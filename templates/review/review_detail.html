@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review Detail</title>
+</head>
+<body>
+    <h1>{{ review.title }}</h1>
+    <p>{{ review.content }}</p>
+    <p>Written by: {{ review.writer }}</p>
+    <p>Date: {{ review.date }}</p>
+    <p><a href="{{ review.giturl }}" target="_blank">GitHub URL</a></p>
+    <p>Likes: {{ review.total_likes }}</p>
+    <form action="{% url 'review:like_review' pk=review.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">{% if user in review.likes.all %}Unlike{% else %}Like{% endif %}</button>
+    </form>
+    <form action="{% url 'review:bookmark_review' pk=review.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">{% if user in review.bookmarks.all %}Remove Bookmark{% else %}Bookmark{% endif %}</button>
+    </form>
+    {% if review.writer == user %}
+    <a href="{% url 'review:review_update' pk=review.pk %}">Edit</a>
+    <form action="{% url 'review:review_delete' pk=review.pk %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+    {% endif %}
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>{{ comment.content }}</p>
+            <p>Written by: {{ comment.writer }} on {{ comment.date }}</p>
+            {% if comment.writer == user or user.is_staff %}
+            <form action="{% url 'review:delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a Comment</h2>
+    <form method="post" action="{% url 'review:add_comment' pk=review.pk %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'review:review_list' %}">Back to reviews</a>
+</body>
+</html>
