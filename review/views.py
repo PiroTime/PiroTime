@@ -28,7 +28,7 @@ def review_create(request):
             return redirect('review:review_detail', pk=review.pk)
     else:
         form = ReviewForm()
-    return render(request, 'review/review_form.html', {'form': form})
+    return render(request, 'review/review_create.html', {'form': form})
 
 def review_delete(request, pk):
     review = get_object_or_404(Review, pk=pk)
@@ -44,7 +44,7 @@ def review_update(request, pk):
             return redirect('review:review_detail', pk=review.pk)
     else:
         form = ReviewForm(instance=review)
-    return render(request, 'review/review_form.html', {'form': form})
+    return render(request, 'review/review_create.html', {'form': form})
 
 def review_detail(request, pk):
     review = get_object_or_404(Review, pk=pk)

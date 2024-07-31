@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trend Detail</title>
+</head>
+<body>
+    <h1>{{ trend.title }}</h1>
+    <p>{{ trend.content }}</p>
+    <p>Written by: {{ trend.writer }}</p>
+    <p>Date: {{ trend.date }}</p>
+    <p><a href="{{ trend.giturl }}" target="_blank">GitHub URL</a></p>
+    <p>Likes: {{ trend.total_likes }}</p>
+    <form action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">{% if user in trend.likes.all %}Unlike{% else %}Like{% endif %}</button>
+    </form>
+    <form action="{% url 'trend:bookmark_trend' pk=trend.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">{% if user in trend.bookmarks.all %}Remove Bookmark{% else %}Bookmark{% endif %}</button>
+    </form>
+    {% if trend.writer == user %}
+    <a href="{% url 'trend:trend_update' pk=trend.pk %}">Edit</a>
+    <form action="{% url 'trend:trend_delete' pk=trend.pk %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+    {% endif %}
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>{{ comment.content }}</p>
+            <p>Written by: {{ comment.writer }} on {{ comment.date }}</p>
+            {% if comment.writer == user or user.is_staff %}
+            <form action="{% url 'trend:delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a Comment</h2>
+    <form method="post" action="{% url 'trend:add_comment' pk=trend.pk %}">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'trend:trend_list' %}">Back to trends</a>
+</body>
+</html>
