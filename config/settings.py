@@ -137,8 +137,3 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 import os
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    'C:/바탕 화면/PiroTime/static',
-]
