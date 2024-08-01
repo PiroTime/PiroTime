@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <h2>{{ user.username }}님, 안녕하세요!</h2>
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <h2>Main Page</h2>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'signup' %}">Signup</a>
+    {% endif %}
+</body>
+</html>
