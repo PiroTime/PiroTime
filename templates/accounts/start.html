@@ -1,325 +1,96 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PiroTime</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Hubballi', sans-serif; 
-            position: relative;
-            margin: 0;
-            padding: 0;
-            background-color: #fff;
-        }
+{% extends "base.html" %}
 
-        #main-header {
-            height: 3rem;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            background: linear-gradient(to bottom, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0) 100%);
-            z-index: 1000;
-            padding: 10px 0;
-        }
-
-        .header--container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
-            margin: 0 auto;
-        }
-
-        .max-width-1200 {
-            width: min(1200px, 100%);
-            margin: auto;
-            padding: 0 40px;
-        }
-
-        #main-header ul {
-            display: flex;
-            gap: 16px;
-            font-size: 1.6rem;
-        }
-
-        ol, ul, li, a {
-            list-style: none;
-            text-decoration: none;
-            color: black;
-        }
-
-        #main-header ul a:hover {
-            color: #0BEC12;
-        }
-
-        #main-header ul a::before {
-            content: " ";
-        }
-        
-        #main-header ul a:nth-child(1)::after, #main-header ul a:nth-child(2)::after, #main-header ul a:nth-child(3)::after
-        ,#main-header ul a:nth-child(4)::after  {
-            content: "|";
-            padding: 20px;
-            pointer-events: none;
-            color: black;
-        }
-        
-        .logo {
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
-
-        .logo svg {
-            height: 40px; 
-            width: auto;
-            margin-right: 8px;
-        }
-
-        main {
-            height: 90vh;
-            display: flex;
-            margin: 50px 0;
-            padding-bottom: 10rem;
-        }
-
-        .main-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .banner {
-            background-color: #e0ffe0;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            font-size: 1.4rem;
-            height: 278px;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .icon-container {
-            flex: 0 0 5%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .icon-container i:hover {
-            color: black;
-        }
-
-        .banner-content {
-            flex: 0 0 90%;
-            text-align: center;
-        }
-
-        .text {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .text.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .title {
-            color: black;
-            font-size: 40px;
-            font-weight: 400;
-        }
-
-        .description {
-            color: black;
-            font-size: 25px;
-            font-weight: 400;
-            display: block;
-            margin-top: 10px;
-        }
-
-        .icon i {
-            font-size: 25px;
-            color: #BBBBBB;
-        }
-
-        .icon-container.left .icon i {
-            transform: rotate(180deg);
-        }
-
-        .activities {
-            padding: 50px 20px;
-        }
-
-        .content-section {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px; 
-            justify-items: center; 
-            align-items: center; 
-            margin-top: 40px;
-        }
-
-        .content-section > div {
-            width: 100%;
-        }
-
-        .content-card {
-            border: 3px solid #ccc;
-            border-radius: 10px;
-            margin: 10px;
-            padding: 20px;
-            width: 90%;
-            height: 100px;
-        }
-
-        footer {
-            padding: 20px 0;
-            background-color: #f7f7f7;
-            text-align: center;
-            width: 100%;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
-
-    </style>
-</head>
-<body>
-    <header id="main-header">
-        <div class="header--container max-width-1200">
-          <h1 class="logo">
-            <svg width="170" height="170" viewBox="0 0 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_30_60)">
-                <path d="M46.9272 93.8545C72.8444 93.8545 93.8545 72.8444 93.8545 46.9272C93.8545 21.01 72.8444 0 46.9272 0C21.01 0 0 21.01 0 46.9272C0 72.8444 21.01 93.8545 46.9272 93.8545Z" fill="#49BF4D" fill-opacity="0.6"/>
-                <path d="M46.9272 170C72.8444 170 93.8545 148.594 93.8545 122.187C93.8545 95.7811 72.8444 74.3746 46.9272 74.3746C21.01 74.3746 0 95.7811 0 122.187C0 148.594 21.01 170 46.9272 170Z" fill="#0BEC12" fill-opacity="0.8"/>
-                <path d="M123.073 93.8545C148.991 93.8545 170.001 72.8444 170.001 46.9272C170.001 21.01 148.991 0 123.073 0C97.1563 0 76.1462 21.01 76.1462 46.9272C76.1462 72.8444 97.1563 93.8545 123.073 93.8545Z" fill="#0BEC12" fill-opacity="0.8"/>
-                <path d="M123.073 170C148.991 170 170.001 148.594 170.001 122.187C170.001 95.7811 148.991 74.3746 123.073 74.3746C97.1563 74.3746 76.1462 95.7811 76.1462 122.187C76.1462 148.594 97.1563 170 123.073 170Z" fill="#49BF4D" fill-opacity="0.8"/>
-                </g>
-                <defs>
-                <clipPath id="clip0_30_60">
-                <rect width="170" height="170" fill="white"/>
-                </clipPath>
-                </defs>
-            </svg>
-            PiroTime
-          </h1>
-          <ul>
-            <a href="#">review</a> 
-            <a href="#">cooperation</a> 
-            <a href="#">coffeechat</a> 
-            <a href="#">ITtrend</a> 
-            {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'signup' %}">Signup</a>
-            {% endif %}
-          </ul>
-        </div>
-    </header>
-    <main>
-        <div class="main-container">
-            <div class="banner">
-                <div class="icon-container left" onclick="BannerSlide()">
-                    <div class="icon"><i class="fa-solid fa-chevron-right"></i></div>
+{% block content %}
+<section id="main">
+    <div class="main-container">
+        <div class="banner">
+            <div class="icon-container left" onclick="BannerSlide()">
+                <div class="icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </div>
+            <div class="banner-content">
+                <div class="text active">
+                    <span class="title">PiroTime 1</span>
+                    <span class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
                 </div>
-                <div class="banner-content">
-                    <div class="text active">
-                        <span class="title">PiroTime 1</span>
-                        <span class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-                    </div>
-                    <div class="text">
-                        <span class="title">PiroTime 2</span>
-                        <span class="description">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
-                    </div>
-                    <div class="text">
-                        <span class="title">PiroTime 3</span>
-                        <span class="description">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</span>
-                    </div>
-                    <div class="text">
-                        <span class="title">PiroTime 4</span>
-                        <span class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</span>
-                    </div>
+                <div class="text">
+                    <span class="title">PiroTime 2</span>
+                    <span class="description">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
                 </div>
-                <div class="icon-container right" onclick="nextSlide()">
-                    <div class="icon"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="text">
+                    <span class="title">PiroTime 3</span>
+                    <span class="description">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</span>
+                </div>
+                <div class="text">
+                    <span class="title">PiroTime 4</span>
+                    <span class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</span>
                 </div>
             </div>
-            <section class="content-section">
-                <div>
-                    <h3>Project Review 인기글</h3>
-                    <div class="content-card">
-                        <p>프로젝트 공유합니다. 피드백&리뷰 받아요!</p>
-                    </div>
-                </div>
-                <div>
-                    <h3>Project Cooperation 인기글</h3>
-                    <div class="content-card">
-                        <p>좋은 아이디어가 있어요? 같이 프로젝트 진행해요!</p>
-                    </div>
-                </div>
-                <div>
-                    <h3>CoffeeChat 인기글</h3>
-                    <div class="content-card">
-                        <p>진로, 프로젝트 고민이 있어요? 커피챗 해요!</p>
-                    </div>
-                </div>
-                <div>
-                    <h3>IT Trend 인기글</h3>
-                    <div class="content-card">
-                        <p>요즘 IT 업계의 따끈따끈한 소식 공유해요!</p>
-                    </div>
-                </div>
-            </section>
+            <div class="icon-container right" onclick="nextSlide()">
+                <div class="icon"><i class="fa-solid fa-chevron-right"></i></div>
+            </div>
         </div>
-    </main>
-    <footer>
-        <div class="social-links">
-            <a href="#">카카오톡 친구 플러스</a>
-            <a href="#">Instagram pirogramming_official</a>
-            <a href="#">pirogramming.official@gmail.com</a>
-        </div>
-        <p>© Pirogramming, 2023 All rights reserved.</p>
-    </footer>
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.text');
-        const totalSlides = slides.length;
+        <section class="content-section">
+            <div>
+                <h3>Project Review 인기글</h3>
+                <div class="content-card">
+                    <p>프로젝트 공유합니다. 피드백&리뷰 받아요!</p>
+                </div>
+            </div>
+            <div>
+                <h3>Project Cooperation 인기글</h3>
+                <div class="content-card">
+                    <p>좋은 아이디어가 있어요? 같이 프로젝트 진행해요!</p>
+                </div>
+            </div>
+            <div>
+                <h3>CoffeeChat 인기글</h3>
+                <div class="content-card">
+                    <p>진로, 프로젝트 고민이 있어요? 커피챗 해요!</p>
+                </div>
+            </div>
+            <div>
+                <h3>IT Trend 인기글</h3>
+                <div class="content-card">
+                    <p>요즘 IT 업계의 따끈따끈한 소식 공유해요!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+<footer>
+    <div class="social-links">
+        <a href="#">카카오톡 친구 플러스</a>
+        <a href="#">Instagram pirogramming_official</a>
+        <a href="#">pirogramming.official@gmail.com</a>
+    </div>
+    <p>© Pirogramming, 2023 All rights reserved.</p>
+</footer>
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.text');
+    const totalSlides = slides.length;
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === index) {
-                    slide.classList.add('active');
-                }
-            });
-        }
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i === index) {
+                slide.classList.add('active');
+            }
+        });
+    }
 
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            showSlide(currentSlide);
-        }
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        showSlide(currentSlide);
+    }
 
-        function BannerSlide() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            showSlide(currentSlide);
-        }
+    function BannerSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(currentSlide);
+    }
 
-        setInterval(nextSlide, 5000); 
+    setInterval(nextSlide, 5000); 
 
-        showSlide(currentSlide); 
-    </script>
-</body>
-</html>
+    showSlide(currentSlide); 
+</script>
+{% endblock %}
