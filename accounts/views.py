@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 
 def index(request):
-    return render(request, 'accounts/index.html')
+    return render(request, 'index.html')
 
 def signup(request):
     if request.method == 'POST':
