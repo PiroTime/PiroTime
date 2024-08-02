@@ -112,10 +112,10 @@ def cor_mail(request, pk):
 
         subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
         send_mail(
-            'Test Email Subject',
-            'This is a test email message.',
-            'your_email@gmail.com',
-            ['recipient_email@gmail.com'],
+            subject,
+            message,
+            from_email,
+            recipient_list,
             fail_silently=False,
         )
         return HttpResponse('Email sent successfully')
