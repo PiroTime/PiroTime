@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Corboard List</title>
+</head>
+<body>
+<h1>Corboard List</h1>
+<a href="{% url 'corboard:cor_create' %}" method="GET">Create New Corboard</a>
+<form method="GET" action="{% url 'corboard:cor_search' %}">
+    <input type="text" name="searchContent" placeholder="Search...">
+    <button type="submit">Search</button>
+</form>
+<ul>
+    {% for corboard in corboards %}
+        <li>
+            <a href="{% url 'corboard:cor_detail' corboard.pk %}">{{ corboard.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

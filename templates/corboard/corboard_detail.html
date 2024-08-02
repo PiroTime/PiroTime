@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ cor.title }}</title>
+</head>
+<body>
+    <h1>{{ cor.title }}</h1>
+    <p>{{ cor.content }}</p>
+    <p>Written by: {{ cor.writer }}</p>
+    <p>Date: {{ cor.date }}</p>
+    <p>Likes: {{ cor.count_like }}</p>
+    <form action="{% url 'corboard:cor_like' pk=cor.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">{% if user in cor.likes.all %}Unlike{% else %}Like{% endif %}</button>
+    </form>
+    <form action="{% url 'corboard:cor_bookmark' pk=cor.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">{% if user in cor.bookmarks.all %}Remove Bookmark{% else %}Bookmark{% endif %}</button>
+    </form>
+    {% if cor.writer == user %}
+        <a href="{% url 'corboard:cor_update' pk=cor.pk %}">Edit</a>
+        <form action="{% url 'corboard:cor_delete' pk=cor.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    {% else %}
+        <a href="{% url 'corboard:cor_mail' pk=cor.pk %}">메일 보내기</a>
+    {% endif %}
+
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <p>{{ comment.content }}</p>
+                <p>Written by: {{ comment.writer }} on {{ comment.date }}</p>
+                {% if comment.writer == user %}
+                    <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a Comment</h2>
+    <form method="post" action="{% url 'corboard:cor_add_comment' pk=cor.pk %}">
+        {% csrf_token %}
+        {{ commentForm.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'corboard:cor_list' %}">Back to list</a>
+</body>
+</html>
