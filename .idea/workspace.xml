@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41c3d7bd-44eb-42dc-9859-6bdc4bf027d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/celery.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/corboard_create.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/corboard_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/corboard_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/이미지.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,20 +37,20 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/mymac/Documents/univ/PiroTime",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/mymac/Documents/univ/PiroTime&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.manage">
     <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -139,6 +123,7 @@
       <workItem from="1722394872801" duration="9177000" />
       <workItem from="1722476012324" duration="42000" />
       <workItem from="1722515157324" duration="12580000" />
+      <workItem from="1722566973706" duration="860000" />
     </task>
     <servers />
   </component>
