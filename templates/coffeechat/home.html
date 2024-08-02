@@ -1,0 +1,303 @@
+<!-- chat/templates/chat/home.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Chat</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 8rem;
+            width: 80%;
+            /* Adjust this value to make the container wider or narrower */
+            max-width: 1325px;
+            /* Adjust this value to control the maximum width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h2 {
+            margin: 20px 0px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 0 210px;
+            padding: 0 20px;
+        }
+
+        .job-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90px;
+            width: 100px;
+            cursor: pointer;
+            gap: 1.5rem;
+            border-radius: 16px;
+            background: linear-gradient(104deg, rgba(131, 233, 255, .08), rgba(133, 160, 255, .08) 45.31%), #fff;
+            margin: 10px 10px;
+            border: 1px solid rgb(94, 103, 235);
+        }
+
+        .img-container {
+            width: 40px;
+            height: 120px;
+            padding: 2px;
+            border-radius: 50%;
+            border: 1px solid rgb(94, 103, 235);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .text {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card {
+            margin: 0px 20px;
+        }
+
+        .btn-primary {
+            background-color: rgba(11, 236, 18, 0.6);
+            color: black;
+            border: none;
+        }
+
+        .custom-btn:hover {
+            background-color: rgba(11, 236, 18, 0.8);
+            color: black;
+            border: 2px solid rgba(11, 236, 18, 0.8);
+        }
+
+        .card-text {
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 class="container">기수별 모아보기</h2>
+    <div class="flex-center">
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="1기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">1기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">2기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">3기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">4기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">5기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">6기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">7기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">8기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">9기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">10기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">11기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">12기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">13기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">14기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">15기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">16기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">17기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">18기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">19기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">20기</span>
+        </div>
+        <div class="job-box">
+            <div class="img-container">
+                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                    src="{% static 'coffeechat/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text">21기</span>
+        </div>
+    </div>
+
+
+
+
+    <h2 class="container">커피챗 하기☕</h2>
+    <div class="d-flex justify-content-center">
+        <div class="card" style="width: 40rem;">
+            <div class="card-body">
+                <h5 class="card-title">자유롭게 커피챗을 제안해 보세요!</h5>
+                <p class="card-text">궁금한 회사에 현재 재직중인 선배님과의 커피챗은 물론, 1:1 매칭이 가능해요.</p>
+                <a href="#" class="btn btn-primary">선배님께 커피챗 신청하기</a>
+                <a href="#" class="btn btn-primary">커피챗 하기 이용방법</a>
+            </div>
+        </div>
+        <div class="card" style="width: 40rem;">
+            <div class="card-body">
+                <h5 class="card-title">먼저 커피챗을 제안받아 보세요!</h5>
+                <p class="card-text">궁금한 피로그래머와 다이렉트로 연결되고, 피로그래밍의 멋쟁이 후배들을 만나보세요</p>
+                <a href="#" class="btn btn-primary">후배에게 커피챗 제안받기</a>
+                <a href="#" class="btn btn-primary">커피챗 받기 이용 방법</a>
+            </div>
+        </div>
+    </div>
+
+
+    <h2 class="container">커피챗 실시간 리뷰</h2>
+    <div class="d-flex justify-content-center">
+        <div class="card" style="width: 26rem;">
+            <div class="card-body">
+                <h5 class="card-title">하** 님의 리뷰</h5>
+                <p class="card-text">업무에 대한 경험과 경력이 많으시고, it 산업 및 회사에 대한 전반적인 내용을 많이 파악하고 계셔서 모든 질문에 막힘없이 설명을 해주셔서 너무 좋았습니다👍👍</p>
+                <a href="#" class="btn btn-primary">리뷰 자세히 보기</a>
+            </div>
+        </div>
+        <div class="card" style="width: 26rem;">
+            <div class="card-body">
+                <h5 class="card-title">김** 님의 리뷰</h5>
+                <p class="card-text">업무에 대한 경험과 경력이 많으시고, it 산업 및 회사에 대한 전반적인 내용을 많이 파악하고 계셔서 모든 질문에 막힘없이 설명을 해주셔서 너무 좋았습니다👍👍</p>
+                <a href="#" class="btn btn-primary">리뷰 자세히 보기</a>
+            </div>
+        </div>
+        <div class="card" style="width: 26rem;">
+            <div class="card-body">
+                <h5 class="card-title">이** 님의 리뷰</h5>
+                <p class="card-text">업무에 대한 경험과 경력이 많으시고, it 산업 및 회사에 대한 전반적인 내용을 많이 파악하고 계셔서 모든 질문에 막힘없이 설명을 해주셔서 너무 좋았습니다👍👍</p>
+                <a href="#" class="btn btn-primary">리뷰 자세히 보기</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+</body>
+
+</html>
