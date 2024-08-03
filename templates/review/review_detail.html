@@ -1,54 +1,83 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Review Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ review.title }}</title>
+    <link rel="stylesheet" href="{% static 'css/review/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>{{ review.title }}</h1>
-    <p>{{ review.content }}</p>
-    <p>Written by: {{ review.writer }}</p>
-    <p>Date: {{ review.date }}</p>
-    <p><a href="{{ review.giturl }}" target="_blank">GitHub URL</a></p>
-    <p>Likes: {{ review.total_likes }}</p>
-    <form action="{% url 'review:like_review' pk=review.pk %}" method="post">
-        {% csrf_token %}
-        <button type="submit">{% if user in review.likes.all %}Unlike{% else %}Like{% endif %}</button>
-    </form>
-    <form action="{% url 'review:bookmark_review' pk=review.pk %}" method="post">
-        {% csrf_token %}
-        <button type="submit">{% if user in review.bookmarks.all %}Remove Bookmark{% else %}Bookmark{% endif %}</button>
-    </form>
-    {% if review.writer == user %}
-    <a href="{% url 'review:review_update' pk=review.pk %}">Edit</a>
-    <form action="{% url 'review:review_delete' pk=review.pk %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit">Delete</button>
-    </form>
-    {% endif %}
+    <div class="container">
+        <!-- 리뷰 상세 카드 -->
+        <div class="review-detail-card">
+            <div class="review-header">
+                <h1>{{ review.title }}</h1>
+                <div class="review-meta">
+                    <span>작성자: {{ review.writer }}</span>
+                    <span>날짜: {{ review.date }}</span>
+                    <div class="review-likes">
+                        <form method="post" action="{% url 'review:like_review' pk=review.pk %}" class="inline-form">
+                            {% csrf_token %}
+                            <button type="submit" class="like-button">
+                                <i class="fas fa-heart"></i> {{ review.total_likes }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-    <h2>Comments</h2>
-    <ul>
-        {% for comment in comments %}
-        <li>
-            <p>{{ comment.content }}</p>
-            <p>Written by: {{ comment.writer }} on {{ comment.date }}</p>
-            {% if comment.writer == user or user.is_staff %}
-            <form action="{% url 'review:delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+            <div class="review-content">
+                {{ review.content }}
+            </div>
 
-    <h2>Add a Comment</h2>
-    <form method="post" action="{% url 'review:add_comment' pk=review.pk %}">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-    <a href="{% url 'review:review_list' %}">Back to reviews</a>
+            <div class="review-actions">
+                <a href="{{ review.giturl }}" target="_blank" class="btn">GitHub URL</a>
+                
+                <form method="post" action="{% url 'review:bookmark_review' pk=review.pk %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-bookmark">
+                        {% if user in review.bookmarks.all %}북마크 제거{% else %}북마크{% endif %}
+                    </button>
+                </form>
+
+                {% if review.writer == user %}
+                <a href="{% url 'review:review_update' pk=review.pk %}" class="btn">수정하기</a>
+                <form method="post" action="{% url 'review:review_delete' pk=review.pk %}" class="inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-delete">삭제하기</button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- 댓글 섹션 -->
+            <div class="comment-section">
+                <h2>댓글</h2>
+                {% for comment in review.comments.all %}
+                <div class="comment">
+                    <p>{{ comment.content }}</p>
+                    <p class="comment-meta">작성자: {{ comment.writer }} / 날짜: {{ comment.date }}</p>
+                    {% if comment.writer == user or user.is_staff %}
+                    <form method="post" action="{% url 'review:comment_delete' pk=comment.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-delete-comment">삭제하기</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <h3>댓글 추가하기</h3>
+                <form method="post" action="{% url 'review:add_comment' pk=review.pk %}" class="comment-form">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="btn btn-submit">등록</button>
+                </form>
+            </div>
+
+            <a href="{% url 'review:review_list' %}" class="btn btn-back">리뷰 목록으로 돌아가기</a>
+        </div>
+    </div>
 </body>
 </html>

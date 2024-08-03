@@ -1,16 +1,25 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Write a Review</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 작성하기</title>
+    <link rel="stylesheet" href="{% static 'css/review/styles.css' %}">
 </head>
 <body>
-    <h1>Write a Review</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-    <a href="{% url 'review:review_list' %}">Back to reviews</a>
+    <div class="container">
+        <!-- 리뷰 작성 카드 -->
+        <div class="review-create-card">
+            <h1>리뷰 작성하기</h1>
+            <form method="post" class="review-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-submit">제출하기</button>
+            </form>
+            <a href="{% url 'review:review_list' %}" class="btn btn-back">리뷰 목록으로 돌아가기</a>
+        </div>
+    </div>
 </body>
 </html>
