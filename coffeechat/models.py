@@ -20,4 +20,7 @@ class CoffeeChat(models.Model):
     hashtags = models.ManyToManyField(Hashtag, related_name='coffeechats') #해시태그
     content = models.TextField(null=True, blank=True) #자기소개
     count = models.IntegerField() #요청 수
+
+
+class AskCoffeeChat(models.Model):
     

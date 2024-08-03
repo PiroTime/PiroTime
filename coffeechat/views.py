@@ -1,4 +1,4 @@
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -26,19 +26,11 @@ def send_email_coffee(request, pk):
 
 
 def cor_mail(request, pk):
-    receiver = get_object_or_404(CoffeeChat, pk=pk).writer
+    receiver = get_object_or_404(CoffeeChat, pk=pk).username
     sender = request.user
 
-
-
     subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
-    send_mail(
-        subject,
-        message,
-        from_email,
-        recipient_list,
-        fail_silently=False,
-    )
+    EmailMessage(subject=subject, from_email=from_email, to=recipient_list, body=message).send()
     return HttpResponse('Email sent successfully')
 
 
