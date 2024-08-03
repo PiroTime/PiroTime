@@ -18,7 +18,7 @@
                 {% if user.is_authenticated %}
                     <li><a href="#">review</a></li>
                     <li><a href="#">cooperation</a></li>
-                    <li><a href="#">coffeechat</a></li>
+                    <li><a href="{% url 'coffeechat_main' %}">coffeechat</a></li>
                     <li><a href="#">ITtrend</a></li>
                     <li><a href="{% url 'logout' %}">logout</a></li>
                 {% else %}
