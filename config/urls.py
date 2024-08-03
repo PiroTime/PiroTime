@@ -22,7 +22,7 @@ import corboard
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("corboard/", include('corboard.urls')),
-    path("review/", include("review.urls")),
+    # path("review/", include("review.urls")),
     path('', include('accounts.urls')),
 ]
 

@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41c3d7bd-44eb-42dc-9859-6bdc4bf027d3" name="Changes" comment="" />
+    <list default="true" id="41c3d7bd-44eb-42dc-9859-6bdc4bf027d3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/templates/corboard/message.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/corboard/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/corboard/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/corboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/corboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/migrations/0002_review_bookmarks_review_likes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/review/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/corboard/corboard_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/corboard/corboard_detail.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
