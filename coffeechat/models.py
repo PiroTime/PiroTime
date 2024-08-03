@@ -23,4 +23,15 @@ class CoffeeChat(models.Model):
 
 
 class AskCoffeeChat(models.Model):
-    
+    STATUS_ASK = [
+        ('stay', '대기 중'),
+        ('accepted', '수락'),
+        ('rejected', '거절'),
+        ('end', '종료')           #요청이 받아들여져 커피챗이 완료된 경우
+    ]
+
+    username = models.ForeignKey(CustomUser, related_name='username', on_delete=models.CASCADE) #커피챗 요청자
+    receiver = models.ForeignKey(CustomUser, related_name='receiver', on_delete=models.CASCADE) #커피챗 요청받은 사람
+    created_at = models.DateTimeField(auto_now_add=True) #요청시간
+    post = models.ForeignKey(CoffeeChat, related_name="coffeechat", on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_ASK, defalut='stay')
