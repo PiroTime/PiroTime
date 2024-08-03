@@ -132,6 +132,22 @@
             {% endif %}
         {% endif %}
     </div>
+    <!-- 요청 목록을 표시 -->
+    <div class="requests-list">
+        <h3>요청받은 커피챗:</h3>
+        {% for request in requests %}
+            <div class="request-item">
+                <p>{{ request.user.username }}: {{ request.get_status_display }}</p>
+                <p>요청 시간: {{ request.created_at }}</p>
+                {% if user.is_authenticated and user == profile.receiver and request.status == 'WAITING' %}
+                    <form method="post" action="{% url 'accept_request' request.id %}">
+                        {% csrf_token %}
+                        <button type="submit">수락하기</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
