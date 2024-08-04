@@ -13,6 +13,10 @@ class CustomUserCreationForm(forms.ModelForm):
         widget=forms.PasswordInput,
         help_text=''
     )
+    cohort = forms.IntegerField(
+        label='Cohort',
+        help_text='몇기인지 입력하세요.'
+    )
 
     class Meta:
         model = CustomUser
@@ -22,6 +26,7 @@ class CustomUserCreationForm(forms.ModelForm):
             'email': '',
             'nickname': '',
             'profile_image': '',
+            'cohort': '',
         }
 
     def clean_password2(self):
@@ -45,12 +50,13 @@ class CustomUserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'nickname', 'profile_image', 'is_active', 'is_staff')
+        fields = ('username', 'email', 'password', 'nickname', 'profile_image', 'is_active', 'cohort', 'is_staff')
         help_texts = {
             'username': '사용자 이름을 입력하세요.',
             'email': '유효한 이메일 주소를 입력하세요.',
             'nickname': '닉네임을 입력하세요.',
             'profile_image': '프로필 이미지를 선택하세요.',
+            'cohort': '몇기인지 입력하세요.',
         }
 
     def clean_password(self):

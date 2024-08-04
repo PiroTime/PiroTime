@@ -39,6 +39,10 @@
                 {% if form.email.errors %}
                     <div class="error">{{ form.email.errors }}</div>
                 {% endif %}
+                <input type="cohort" name="cohort" placeholder="기수" class="form-input">
+                {% if form.cohort.errors %}
+                    <div class="error">{{ form.cohort.errors }}</div>
+                {% endif %}
                 <div class="image-upload">
                     <span>프로필 이미지 (선택)</span>
                     <label for="id_profile_image" class="upload-label">

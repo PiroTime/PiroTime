@@ -24,4 +24,5 @@ urlpatterns = [
     path("trend/", include("apps.trend.urls")),
     path("corboard/", include('apps.corboard.urls')),
     path('coffeechat/', include('apps.coffeechat.urls')),
+    
 ]
