@@ -1,5 +1,5 @@
 from django.db import models
-from apps.accounts.models import CustomUser
+from accounts.models import CustomUser
 from django.utils import timezone
 
 class Hashtag(models.Model):
@@ -28,3 +28,5 @@ class CoffeeChatRequest(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE) # 요청한 사용자
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='WAITING') #요청한 사용자에 따른 현재 상태
     created_at = models.DateTimeField(default=timezone.now) # 요청 생성 시간
+
+    

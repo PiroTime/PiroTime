@@ -6,8 +6,8 @@ from .forms import CoffeeChatForm
 from datetime import timedelta
 import json
 
-def home(request):
-    return render(request, 'coffeechat/home.html')
+def main(req):
+    return render(req, 'coffeechat/main.html')
 
 def list(req):
     query = req.GET.get('search')
@@ -28,7 +28,7 @@ def create(req):
     # 현재 사용자가 이미 프로필을 가지고 있는지 확인
     existing_profile = CoffeeChat.objects.filter(receiver=req.user).first()
     if existing_profile:
-        return redirect('coffeechat:coffeechat_detail', pk=existing_profile.pk)  # 이미 존재하면 자신의 detail 페이지로 리디렉션
+        return redirect('coffeechat_detail', pk=existing_profile.pk)  # 이미 존재하면 자신의 detail 페이지로 리디렉션
 
     if req.method == "POST": #생성 후
         form = CoffeeChatForm(req.POST)
@@ -49,7 +49,7 @@ def create(req):
             coffeechat.hashtags.set(hashtag_objects)
             
             coffeechat.save()
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat.pk)
+            return redirect('coffeechat_detail', pk=coffeechat.pk)
     else: #생성 전(GET)
         form = CoffeeChatForm()
     ctx = {
@@ -112,7 +112,7 @@ def accept_request(request, request_id): #수락 시
         coffeechat.count += 1
         coffeechat.save()
         
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+    return redirect('coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
 
 @login_required
 def update(req, pk):
@@ -136,7 +136,7 @@ def update(req, pk):
             coffeechat.hashtags.set(hashtag_objects)
             
             coffeechat.save()
-            return redirect('coffeechat:coffeechat:coffeechat_detail', pk=profile.pk)
+            return redirect('coffeechat_detail', pk=profile.pk)
     else: # 수정 전(위한 load, GET)
         form = CoffeeChatForm(instance=profile)
         # 수정을 위해서 기존 콘텐츠와 해시태그 로드(JSON)
@@ -155,7 +155,7 @@ def delete(req, pk):
     profile = CoffeeChat.objects.get(pk=pk)
     if req.method == "POST":
         profile.delete()
-        return redirect('coffeechat:coffeechat_list')
+        return redirect('coffeechat_list')
     ctx = {
         'profile': profile
     }

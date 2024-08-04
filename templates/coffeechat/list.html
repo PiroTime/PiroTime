@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}List of CoffeeChat Profiles{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/profile.css' %}"> 
+<div class="container">
+    <div class="search-bar-container">
+        <form class="search-bar" method="get" action="{% url 'coffeechat:coffeechat_list' %}">
+            <input type="text" name="search" placeholder="Search profiles...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    <div class="profile-list">
+        {% for profile in profiles %}
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-info">
+                        <h2>{{ profile.receiver.username }}</h2>
+                        <p>{{ profile.job }}</p>
+                    </div>
+                </div>
+                <p>Hashtags</p>
+                <p>
+                    {% for hashtag in profile.hashtags.all %}
+                        <span class="hashtag">#{{ hashtag.name }}</span>
+                    {% endfor %}
+                </p>
+                <a href="{% url 'coffeechat:coffeechat_detail' profile.pk %}">View Details</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

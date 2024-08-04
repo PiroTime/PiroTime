@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.receiver.username }}'s Profile{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        margin-top: 60px;
+    }
+
+    .max-width-1200 {
+        width: min(1200px, 100%);
+        padding: 0 40px;
+    }
+
+    .profile-header {
+        background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+        padding: 20px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .profile-header img {
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+    }
+
+    .profile-header .profile-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-header h1 {
+        margin: 0;
+        font-size: 2.5em;
+    }
+
+    .profile-header p {
+        margin: 5px 0;
+    }
+
+    .profile-details {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-details p {
+        font-size: 1.2em;
+        margin: 10px 0;
+    }
+
+    .profile-content {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .profile-content h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .profile-content div {
+        line-height: 1.6;
+        font-size: 1.2em;
+    }
+
+    .action-buttons {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-left: auto; /* 오른쪽 정렬을 위해 추가 */
+    }
+
+
+    .action-buttons form,
+    .action-buttons a {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .action-buttons button,
+    .action-buttons a {
+        background: white;
+        color: black;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .action-buttons button:hover,
+    .action-buttons a:hover {
+        background: #0056b3;
+    }
+
+    .profile-img{
+        width: 100px;
+        height: 100px;
+        background-color: lightgray;
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+</style>
+<div class="container">
+    <div class="profile-header">
+        <div class="header-container max-width-1200">
+            <div class="profile-info">
+                <div class="profile-img"></div>
+                <div>
+                    <h1>{{ profile.receiver.username }}</h1>
+                    <p>{{ profile.job }}</p>
+                    <p>피로그래밍 21기</p>
+                    <p>커피챗 {{ profile.count }}회</p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                {% if user.is_authenticated %}
+                    {% if user == profile.receiver %}
+                        <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}">프로필 수정하기</a>
+                        <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="button" onclick="confirmDelete()">프로필 삭제하기</button>
+                        </form>
+                        <a href="/">비공개로 전환하기</a>
+                    {% else %}
+                        {% if is_limited %}
+                            <p>오늘치 최대 커피챗을 신청받음</p>
+                        {% elif is_waiting %}
+                            <p>커피챗 수락대기중</p>
+                        {% else %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <button type="submit">커피챗 제안하기</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="profile-details">
+        <p><strong>Hashtags:</strong> 
+            {% for hashtag in hashtags %}
+                #{{ hashtag.name }}
+            {% endfor %}
+        </p>
+    </div>
+    <div class="profile-content max-width-1200">
+        <h2>프로필 소개</h2>
+        <div>{{ profile.content|safe }}</div>
+    </div>
+    <!-- 요청 목록을 표시 -->
+    <div class="requests-list max-width-1200">
+        <h3>요청받은 커피챗:</h3>
+        {% for request in requests %}
+            <div class="request-item">
+                <p>{{ request.user.username }}: {{ request.get_status_display }}</p>
+                <p>요청 시간: {{ request.created_at }}</p>
+                {% if user.is_authenticated and user == profile.receiver and request.status == 'WAITING' %}
+                    <form method="post" action="{% url 'coffeechat:accept_request' request.id %}">
+                        {% csrf_token %}
+                        <button type="submit">수락하기</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function confirmDelete() {
+        if (confirm("삭제하시겠습니까?")) {
+            document.getElementById('delete-form').submit();
+        }
+    }
+</script>
+{% endblock %}

@@ -1,10 +1,8 @@
 from django.urls import path
 from . import views
 
-app_name = 'coffeechat'
-
 urlpatterns = [
-    path('', views.home, name='coffeechat_home'), 
+    path('', views.main, name='coffeechat_main'),
     path('list/', views.list, name='coffeechat_list'),
     path('create/', views.create, name='coffeechat_create'),
     path('detail/<int:pk>/', views.detail, name='coffeechat_detail'),
