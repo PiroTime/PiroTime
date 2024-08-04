@@ -8,8 +8,13 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #ffffff;
-            margin: 30px;
+            margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            {#align-items: center;#}
+            height: 100vh;
+            margin-top: 30px;
         }
         .container {
             width: 100%;
@@ -19,7 +24,6 @@
             text-align: center;
             border: 1px solid #dcdcdc;
             background-color: #ffffff;
-
         }
         .header {
             background-color: #ffffff;
@@ -36,10 +40,7 @@
             position: relative;
             width: 100px;
             height: 100px;
-            {#text-align: center;#}
-            display: flex;
-            align-content: center;
-
+            margin: 0 auto;
         }
         .circle {
             position: absolute;
@@ -50,22 +51,26 @@
         }
         .circle1 {
             top: 0;
-            left: 40%;
+            left: 30%;
+            transform: translateX(-50%);
         }
         .circle2 {
             top: 0;
-            left: 0%;
+            left: 70%;
+            transform: translateX(-50%);
             background-color: rgba(166, 215, 157, 0.8);
         }
         .circle3 {
             bottom: 0;
-            left: 40%;
+            left: 30%;
+            transform: translateX(-50%);
             background-color: rgba(135, 200, 123, 0.8);
         }
         .circle4 {
             bottom: 0;
-            left: 0%;
-            {#background-color: rgba(138, 237, 109, 0.8);#}
+            left: 70%;
+            transform: translateX(-50%);
+            background-color: rgba(138, 237, 109, 0.8);
         }
         .menu a {
             margin: 0 10px;
@@ -95,17 +100,6 @@
             justify-content: center;
             margin: 20px 0;
         }
-        {#.circle {#}
-        {#    width: 100px;#}
-        {#    height: 100px;#}
-        {#    border-radius: 50%;#}
-        {#    margin: 0 10px;#}
-        {#    display: flex;#}
-        {#    justify-content: center;#}
-        {#    align-items: center;#}
-        {#    font-size: 16px;#}
-        {#    color: #ffffff;#}
-
         .logo.img {
             width: 100px;
             height: 100px;
@@ -113,21 +107,20 @@
         a {
             margin: 5px;
             padding: 10px 15px;
-            background-color: #8bc34a; /* 초록색 배경 */
-            color: #ffffff; /* 흰색 글자 */
-            text-decoration: none; /* 밑줄 제거 */
+            background-color: #8bc34a;
+            color: #ffffff;
+            text-decoration: none;
             font-size: 14px;
-            display: inline-block; /* 블록 모양 */
-            border-radius: 5px; /* 둥근 모서리 */
+            display: inline-block;
+            border-radius: 5px;
         }
         a:hover {
-            background-color: #76c043; /* 호버 시 색상 변경 */
+            background-color: #76c043;
         }
     </style>
 </head>
 <body>
 <div class="container">
-
     <div class="content">
         <div class="logo">
             <div class="circle circle1"></div>
@@ -135,15 +128,13 @@
             <div class="circle circle3"></div>
             <div class="circle circle4"></div>
         </div>
-        <img class="logo img" src="../../static/images/logo.svg"/>
         <h1>PiroTime</h1>
         <p>
             {{ receiver }}님!
             {{ content }}
         </p>
-        <a href="">coorperation 확인하기</a>
+        <a href="">cooperation 확인하기</a>
     </div>
-
     <div class="footer">
         &copy; 2024 PiroTime. All rights reserved.
     </div>
