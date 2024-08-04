@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     "review",  # Review app
     "trend",   # Trend app
+
+    "corboard",
+
 ]
 
 MIDDLEWARE = [
@@ -126,8 +130,20 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+
+# ----------------------------
+#email 관련 설정
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'pirotimeofficial@gmail.com'
+EMAIL_HOST_PASSWORD = 'foci ryhd hxqa mcwb'
+
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
 
 AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 
@@ -136,3 +152,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     import PIL
 # except ImportError:
 #     os.system("pip install Pillow")
+
+
+
+

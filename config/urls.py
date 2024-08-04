@@ -17,9 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import corboard
+
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),  
     path("review/", include("review.urls")),
     path("trend/", include("trend.urls")),
+    path("corboard/", include('corboard.urls')),
+
+
 ]

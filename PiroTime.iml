@@ -26,6 +26,7 @@
         <option value="$MODULE_DIR$/templates/trend" />
         <option value="$MODULE_DIR$/templates/review" />
         <option value="$MODULE_DIR$/templates/accounts" />
+        <option value="$MODULE_DIR$/templates/corboard" />
       </list>
     </option>
   </component>

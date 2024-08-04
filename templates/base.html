@@ -17,7 +17,7 @@
             <ul>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'review:review_list' %}">review</a></li>
-                    <li><a href="#">cooperation</a></li>
+                    <li><a href="{% url 'corboard:' %}">cooperation</a></li>
                     <li><a href="#">coffeechat</a></li>
                     <li><a href="{% url 'trend:trend_list' %}">ITtrend</a></li>
                     <li><a href="{% url 'logout' %}">logout</a></li>
