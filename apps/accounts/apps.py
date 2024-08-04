@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CoffeechatConfig(AppConfig):
+class AccountsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'coffeechat'
+    name = 'apps.accounts'

@@ -11,19 +11,21 @@
 <body>
     <header id="main-header">
         <div class="header--container max-width-1200">
-            <h1 class="logo">
-                <img src="{% static 'images/logo.svg' %}" alt="PiroTime Logo" width="170" height="170">
-            </h1>
+            <a href="{% url 'accounts:index' %}">
+                <h1 class="logo">
+                    <img src="{% static 'images/logo.svg' %}" alt="PiroTime Logo" width="170" height="170">
+                </h1>
+            </a>
             <ul>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'review:review_list' %}">review</a></li>
                     <li><a href="{% url 'corboard:cor_list' %}">cooperation</a></li>
-                    <li><a href="{% url 'coffeechat_home' %}">coffeechat</a></li>
+                    <li><a href="{% url 'coffeechat:coffeechat_home' %}">coffeechat</a></li>
                     <li><a href="{% url 'trend:trend_list' %}">ITtrend</a></li>
-                    <li><a href="{% url 'logout' %}">logout</a></li>
+                    <li><a href="{% url 'accounts:logout' %}">logout</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">login</a></li>
-                    <li><a href="{% url 'signup' %}">signup</a></li>
+                    <li><a href="{% url 'accounts:login' %}">login</a></li>
+                    <li><a href="{% url 'accounts:signup' %}">signup</a></li>
                 {% endif %}
             </ul>
         </div>

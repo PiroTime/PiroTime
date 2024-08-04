@@ -17,14 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-import corboard
-
 urlpatterns = [
 
     path('admin/', admin.site.urls),
-    path('', include('accounts.urls')),  
-    path("review/", include("review.urls")),
-    path("trend/", include("trend.urls")),
-    path("corboard/", include('corboard.urls')),
-    path('coffeechat/', include('coffeechat.urls')),
+    path('', include('apps.accounts.urls')),  
+    path("review/", include("apps.review.urls")),
+    path("trend/", include("apps.trend.urls")),
+    path("corboard/", include('apps.corboard.urls')),
+    path('coffeechat/', include('apps.coffeechat.urls')),
 ]

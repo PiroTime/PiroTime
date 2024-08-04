@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
 
-from corboard.forms import CorboardForm, CorCommentForm
-from corboard.models import Corboard, Comment
+from apps.corboard.forms import CorboardForm, CorCommentForm
+from apps.corboard.models import Corboard, Comment
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 

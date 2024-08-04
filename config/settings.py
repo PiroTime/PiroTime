@@ -30,11 +30,11 @@ ALLOWED_HOSTS = []  # In production, add your domain here
 # Application definition
 
 INSTALLED_APPS = [
-    "accounts",
-    "coffeechat",
-    "review",  
-    "trend", 
-    "corboard",
+    "apps.accounts",
+    "apps.coffeechat",
+    "apps.review",  
+    "apps.trend", 
+    "apps.corboard",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

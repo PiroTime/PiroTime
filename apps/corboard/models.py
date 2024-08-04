@@ -2,7 +2,7 @@
 from django.db import models
 
 # Create your models here.
-from accounts.models import CustomUser
+from apps.accounts.models import CustomUser
 
 
 class Corboard(models.Model):
@@ -18,7 +18,7 @@ class Corboard(models.Model):
     bookmarks = models.ManyToManyField(CustomUser, related_name='cor_bookmarks', blank=True)
 
     def count_like(self):
-        return self.likes.count();
+        return self.likes.count()
 
 class Comment(models.Model):
     corboard = models.ForeignKey(Corboard, related_name='cor_comments', on_delete=models.CASCADE)
