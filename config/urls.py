@@ -26,6 +26,5 @@ urlpatterns = [
     path("review/", include("review.urls")),
     path("trend/", include("trend.urls")),
     path("corboard/", include('corboard.urls')),
-
-
+    path('coffeechat/', include('coffeechat.urls')),
 ]
