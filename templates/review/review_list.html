@@ -76,11 +76,24 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         padding: 15px;
         border: 1px solid #CCCCCC;
+        position: relative;
     }
 
     .review-card-image {
         height: 100px;
         margin-bottom: 15px;
+    }
+
+    .scrap-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 1.4rem;
+        cursor: pointer;
+    }
+
+    .scrap-icon.scrapped {
+        color: #FFC107;
     }
 
     .profile-info {
@@ -159,6 +172,9 @@
             {% for review in page_obj %}
             <div class="review-card">
                 <div class="review-card-image" style="background-image: url('{% static 'images/logo.svg' %}');"></div>
+                <div class="scrap-icon{% if request.user in review.bookmarks.all %} scrapped{% endif %}">
+                    <i class="fas fa-bookmark"></i>
+                </div>
                 <div class="review-card-content">
                     <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
                     <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
