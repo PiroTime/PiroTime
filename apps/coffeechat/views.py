@@ -1,6 +1,10 @@
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import strip_tags
+
 from .models import CoffeeChat, Hashtag, CoffeeChatRequest
 from .forms import CoffeeChatForm
 from datetime import timedelta
@@ -111,7 +115,11 @@ def accept_request(request, request_id): #수락 시
         coffeechat = coffeechat_request.coffeechat
         coffeechat.count += 1
         coffeechat.save()
-        
+
+        #메일 보내기
+        if not cor_mail(coffeechat.receiver, coffeechat_request.user):
+            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
+
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
 
 @login_required
@@ -160,3 +168,30 @@ def delete(req, pk):
         'profile': profile
     }
     return render(req, 'coffeechat/delete.html', ctx)
+
+
+def generate_email_content(sender, receiver):
+    subject = "PiroTime: 협력 제안이 왔습니다!"
+    message = f"{sender.username}님으로 부터 협력 제안이 왔습니다. PiroTime에 접속해서 내용을 확인하세요!"
+    from_email = 'pirotimeofficial@gmail.com'
+    recipient_list = [receiver.email]
+    return subject, message, from_email, recipient_list
+
+def cor_mail(receiver, sender):
+
+    subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
+
+    html_message = render_to_string(
+        "corboard/message.html",
+        {"sender": sender.username, "receiver": receiver.username,
+         "content": "커피챗 신청이 들어왔습니다! 아래 링크로 들어와 확인해 보세요!"},
+    )
+    plain_message = strip_tags(html_message)
+    send_mail(
+        subject,
+        plain_message,
+        from_email,
+        recipient_list,
+        html_message=html_message,
+    )
+    return True
