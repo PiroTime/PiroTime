@@ -2,93 +2,90 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/trend/trend_detail.css' %}"> <!-- Changed from review to trend -->
+<link rel="stylesheet" href="{% static 'css/review/review_detail.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-<!-- CSRF 토큰을 메타 태그로 삽입 -->
 <meta name="csrf-token" content="{{ csrf_token }}">
 
-<div class="container">
-  <div class="trend-detail"> <!-- Changed from review-detail to trend-detail -->
-    <div class="header-section">
-      <div class="image-placeholder">
-        <img src="{% static 'images/logo.svg' %}" alt="Trend Image" class="trend-image"> <!-- Changed alt text -->
-      </div>
-      <div class="header-details">
-        <h1>{{ trend.title }}</h1> <!-- Changed from review to trend -->
-        <h2>{{ trend.subtitle }}</h2> <!-- Changed from review to trend -->
-        <div class="meta-info">
-          <span><i class="fas fa-user"></i> {{ trend.writer }}</span> <!-- Changed from review to trend -->
-          <span><i class="fas fa-calendar-alt"></i> {{ trend.date }}</span> <!-- Changed from review to trend -->
+<div class="container max-width-1200">
+  <div class="review-container">
+    <div class="review-detail">
+      <div class="header-container {% if not review.giturl %}justify-flex-start{% else %}justify-space-between{% endif %}">
+        <div class="image-placeholder">
+          <img src="{% static 'images/logo.svg' %}" alt="Review Image" class="review-image">
         </div>
-      </div>
-    </div>
-
-    <hr class="section-divider">
-
-    <div class="content-section">
-      <div class="sidebar">
-        <div class="about-box">
-          <h3>About</h3>
-          <div class="action-buttons">
-            <button class="btn-action btn-like {% if user in trend.likes.all %}liked{% endif %}" data-trend-id="{{ trend.id }}"> <!-- Changed from review to trend -->
-              <i class="fas fa-heart"></i>
-              <span class="like-count">{{ trend.likes.count }}</span> <!-- Changed from review to trend -->
-            </button>
-            <button class="btn-action btn-bookmark {% if user in trend.bookmarks.all %}bookmarked{% endif %}" data-trend-id="{{ trend.id }}"> <!-- Changed from review to trend -->
-              <i class="fas fa-bookmark"></i>
-            </button>
-            <a href="{{ trend.giturl }}" class="btn-action btn-github" target="_blank"> <!-- Changed from review to trend -->
-              <i class="fab fa-github"></i>
-            </a>
+        <div class="header-details">
+          <h1>{{ trend.title }}</h1>
+          <h2>{{ trend.subtitle }}</h2>
+          <div class="meta-info">
+            <span><i class="fas fa-user"></i> {{ trend.writer }}</span>
+            <span><i class="fas fa-calendar-alt"></i> {{ trend.date }}</span>
           </div>
         </div>
-      </div>
-      <div class="main-content">
-        {{ trend.content|safe }} <!-- Changed from review to trend -->
-      </div>
-    </div>
-
-    <hr class="section-divider">
-
-    <div class="comment-section">
-      <h3>댓글</h3>
-      <div class="comments">
-        {% for comment in comments %}
-          <div class="comment">
-            <p>{{ comment.content }}</p>
-            <div class="comment-meta">
-              <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
-              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-              {% if comment.writer == user or user.is_staff %}
-                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                  <i class="fas fa-trash-alt"></i> 삭제
-                </button>
+        <div class="sidebar">
+          <div class="about-box">
+            <div class="action-buttons">
+              <button class="btn-action btn-like {% if user in trend.likes.all %}liked{% endif %}" data-review-id="{{ trend.id }}">
+                <i class="fas fa-heart {% if user in trend.likes.all %}liked{% endif %}"></i>
+              </button>
+              <button class="btn-action btn-bookmark {% if user in trend.bookmarks.all %}bookmarked{% endif %}" data-review-id="{{ trend.id }}">
+                <i class="fas fa-bookmark {% if user in trend.bookmarks.all %}bookmarked{% endif %}"></i>
+              </button>
+              {% if trend.ref_url %}
+              <a href="{{ review.giturl }}" class="btn-action btn-github" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
               {% endif %}
             </div>
           </div>
-        {% empty %}
-          <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
-        {% endfor %}
+        </div>
       </div>
-      <form class="comment-form" method="post" action="{% url 'trend:add_comment' trend.id %}"> <!-- Changed from review to trend -->
-        {% csrf_token %}
-        <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
-        <button type="submit" class="btn-add-comment">등록</button>
-      </form>
+      <div class="content-section">
+        <div class="main-content">
+          {{ trend.content|safe }}
+        </div>
+      </div>
     </div>
   </div>
+
+  <hr class="section-divider">
+  <span class="like-count">좋아요 {{ trend.likes.count }}개</span>
+  <div class="comment-section">
+    <h3>댓글</h3>
+    <div class="comments">
+      {% for comment in comments %}
+        <div class="comment">
+          <p>{{ comment.content }}</p>
+          <div class="comment-meta">
+            <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
+            <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+            {% if comment.writer == user or user.is_staff %}
+              <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                <i class="fas fa-trash-alt"></i> 삭제
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+      {% endfor %}
+    </div>
+    <form class="comment-form" method="post" action="{% url 'trend:add_comment' trend.id %}">
+      {% csrf_token %}
+      <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
+      <button type="submit" class="btn-add-comment">등록</button>
+    </form>
+  </div>
   <div class="action-buttons-bottom">
-    <a href="{% url 'trend:trend_list' %}" class="btn-action btn-back"> <!-- Changed from review to trend -->
-      <i class="fas fa-arrow-left"></i> 트렌드 목록으로 돌아가기 <!-- Changed link text -->
+    <a href="{% url 'trend:trend_list' %}" class="btn-action btn-back">
+      <i class="fas fa-arrow-left"></i> 리뷰 목록으로 돌아가기
     </a>
-    {% if user.username == trend.writer.username or user.is_staff %} <!-- Changed from review to trend -->
-      <a href="{% url 'trend:trend_update' trend.id %}" class="btn-action btn-edit"> <!-- Changed from review to trend -->
+    {% if user.username == trend.writer.username or user.is_staff %}
+      <a href="{% url 'trend:trend_update' trend.id %}" class="btn-action btn-edit">
         <i class="fas fa-edit"></i> 수정
       </a>
-      <form method="post" action="{% url 'trend:trend_delete' trend.id %}" style="display: inline;"> <!-- Changed from review to trend -->
+      <form method="post" action="{% url 'trend:trend_delete' trend.id %}" style="display: inline;">
         {% csrf_token %}
-        <button type="submit" class="btn-action btn-delete" onclick="return confirm('정말로 이 트렌드를 삭제하시겠습니까?');"> <!-- Changed confirmation text -->
+        <button type="submit" class="btn-action btn-delete" onclick="return confirm('정말로 이 리뷰를 삭제하시겠습니까?');">
           <i class="fas fa-trash-alt"></i> 삭제
         </button>
       </form>
@@ -115,9 +112,9 @@
 
     // 좋아요 기능
     $('.btn-like').click(function() {
-      var trendId = $(this).data('trend-id'); // Changed from review to trend
+      var reviewId = $(this).data('review-id');
       var likeButton = $(this);
-      $.post('/trend/' + trendId + '/like/', { // Changed from review to trend
+      $.post('/trend/' + reviewId + '/like/', {
         csrfmiddlewaretoken: getCSRFToken()
       }, function(data) {
         if (data.liked) {
@@ -126,6 +123,8 @@
           likeButton.removeClass('liked');
         }
         likeButton.find('.like-count').text(data.total_likes); // 좋아요 수 업데이트
+        // 페이지 상단 좋아요 수 업데이트
+        $('span.like-count').text('좋아요 ' + data.total_likes + '개');
       }).fail(function(xhr, status, error) {
         // 로그인 리다이렉션 확인
         if (xhr.status == 302) {
@@ -138,9 +137,9 @@
 
     // 북마크 기능
     $('.btn-bookmark').click(function() {
-      var trendId = $(this).data('trend-id'); // Changed from review to trend
+      var reviewId = $(this).data('review-id');
       var bookmarkButton = $(this);
-      $.post('/trend/' + trendId + '/bookmark/', { // Changed from review to trend
+      $.post('/trend/' + reviewId + '/bookmark/', {
         csrfmiddlewaretoken: getCSRFToken()
       }, function(data) {
         if (data.bookmarked) {
@@ -163,7 +162,7 @@
       var commentId = $(this).data('comment-id');
       if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
         $.ajax({
-          url: '/trend/comment/' + commentId + '/delete/', // Changed from review to trend
+          url: '/trend/comment/' + commentId + '/delete/',
           type: 'POST',
           headers: {
             'X-CSRFToken': getCSRFToken() // CSRF 토큰 추가

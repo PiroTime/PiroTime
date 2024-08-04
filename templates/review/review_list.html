@@ -170,8 +170,9 @@
         <!-- 리뷰 그리드 -->
         <div class="review-grid">
             {% for review in page_obj %}
+            {% with random_image=image_files|random %}
             <div class="review-card">
-                <div class="review-card-image" style="background-image: url('{% static 'images/logo.svg' %}');"></div>
+                <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
                 <div class="scrap-icon{% if request.user in review.bookmarks.all %} scrapped{% endif %}">
                     <i class="fas fa-bookmark"></i>
                 </div>
@@ -188,6 +189,7 @@
                     </div>
                 </div>
             </div>
+            {% endwith %}
             {% empty %}
             <p>리뷰가 없습니다.</p>
             {% endfor %}
