@@ -27,6 +27,7 @@
         <option value="$MODULE_DIR$/templates/review" />
         <option value="$MODULE_DIR$/templates/accounts" />
         <option value="$MODULE_DIR$/templates/corboard" />
+        <option value="$MODULE_DIR$/templates/coffeechat" />
       </list>
     </option>
   </component>
