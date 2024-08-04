@@ -3,10 +3,9 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/review/review_create.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <div class="container max-width-1200">
     <div class="review-create-card">
-        <h1 class="main-title">프로젝트 협업 게시물 작성하기</h1>
+        <h1 class="main-title">프로젝트 리뷰 수정하기</h1>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
@@ -23,7 +22,7 @@
             </div>
             <div class="btns">
                 <a href="{% url 'corboard:cor_list' %}" class="btn btn-back"><i class="fas fa-arrow-left"></i> 게시글 목록으로 돌아가기</a>
-                <button type="submit" class="btn btn-primary">제출하기</button>
+                <button type="submit" class="btn btn-primary">저장하기</button>
             </div>
         </form>
     </div>
