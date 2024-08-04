@@ -16,6 +16,9 @@ class CoffeeChat(models.Model):
     content = models.TextField(null=True, blank=True) #자기소개
     count = models.IntegerField(default=0) #요청 수
 
+    def date(self):
+        return self.created_at
+
 class CoffeeChatRequest(models.Model):
     STATUS_CHOICES = [
         ('WAITING','수락대기중'),
