@@ -4,12 +4,145 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/review/review_list.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<style>
+    body{
+        background-color: white;
+        font-family: 'Hubballi', sans-serif; 
+    }
 
+    .main-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .search-and-filter {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 30px;
+        border: 1px solid #0BEC12;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-search {
+        color: #fff;
+        border: none;
+        background-color: transparent;
+        padding: 0 20px;
+        border-radius: 0 30px 30px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-search:hover {
+        background-color: transparent;
+    }
+
+    .fa-search {
+        color: #0BEC12;
+        font-size: 1.6rem;
+    }
+
+    .fa-search:hover {
+        color: #28a745;
+    }
+
+    .list-container {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        gap: 20px;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    .review-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .review-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        border: 1px solid #CCCCCC;
+    }
+
+    .review-card-image {
+        height: 100px;
+        margin-bottom: 15px;
+    }
+
+    .profile-info {
+        border-radius: 10px;
+        padding: 20px;
+        border: 1px solid #CCCCCC;
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+
+    .step-links {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .step-links a {
+        color: #333;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .step-links a:hover {
+        background-color: #e0e0e0;
+    }
+
+    .current {
+        font-weight: bold;
+        margin: 0 20px;
+        color: black;
+        font-size: 1.4rem;
+    }
+
+    .profile-img{
+        width: 100px;
+        height: 100px;
+        background-color: lightgray;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+
+    .mypage {
+        background-color: #007bff;
+        color: white;
+        border:none;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .mypage:hover {
+        background-color: #0056b3;
+    }
+</style>
 <div class="main-container">
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'review:review_list' %}" method="get" class="search-form">
-            <input type="text" name="search" placeholder="리뷰 검색" value="{{ search_form.search.value }}">
+            <input type="text" name="search" placeholder="리뷰 검색" value="{{ search_form.search.value|default:'' }}">
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
         
@@ -20,27 +153,39 @@
         </div>
     </div>
 
-    <!-- 리뷰 그리드 -->
-    <div class="review-grid">
-        {% for review in page_obj %}
-        <div class="review-card">
-            <div class="review-card-image" style="background-image: url('{% static 'images/logo.svg' %}');"></div>
-            <div class="review-card-content">
-                <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
-                <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
-                <div class="review-likes">
-                    <form action="{% url 'review:like_review' pk=review.pk %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="like-button">
-                            <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> {{ review.total_likes }}
-                        </button>
-                    </form>
+    <div class="list-container">
+        <!-- 리뷰 그리드 -->
+        <div class="review-grid">
+            {% for review in page_obj %}
+            <div class="review-card">
+                <div class="review-card-image" style="background-image: url('{% static 'images/logo.svg' %}');"></div>
+                <div class="review-card-content">
+                    <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
+                    <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
+                    <div class="review-likes">
+                        <form action="{% url 'review:like_review' pk=review.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="like-button">
+                                <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> {{ review.total_likes }}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+            {% empty %}
+            <p>리뷰가 없습니다.</p>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p>리뷰가 없습니다.</p>
-        {% endfor %}
+        
+        <!-- 프로필 정보 -->
+        <div class="profile-info">
+            <h3>프로필 정보</h3>
+            <div class="profile-img"></div>
+            <p>이름: {{ user.username }}</p>
+            <p>이메일: {{ user.email }}</p>
+            <p></p>
+            <a href="#"><button class="mypage">마이페이지</button></a>
+        </div>
     </div>
 
     <!-- 페이지네이션 -->
@@ -48,15 +193,17 @@
         <span class="step-links">
             {% if page_obj.has_previous %}
                 <a href="?page=1&order_by={{ order_by }}&search={{ search|urlencode }}">« 처음</a>
+                <span class="current">
+                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
                 <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">이전</a>
             {% endif %}
 
-            <span class="current">
-                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-            </span>
-
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">다음</a>
+                <span class="current">
+                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
                 <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&search={{ search|urlencode }}">마지막 »</a>
             {% endif %}
         </span>

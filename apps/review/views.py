@@ -25,7 +25,7 @@ def review_list(request):
     else:
         reviews = Review.objects.filter(query).order_by('-date')
 
-    paginator = Paginator(reviews, 12)  # 페이지당 12개의 리뷰
+    paginator = Paginator(reviews, 6)  # 페이지당 12개의 리뷰
     page_number = request.GET.get('page')
 
     try:
