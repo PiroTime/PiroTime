@@ -4,16 +4,22 @@
 
 {% block content %}
 <style>
-    .container{
+    .container {
         margin-top: 60px;
     }
+
+    .max-width-1200 {
+        width: min(1200px, 100%);
+        padding: 0 40px;
+    }
+
     .profile-header {
         background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
         padding: 20px;
-        border-radius: 10px;
         color: white;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         margin-bottom: 20px;
     }
 
@@ -22,6 +28,11 @@
         width: 80px;
         height: 80px;
         margin-right: 20px;
+    }
+
+    .profile-header .profile-info {
+        display: flex;
+        align-items: center;
     }
 
     .profile-header h1 {
@@ -65,7 +76,12 @@
 
     .action-buttons {
         margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-left: auto; /* 오른쪽 정렬을 위해 추가 */
     }
+
 
     .action-buttons form,
     .action-buttons a {
@@ -75,8 +91,8 @@
 
     .action-buttons button,
     .action-buttons a {
-        background: #007bff;
-        color: white;
+        background: white;
+        color: black;
         border: none;
         padding: 10px 20px;
         border-radius: 5px;
@@ -88,15 +104,50 @@
     .action-buttons a:hover {
         background: #0056b3;
     }
+
+    .profile-img{
+        width: 100px;
+        height: 100px;
+        background-color: lightgray;
+        border-radius: 50%;
+        margin-right: 20px;
+    }
 </style>
 <div class="container">
     <div class="profile-header">
-        
-        <div>
-            <h1>{{ profile.receiver.username }}</h1>
-            <p>{{ profile.job }}</p>
-            피로그래밍 21기
-            <p>커피챗 {{ profile.count }}회</p>
+        <div class="header-container max-width-1200">
+            <div class="profile-info">
+                <div class="profile-img"></div>
+                <div>
+                    <h1>{{ profile.receiver.username }}</h1>
+                    <p>{{ profile.job }}</p>
+                    <p>피로그래밍 21기</p>
+                    <p>커피챗 {{ profile.count }}회</p>
+                </div>
+            </div>
+            <div class="action-buttons">
+                {% if user.is_authenticated %}
+                    {% if user == profile.receiver %}
+                        <a href="{% url 'coffeechat_update' profile.pk %}">프로필 수정하기</a>
+                        <form id="delete-form" method="post" action="{% url 'coffeechat_delete' profile.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="button" onclick="confirmDelete()">프로필 삭제하기</button>
+                        </form>
+                        <a href="/">비공개로 전환하기</a>
+                    {% else %}
+                        {% if is_limited %}
+                            <p>오늘치 최대 커피챗을 신청받음</p>
+                        {% elif is_waiting %}
+                            <p>커피챗 수락대기중</p>
+                        {% else %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <button type="submit">커피챗 제안하기</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
     </div>
     <div class="profile-details">
@@ -106,34 +157,12 @@
             {% endfor %}
         </p>
     </div>
-    <div class="profile-content">
+    <div class="profile-content max-width-1200">
         <h2>프로필 소개</h2>
         <div>{{ profile.content|safe }}</div>
     </div>
-    <div class="action-buttons">
-        {% if user.is_authenticated %}
-            {% if user == profile.receiver %}
-                <a href="{% url 'coffeechat_update' profile.pk %}">Edit</a>
-                <form id="delete-form" method="post" action="{% url 'coffeechat_delete' profile.pk %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="button" onclick="confirmDelete()">Delete</button>
-                </form>
-            {% else %}
-                {% if is_limited %}
-                    <p>오늘치 최대 커피챗을 신청받음</p>
-                {% elif is_waiting %}
-                    <p>커피챗 수락대기중</p>
-                {% else %}
-                    <form method="post">
-                        {% csrf_token %}
-                        <button type="submit">커피챗 제안하기</button>
-                    </form>
-                {% endif %}
-            {% endif %}
-        {% endif %}
-    </div>
     <!-- 요청 목록을 표시 -->
-    <div class="requests-list">
+    <div class="requests-list max-width-1200">
         <h3>요청받은 커피챗:</h3>
         {% for request in requests %}
             <div class="request-item">

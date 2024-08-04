@@ -6,20 +6,21 @@
 <style>
     .container {
         margin-top: 100px;
-        max-width: 800px;
         margin-left: auto;
         margin-right: auto;
         padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     }
 
-    .container h1 {
+    .container h2 {
         text-align: center;
-        margin-bottom: 30px;
-        font-size: 2.5em;
+        margin-bottom: 20px;
+        font-size: 2em;
         color: #333;
+    }
+
+    .max-width-1200 {
+        width: min(1200px, 100%);
+        padding: 0 40px;
     }
 
     .form-group {
@@ -31,7 +32,6 @@
         margin-bottom: 10px;
         font-weight: bold;
         font-size: 1.2em;
-        color: #555;
     }
 
     .form-group input[type="text"],
@@ -41,14 +41,17 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 1em;
+        box-sizing: border-box;
+    }
+
+    #job {
+        width: 100%;
     }
 
     #editor-container {
-        height: 200px;
+        height: 300px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        padding: 10px;
-        background-color: #fff;
     }
 
     .btn-submit {
@@ -58,34 +61,35 @@
         background-color: #007bff;
         color: white;
         border: none;
-        border-radius: 5px;
+        border-radius: 10px;
         font-size: 1.2em;
         cursor: pointer;
         transition: background-color 0.3s;
+        margin-bottom: 100px;
     }
 
     .btn-submit:hover {
         background-color: #0056b3;
     }
 </style>
-<div class="container">
-    <h1>Create CoffeeChat Profile</h1>
+<div class="container max-width-1200">
+    <h2>커피챗 프로필 생성하기</h2>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="id_job">Job:</label>
-            {{ form.job }}
+            <label for="id_job">직업</label>
+            <div id="job">{{ form.job }}</div>
         </div>
         <div class="form-group">
-            <label for="id_hashtags">Hashtags:</label>
+            <label for="id_hashtags">해시태그</label>
             <input name="hashtags" id="hashtags" placeholder="Enter hashtags" />
         </div>
         <div class="form-group">
-            <label for="id_content">Content:</label>
+            <label for="id_content">프로필 소개</label>
             <input type="hidden" name="content" id="content" />
             <div id="editor-container"></div>
         </div>
-        <button type="submit" class="btn-submit">Save</button>
+        <button type="submit" class="btn-submit">등록하기</button>
     </form>
 </div>
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -106,7 +110,7 @@
     form.onsubmit = function() {
        // 작성된 내용 가져옴(content)
         var content = document.querySelector('input[name=content]');
-        content.value = quill.root.innerHTML; // Set the hidden input's value to Quill content
+        content.value = quill.root.innerHTML; 
 
         // 작성된 내용을 JSON문자열로
         var parsedHashtags = tagify.value.map(tag => tag.value);

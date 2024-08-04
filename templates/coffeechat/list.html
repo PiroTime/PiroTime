@@ -12,16 +12,19 @@
             <button type="submit">Search</button>
         </form>
     </div>
-    <h1>List of CoffeeChat Profiles</h1>
     <div class="profile-list">
         {% for profile in profiles %}
             <div class="profile-card">
-                <h2>{{ profile.receiver.username }}</h2>
-                <p>Job: {{ profile.job }}</p>
+                <div class="profile-header">
+                    <div class="profile-info">
+                        <h2>{{ profile.receiver.username }}</h2>
+                        <p>{{ profile.job }}</p>
+                    </div>
+                </div>
                 <p>Hashtags</p>
                 <p>
                     {% for hashtag in profile.hashtags.all %}
-                        #{{ hashtag.name }} 
+                        <span class="hashtag">#{{ hashtag.name }}</span>
                     {% endfor %}
                 </p>
                 <a href="{% url 'coffeechat_detail' profile.pk %}">View Details</a>

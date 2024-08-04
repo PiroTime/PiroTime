@@ -2,6 +2,7 @@
     margin-top: 60px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .search-bar-container {
@@ -38,8 +39,10 @@
     background-color: #0056b3;
 }
 
-.profile-list{
+.profile-list {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .profile-card {
@@ -49,12 +52,39 @@
     margin: 20px;
     padding: 20px;
     box-sizing: border-box;
-    width: 200px;
+    width: 300px; /* 고정된 너비 */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(45deg, #ff6b6b, #f5f7fa);
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-header img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+}
+
+.profile-info {
+    margin-left: 80px; /* 이미지 크기 + 여백 */
+    color: white;
 }
 
 .profile-card h2 {
     font-size: 1.5em;
-    margin-bottom: 10px;
+    margin: 0;
 }
 
 .profile-card p {
@@ -75,4 +105,13 @@
 .profile-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hashtag {
+    display: inline-block;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
