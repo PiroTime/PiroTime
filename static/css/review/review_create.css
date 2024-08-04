@@ -1,17 +1,22 @@
+.max-width-1200 {
+    width: min(1200px, 100%);
+    padding: 0 40px;
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 100px;
+    margin-top: 60px;
 }
 
 .review-create-card {
     background-color: #fff;
     border-radius: 10px;
-    padding: 40px;
-    max-width: 600px;
     width: 100%;
+    padding: 20px;
+    margin: 0 100px;
 }
 
 .main-title {
@@ -91,4 +96,29 @@ form button[type="submit"]:hover {
     .main-title {
         font-size: 1.5rem;
     }
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.btns {
+    display: flex;
+    justify-content: space-between;
 }
