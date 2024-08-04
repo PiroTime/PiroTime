@@ -218,7 +218,7 @@
           <ul>
             <a href="#">review</a> 
             <a href="#">cooperation</a> 
-            <a href="#">coffeechat</a> 
+            <a href="{% url 'coffeechat_home' %}">coffeechat</a> 
             <a href="#">ITtrend</a> 
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}">Logout</a>
