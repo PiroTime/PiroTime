@@ -173,9 +173,5 @@ cython_debug/
 .idea/
 .idea
 PiroTime.iml
-.idea/*
-!.idea/misc.xml
-!.idea/modules.xml
-!.idea/vcs.xml
-!.idea/workspace.xml
+
 # End of https://www.toptal.com/developers/gitignore/api/django

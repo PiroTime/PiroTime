@@ -1,42 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="41c3d7bd-44eb-42dc-9859-6bdc4bf027d3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/celery.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/corboard/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/corboard_create.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/corboard_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/corboard_list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/corboard/message.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/이미지.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PiroTime.iml" beforeDir="false" afterPath="$PROJECT_DIR$/PiroTime.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/corboard/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/review/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/review/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/corboard/migrations/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/review/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/corboard/tests.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/review/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/review/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/review/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-    </list>
+    <list default="true" id="41c3d7bd-44eb-42dc-9859-6bdc4bf027d3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -132,6 +97,25 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <module name="PiroTime" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
       <method v="2" />
     </configuration>
     <list>
