@@ -1,0 +1,277 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 20px;
+    padding-bottom: 5rem;
+    min-height: calc(100vh - 8rem);
+}
+
+.review-detail {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.image-placeholder {
+    width: 120px;
+    height: 120px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 30px;
+}
+
+.review-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.header-details h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.header-details h2 {
+    font-size: 1.5rem;
+    color: #666;
+    margin: 0 0 15px 0;
+}
+
+.meta-info {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.meta-info span {
+    margin-right: 15px;
+}
+
+.section-divider {
+    border: none;
+    border-top: 2px solid #0BEC12;
+    margin: 30px 0;
+}
+
+.content-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.sidebar {
+    flex-basis: 25%;
+}
+
+.main-content {
+    flex-basis: 70%;
+}
+
+.about-box {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.about-box h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    font-size: 1.2rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 5px;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+}
+
+
+.btn-like.liked {
+    color: #FF4C4C;
+    transform: scale(1.1);
+}
+
+
+.btn-bookmark.bookmarked {
+    color: #FFC107;
+    transform: scale(1.1);
+}
+
+.btn-github:hover {
+    color: #333;
+}
+
+.main-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+}
+
+.comment-section {
+    margin-top: 40px;
+}
+
+.comment-section h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.comments {
+    margin-bottom: 30px;
+}
+
+.comment {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comment-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.btn-delete-comment {
+    background: none;
+    border: none;
+    color: #FF4C4C;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.btn-delete-comment:hover {
+    color: #FF0000;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-input {
+    border: 1px solid #e0e0e0;
+    outline: none;
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.3s ease;
+}
+
+.comment-input:focus {
+    border-color: #0BEC12;
+}
+
+.btn-add-comment {
+    background-color: #0BEC12;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    align-self: flex-end;
+}
+
+.btn-add-comment:hover {
+    background-color: #09B10F;
+}
+
+.action-buttons-bottom {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    justify-content: flex-end;
+}
+
+.btn-back, .btn-edit, .btn-delete {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.btn-back:hover, .btn-edit:hover, .btn-delete:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.btn-delete:hover {
+    background-color: #FF4C4C;
+    color: #ffffff;
+}
+
+.btn-back i, .btn-edit i, .btn-delete i {
+    margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .image-placeholder {
+        margin-bottom: 20px;
+    }
+
+    .content-section {
+        flex-direction: column;
+    }
+
+    .sidebar, .main-content {
+        flex-basis: 100%;
+    }
+
+    .sidebar {
+        margin-bottom: 30px;
+    }
+}

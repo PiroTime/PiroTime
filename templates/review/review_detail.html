@@ -1,83 +1,187 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ review.title }}</title>
-    <link rel="stylesheet" href="{% static 'css/review/styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <div class="container">
-        <!-- 리뷰 상세 카드 -->
-        <div class="review-detail-card">
-            <div class="review-header">
-                <h1>{{ review.title }}</h1>
-                <div class="review-meta">
-                    <span>작성자: {{ review.writer }}</span>
-                    <span>날짜: {{ review.date }}</span>
-                    <div class="review-likes">
-                        <form method="post" action="{% url 'review:like_review' pk=review.pk %}" class="inline-form">
-                            {% csrf_token %}
-                            <button type="submit" class="like-button">
-                                <i class="fas fa-heart"></i> {{ review.total_likes }}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/review/review_detail.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-            <div class="review-content">
-                {{ review.content }}
-            </div>
+<meta name="csrf-token" content="{{ csrf_token }}">
 
-            <div class="review-actions">
-                <a href="{{ review.giturl }}" target="_blank" class="btn">GitHub URL</a>
-                
-                <form method="post" action="{% url 'review:bookmark_review' pk=review.pk %}" class="inline-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-bookmark">
-                        {% if user in review.bookmarks.all %}북마크 제거{% else %}북마크{% endif %}
-                    </button>
-                </form>
-
-                {% if review.writer == user %}
-                <a href="{% url 'review:review_update' pk=review.pk %}" class="btn">수정하기</a>
-                <form method="post" action="{% url 'review:review_delete' pk=review.pk %}" class="inline-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-delete">삭제하기</button>
-                </form>
-                {% endif %}
-            </div>
-
-            <!-- 댓글 섹션 -->
-            <div class="comment-section">
-                <h2>댓글</h2>
-                {% for comment in review.comments.all %}
-                <div class="comment">
-                    <p>{{ comment.content }}</p>
-                    <p class="comment-meta">작성자: {{ comment.writer }} / 날짜: {{ comment.date }}</p>
-                    {% if comment.writer == user or user.is_staff %}
-                    <form method="post" action="{% url 'review:comment_delete' pk=comment.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-delete-comment">삭제하기</button>
-                    </form>
-                    {% endif %}
-                </div>
-                {% endfor %}
-
-                <h3>댓글 추가하기</h3>
-                <form method="post" action="{% url 'review:add_comment' pk=review.pk %}" class="comment-form">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <button type="submit" class="btn btn-submit">등록</button>
-                </form>
-            </div>
-
-            <a href="{% url 'review:review_list' %}" class="btn btn-back">리뷰 목록으로 돌아가기</a>
+<div class="container">
+  <div class="review-detail">
+    <div class="header-section">
+      <div class="image-placeholder">
+        <img src="{% static 'images/logo.svg' %}" alt="Review Image" class="review-image">
+      </div>
+      <div class="header-details">
+        <h1>{{ review.title }}</h1>
+        <h2>{{ review.subtitle }}</h2>
+        <div class="meta-info">
+          <span><i class="fas fa-user"></i> {{ review.writer }}</span>
+          <span><i class="fas fa-calendar-alt"></i> {{ review.date }}</span>
         </div>
+      </div>
     </div>
-</body>
-</html>
+
+    <hr class="section-divider">
+
+    <div class="content-section">
+      <div class="sidebar">
+        <div class="about-box">
+          <h3>About</h3>
+          <div class="action-buttons">
+            <button class="btn-action btn-like {% if user in review.likes.all %}liked{% endif %}" data-review-id="{{ review.id }}">
+              <i class="fas fa-heart"></i>
+              <span class="like-count">{{ review.likes.count }}</span>
+            </button>
+            <button class="btn-action btn-bookmark {% if user in review.bookmarks.all %}bookmarked{% endif %}" data-review-id="{{ review.id }}">
+              <i class="fas fa-bookmark"></i>
+            </button>
+            <a href="{{ review.giturl }}" class="btn-action btn-github" target="_blank">
+              <i class="fab fa-github"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="main-content">
+        {{ review.content|safe }}
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="comment-section">
+      <h3>댓글</h3>
+      <div class="comments">
+        {% for comment in comments %}
+          <div class="comment">
+            <p>{{ comment.content }}</p>
+            <div class="comment-meta">
+              <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
+              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+              {% if comment.writer == user or user.is_staff %}
+                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                  <i class="fas fa-trash-alt"></i> 삭제
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+        {% endfor %}
+      </div>
+      <form class="comment-form" method="post" action="{% url 'review:add_comment' review.id %}">
+        {% csrf_token %}
+        <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
+        <button type="submit" class="btn-add-comment">등록</button>
+      </form>
+    </div>
+  </div>
+  <div class="action-buttons-bottom">
+    <a href="{% url 'review:review_list' %}" class="btn-action btn-back">
+      <i class="fas fa-arrow-left"></i> 리뷰 목록으로 돌아가기
+    </a>
+    {% if user.username == review.writer.username or user.is_staff %}
+      <a href="{% url 'review:review_update' review.id %}" class="btn-action btn-edit">
+        <i class="fas fa-edit"></i> 수정
+      </a>
+      <form method="post" action="{% url 'review:review_delete' review.id %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn-action btn-delete" onclick="return confirm('정말로 이 리뷰를 삭제하시겠습니까?');">
+          <i class="fas fa-trash-alt"></i> 삭제
+        </button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // CSRF 토큰 가져오기
+    function getCSRFToken() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+
+    // AJAX 설정
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        if (!this.crossDomain) {
+          xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+        }
+      }
+    });
+
+    // 좋아요 기능
+    $('.btn-like').click(function() {
+      var reviewId = $(this).data('review-id');
+      var likeButton = $(this);
+      $.post('/review/' + reviewId + '/like/', {
+        csrfmiddlewaretoken: getCSRFToken()
+      }, function(data) {
+        if (data.liked) {
+          likeButton.addClass('liked');
+        } else {
+          likeButton.removeClass('liked');
+        }
+        likeButton.find('.like-count').text(data.total_likes); // 좋아요 수 업데이트
+      }).fail(function(xhr, status, error) {
+        // 로그인 리다이렉션 확인
+        if (xhr.status == 302) {
+          window.location.href = xhr.getResponseHeader('Location');
+        } else {
+          alert('좋아요 요청에 실패했습니다. 다시 시도해주세요.');
+        }
+      });
+    });
+
+    // 북마크 기능
+    $('.btn-bookmark').click(function() {
+      var reviewId = $(this).data('review-id');
+      var bookmarkButton = $(this);
+      $.post('/review/' + reviewId + '/bookmark/', {
+        csrfmiddlewaretoken: getCSRFToken()
+      }, function(data) {
+        if (data.bookmarked) {
+          bookmarkButton.addClass('bookmarked');
+        } else {
+          bookmarkButton.removeClass('bookmarked');
+        }
+      }).fail(function(xhr, status, error) {
+        // 로그인 리다이렉션 확인
+        if (xhr.status == 302) {
+          window.location.href = xhr.getResponseHeader('Location');
+        } else {
+          alert('북마크 요청에 실패했습니다. 다시 시도해주세요.');
+        }
+      });
+    });
+
+    // 댓글 삭제 기능
+    $('.btn-delete-comment').click(function() {
+      var commentId = $(this).data('comment-id');
+      if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+        $.ajax({
+          url: '/review/comment/' + commentId + '/delete/',
+          type: 'POST',
+          headers: {
+            'X-CSRFToken': getCSRFToken() // CSRF 토큰 추가
+          },
+          success: function() {
+            location.reload();
+          },
+          error: function(xhr, status, error) {
+            // 로그인 리다이렉션 확인
+            if (xhr.status == 302) {
+              window.location.href = xhr.getResponseHeader('Location');
+            } else {
+              alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+            }
+          }
+        });
+      }
+    });
+  });
+</script>
+
+{% endblock %}

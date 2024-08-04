@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Write a Trend</title>
-</head>
-<body>
-    <h1>Write a Trend</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-    <a href="{% url 'trend:trend_list' %}">Back to trends</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/trend/trend_create.css' %}">
+
+<div class="container">
+    <div class="trend-create-card">
+        <h1 class="main-title">트렌드 작성하기</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">제출하기</button>
+        </form>
+        <a href="{% url 'trend:trend_list' %}" class="btn btn-back">트렌드 목록으로 돌아가기</a>
+    </div>
+</div>
+{% endblock %}

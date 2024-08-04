@@ -11,8 +11,8 @@ urlpatterns = [
     path('detail/<int:pk>/', trend_detail, name='trend_detail'),
     
     path('comment/<int:pk>/', add_comment, name='add_comment'),
-    path('comment/delete/<int:pk>/', delete_comment, name='delete_comment'),
+    path('comment/<int:pk>/delete/', delete_comment, name='delete_comment'),
     
-    path('like/<int:pk>/', like_trend, name='like_trend'),
-    path('bookmark/<int:pk>/', bookmark_trend, name='bookmark_trend'),
+    path('<int:pk>/like/', like_trend, name='like_trend'),
+    path('<int:pk>/bookmark/', bookmark_trend, name='bookmark_trend'),
 ]

@@ -6,11 +6,11 @@
 
 <div class="container">
     <div class="review-create-card">
-        <h1 class="main-title">리뷰 작성하기</h1>
+        <h1 class="main-title">리뷰 수정하기</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">제출하기</button>
+            <button type="submit" class="btn btn-primary">수정 완료</button>
         </form>
         <a href="{% url 'review:review_list' %}" class="btn btn-back">리뷰 목록으로 돌아가기</a>
     </div>

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/trend/trend_create.css' %}"> <!-- Changed from review to trend -->
+
+<div class="container">
+    <div class="trend-create-card"> <!-- Changed from review-create-card to trend-create-card -->
+        <h1 class="main-title">트렌드 수정하기</h1> <!-- Changed text from review to trend -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }} <!-- Assuming TrendForm is used -->
+            <button type="submit" class="btn btn-primary">수정 완료</button>
+        </form>
+        <a href="{% url 'trend:trend_list' %}" class="btn btn-back">트렌드 목록으로 돌아가기</a> <!-- Changed from review to trend -->
+    </div>
+</div>
+{% endblock %}

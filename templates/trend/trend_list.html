@@ -1,26 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Trend List</title>
-</head>
-<body>
-    <h1>Trends</h1>
-    <form method="get" action="">
-        <select name="filter" onchange="this.form.submit()">
-            <option value="date">Latest</option>
-            <option value="likes">Most Liked</option>
-        </select>
-    </form>
-    <ul>
-        {% for trend in trends %}
-        <li>
-            <a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a>
-            <p>Written by: {{ trend.writer }} on {{ trend.date }}</p>
-            <p>Likes: {{ trend.total_likes }}</p>
-        </li>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/trend/trend_list.css' %}"> <!-- Changed from review to trend -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+<div class="main-container">
+    <!-- 검색 및 필터 섹션 -->
+    <div class="search-and-filter">
+        <form action="{% url 'trend:trend_list' %}" method="get" class="search-form"> <!-- Changed from review to trend -->
+            <input type="text" name="search" placeholder="트렌드 검색" value="{{ search_form.search.value }}"> <!-- Changed placeholder -->
+            <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
+        </form>
+        
+        <div class="button-group">
+            <a href="{% url 'trend:trend_list' %}?order_by=date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</a> <!-- Changed from review to trend -->
+            <a href="{% url 'trend:trend_list' %}?order_by=likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</a> <!-- Changed from review to trend -->
+            <a href="{% url 'trend:trend_create' %}" class="btn btn-create">새로운 트렌드 작성하기</a> <!-- Changed from review to trend -->
+        </div>
+    </div>
+
+    <!-- 트렌드 그리드 -->
+    <div class="trend-grid"> <!-- Changed from review-grid to trend-grid -->
+        {% for trend in page_obj %} <!-- Changed from review to trend -->
+        <div class="trend-card"> <!-- Changed from review-card to trend-card -->
+            <div class="trend-card-image" style="background-image: url('{% static 'images/logo.svg' %}');"></div> <!-- Changed from review to trend -->
+            <div class="trend-card-content"> <!-- Changed from review to trend -->
+                <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2> <!-- Changed from review to trend -->
+                <p>작성자: {{ trend.writer }} / 날짜: {{ trend.date }}</p> <!-- Changed from review to trend -->
+                <div class="trend-likes"> <!-- Changed from review-likes to trend-likes -->
+                    <form action="{% url 'trend:like_trend' pk=trend.pk %}" method="post"> <!-- Changed from review to trend -->
+                        {% csrf_token %}
+                        <button type="submit" class="like-button">
+                            <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> {{ trend.total_likes }} <!-- Changed from review to trend -->
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>트렌드가 없습니다.</p> <!-- Changed from review to trend -->
         {% endfor %}
-    </ul>
-    <a href="{% url 'trend:trend_create' %}">Write a new trend</a>
-</body>
-</html>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&order_by={{ order_by }}&search={{ search|urlencode }}">« 처음</a>
+                <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">이전</a>
+            {% endif %}
+
+            <span class="current">
+                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">다음</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&search={{ search|urlencode }}">마지막 »</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}
