@@ -1,7 +1,7 @@
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.mail import EmailMessage, send_mail
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
@@ -84,19 +84,26 @@ def cor_delete_comment(request, pk):
 
 def cor_like(request,  pk):
     cor = get_object_or_404(Corboard, pk=pk)
+    print("like:", cor.count_like())
+
     if cor.likes.filter(id=request.user.id).exists():
         cor.likes.remove(request.user.id)
+        liked = False
     else:
         cor.likes.add(request.user)
-    return redirect('corboard:cor_detail', pk=cor.id)
+        liked = True
+
+    return JsonResponse({'liked': liked, 'total_likes': cor.count_like()})
 
 def cor_bookmark(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
     if cor.bookmarks.filter(id=request.user.id).exists():
         cor.bookmarks.remove(request.user.id)
+        bookmarked = False
     else:
         cor.bookmarks.add(request.user)
-    return redirect('corboard:cor_detail', pk=cor.id)
+        bookmarked = True
+    return JsonResponse({'bookmarked': bookmarked, 'total_likes': cor.count_like()})
 
 def cor_search(request):
     query = request.GET.get('searchContent')
