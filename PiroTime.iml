@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="PYTHON_MODULE" version="4">
+<module version="4">
   <component name="FacetManager">
     <facet type="django" name="Django">
       <configuration>
-        <option name="rootFolder" value="$MODULE_DIR$/trend" />
+        <option name="rootFolder" value="$MODULE_DIR$/apps/trend" />
         <option name="settingsModule" value="settings.py" />
         <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
@@ -20,15 +20,5 @@
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
-    <option name="TEMPLATE_FOLDERS">
-      <list>
-        <option value="$MODULE_DIR$/templates" />
-        <option value="$MODULE_DIR$/templates/trend" />
-        <option value="$MODULE_DIR$/templates/review" />
-        <option value="$MODULE_DIR$/templates/accounts" />
-        <option value="$MODULE_DIR$/templates/corboard" />
-        <option value="$MODULE_DIR$/templates/coffeechat" />
-      </list>
-    </option>
   </component>
 </module>

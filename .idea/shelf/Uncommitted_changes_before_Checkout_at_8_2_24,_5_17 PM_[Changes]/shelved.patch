@@ -1,0 +1,22 @@
+Index: config/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/config/urls.py b/config/urls.py
+--- a/config/urls.py	
++++ b/config/urls.py	
+@@ -17,8 +17,12 @@
+ from django.contrib import admin
+ from django.urls import path, include
+ 
++
+ urlpatterns = [
+     path('admin/', admin.site.urls),
+-    path('', include('accounts.urls')),  
++    path('', include('accounts.urls')),
++    path("corboard/", include('corboard.urls'))
+ ]
+ 
++
++
