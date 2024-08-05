@@ -35,7 +35,7 @@
         <section class="content-section">
             <div>
                 <h3 class="start-card-title">Project Review 인기글</h3>
-                <a href="{% url 'review:review_detail' pk=review_most.pk %}" >
+                <a {% if corboard_most %} href="{% url 'review:review_detail' pk=review_most.pk %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
                     <p class="start-title">{{ review_most.title }}</p>
                     <p class="start-content">{{ review_most.content }}</p>
