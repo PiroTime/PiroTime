@@ -44,7 +44,7 @@
             </div>
             <div>
                 <h3 class="start-card-title">Project Cooperation 인기글</h3>
-                <a{% if corboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}"> {% else %}href="#"{% endif %}>
+                <a {% if corboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
                     <p class="start-title">{{ coboard_most.title }}</p>
                     <p class="start-content">{{ coboard_most.content }}</p>
@@ -53,7 +53,7 @@
             </div>
             <div>
                 <h3 class="start-card-title">CoffeeChat 인기글</h3>
-                <a{% if corboard_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}"> {% else %}href="#"{% endif %}>
+                <a {% if corboard_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
                     <p class="start-title">{{ coffeechat_most.title }}</p>
                     <p class="start-content">{{ coffeechat_most.content }}</p>
@@ -62,7 +62,7 @@
             </div>
             <div>
                 <h3 class="start-card-title">IT Trend 인기글</h3>
-                <a{% if corboard_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}"> {% else %}href="#"{% endif %}>
+                <a {% if corboard_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
                     <p class="start-title">{{ trend_most.title }}</p>
                     <p class="start-content">{{ trend_most.content }}</p>
