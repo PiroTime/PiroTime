@@ -3,9 +3,9 @@
   <component name="FacetManager">
     <facet type="django" name="Django">
       <configuration>
-        <option name="rootFolder" value="$MODULE_DIR$/trend" />
-        <option name="settingsModule" value="settings.py" />
-        <option name="manageScript" value="manage.py" />
+        <option name="rootFolder" value="$MODULE_DIR$/apps/trend" />
+        <option name="settingsModule" value="" />
+        <option name="manageScript" value="" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
         <option name="trackFilePattern" value="migrations" />
@@ -17,19 +17,5 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-  <component name="TemplatesService">
-    <option name="TEMPLATE_CONFIGURATION" value="Django" />
-    <option name="TEMPLATE_FOLDERS">
-      <list>
-        <option value="$MODULE_DIR$/templates" />
-        <option value="$MODULE_DIR$/templates/trend" />
-        <option value="$MODULE_DIR$/templates/review" />
-        <option value="$MODULE_DIR$/templates/accounts" />
-        <option value="$MODULE_DIR$/templates/corboard" />
-        <option value="$MODULE_DIR$/templates/coffeechat" />
-        <option value="$MODULE_DIR$/templates/mypage" />
-      </list>
-    </option>
   </component>
 </module>
