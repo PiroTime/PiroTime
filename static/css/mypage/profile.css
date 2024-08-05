@@ -1,0 +1,208 @@
+body {
+    background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
+}
+
+.profile-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.profile-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.profile-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0BEC12;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-intro {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.btn-primary {
+    background-color: #0BEC12;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #09D910;
+}
+
+.profile-activities {
+    margin-top: 2rem;
+    position: relative;
+}
+
+.activity-navbar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: absolute;
+    left: 0;
+    width: 150px;
+}
+
+.activity-link {
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.activity-link:hover, .activity-link.active {
+    color: #fff;
+    background-color: #0BEC12;
+}
+
+.activity-filter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filter-link {
+    padding: 0.3rem 0.8rem;
+    text-decoration: none;
+    color: #333;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.filter-link:hover, .filter-link.active {
+    color: #fff;
+    background-color: #0BEC12;
+}
+
+.activity-content {
+    margin-left: 170px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.activity-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.card-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.card-category {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background-color: #0BEC12;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.activity-content {
+    margin-left: 170px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.activity-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.card-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.card-category {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    background-color: #0BEC12;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}

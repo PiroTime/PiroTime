@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/review/review_create.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<div class="container max-width-1200">
+    <div class="review-create-card">
+        <h1 class="main-title">IT trend 작성하기</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">제목</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}">내용</label>
+                {{ form.content }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.refer_url.id_for_label }}">URL</label>
+                {{ form.refer_url }}
+            </div>
+            <div class="btns">
+                <a href="{% url 'trend:trend_list' %}" class="btn btn-back"><i class="fas fa-arrow-left"></i>리뷰 목록으로 돌아가기</a>
+                <button type="submit" class="btn btn-primary">제출하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

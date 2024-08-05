@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
+
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>{{ user.username }}의 프로필</h1>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-image">
+            {% if profile and profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="{{ user.username }}의 프로필 이미지">
+            {% else %}
+                <img src="{% static 'images/logo.svg' %}" alt="기본 프로필 이미지">
+            {% endif %}
+        </div>
+
+        <div class="profile-info">
+            <p class="profile-intro">{{ profile.intro|default:"소개가 없습니다." }}</p>
+            <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
+        </div>
+    </div>
+
+    <div class="profile-activities">
+        <div class="activity-navbar">
+            <a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a>
+            <a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a>
+            <a href="#" class="activity-link" data-filter="liked">좋아요한 글</a>
+            <a href="#" class="activity-link" data-filter="commented">댓글 단 글</a>
+        </div>
+
+        <div class="activity-filter">
+            <a href="#" class="filter-link active" data-category="all">전체</a>
+            <a href="#" class="filter-link" data-category="review">리뷰</a>
+            <a href="#" class="filter-link" data-category="trend">트렌드</a>
+            <a href="#" class="filter-link" data-category="corboard">협업</a>
+        </div>
+
+        <div id="activity-content" class="activity-content">
+            <!-- AJAX -->
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentFilter = 'my_posts';
+    let currentCategory = 'all';
+
+    loadActivities(currentFilter, currentCategory);
+
+    const activityLinks = document.querySelectorAll('.activity-link');
+    activityLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentFilter = this.getAttribute('data-filter');
+            activityLinks.forEach(link => link.classList.remove('active'));
+            this.classList.add('active');
+            loadActivities(currentFilter, currentCategory);
+        });
+    });
+
+    const filterLinks = document.querySelectorAll('.filter-link');
+    filterLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentCategory = this.getAttribute('data-category');
+            filterLinks.forEach(link => link.classList.remove('active'));
+            this.classList.add('active');
+            loadActivities(currentFilter, currentCategory);
+        });
+    });
+
+    function loadActivities(filter, category) {
+        const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const activityContent = document.getElementById('activity-content');
+                activityContent.innerHTML = '';
+                if (data.posts.length > 0) {
+                    data.posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.classList.add('activity-card');
+                        postElement.innerHTML = `
+                            <div class="card-content">
+                                <h3><a href="${post.url}">${post.title}</a></h3> <!-- 제목에 링크 추가 -->
+                                <p>${post.content}</p>
+                                <span>작성자: ${post.writer}</span>
+                                <span>작성일: ${new Date(post.date).toLocaleDateString()}</span>
+                                <span class="card-category">${post.category}</span>
+                            </div>
+                        `;
+                        activityContent.appendChild(postElement);
+                    });
+                } else {
+                    activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
+                }
+            })
+            .catch(error => console.error('Error loading activities:', error));
+    }
+});
+</script>
+{% endblock %}
