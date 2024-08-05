@@ -1,33 +1,218 @@
 {% extends 'base.html' %}
 
-{% block title %}List of CoffeeChat Profiles{% endblock %}
-
 {% block content %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/profile.css' %}"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<style>
+    .container{
+        max-width: 1000px;
+        margin: 3rem auto;
+        padding: 20px;
+        padding-bottom: 5rem;
+        height: 70vh;
+    }
+    
+    .search-bar-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        margin-top: 50px;
+        padding: 10px;
+    }
+
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 30px;
+        border: 1px solid #0BEC12;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-bar button{
+        background-color: transparent;
+        border: none;
+    }
+
+    .search-bar button:hover{
+        background-color: transparent;
+    }
+
+    .search-bar input[type="text"] {
+        flex: 1;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px 0 0 30px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .search-bar input[type="text"]::placeholder {
+        color: #999;
+    }
+
+    .btn-search {
+        color: #fff;
+        border: none;
+        background-color: transparent;
+        padding: 0 20px;
+        border-radius: 0 30px 30px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-search:hover {
+        background-color: transparent;
+    }
+
+    .fa-search {
+        color: #0BEC12;
+        font-size: 1.6rem;
+    }
+
+    .fa-search:hover {
+        color: #28a745;
+    }
+
+    .profile-list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        justify-content: center;
+    }
+
+    .profile-card {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 0;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #CCCCCC;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(45deg, #ff6b6b, #f5f7fa);
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+        position: relative;
+        width: 100%;
+    }
+
+    .profile-info {
+        margin-left: 20px;
+        color: white;
+    }
+
+    .profile-card h2 {
+        font-size: 1.5em;
+        margin: 0;
+    }
+
+    .profile-card p {
+        margin: 5px 0;
+    }
+
+    .profile-card a {
+        display: inline-block;
+        margin-top: 10px;
+        text-decoration: none;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .hashtag-container {
+        max-height: 100px; 
+        overflow: hidden; 
+    }
+
+    .hashtag {
+        display: inline-block;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        color: black;
+    }
+
+    .hashtag:hover  {
+        text-decoration: none;
+    }
+
+    .profile-content {
+        padding: 0 20px 20px 20px;
+        flex: 1; 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .profile-content > a {
+        margin-top: auto; /* Link를 아래로 밀기 위해 auto margin 사용 */
+        align-self: flex-end; /* 왼쪽 정렬 */
+    }
+    
+    .profile-img {
+        background-color: lightgray;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .profile-img i {
+        font-size: 2rem;
+        color: #BBBBBB;
+    }
+
+    .profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
 <div class="container">
     <div class="search-bar-container">
         <form class="search-bar" method="get" action="{% url 'coffeechat:coffeechat_list' %}">
-            <input type="text" name="search" placeholder="Search profiles...">
-            <button type="submit">Search</button>
+            <input type="text" name="search" placeholder="선배들의 프로필을 검색해보세요...">
+            <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
     </div>
     <div class="profile-list">
         {% for profile in profiles %}
             <div class="profile-card">
                 <div class="profile-header">
+                    <div class="profile-img">
+                        {% if profile.profile_image %}
+                            <img src="{{ profile.profile_image.url }}" alt="Profile Image">
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
+                    </div>
                     <div class="profile-info">
                         <h2>{{ profile.receiver.username }}</h2>
                         <p>{{ profile.job }}</p>
                     </div>
                 </div>
-                <p>Hashtags</p>
-                <p>
-                    {% for hashtag in profile.hashtags.all %}
-                        <span class="hashtag">#{{ hashtag.name }}</span>
-                    {% endfor %}
-                </p>
-                <a href="{% url 'coffeechat:coffeechat_detail' profile.pk %}">View Details</a>
+                <div class="profile-content">
+                    <div class="hashtag-container">
+                        {% for hashtag in profile.hashtags.all %}
+                            <a href="{% url 'coffeechat:coffeechat_list' %}?search={{ hashtag.name }}" class="hashtag">#{{ hashtag.name }}</a>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'coffeechat:coffeechat_detail' profile.pk %}">View Details</a>
+                </div>
             </div>
         {% endfor %}
     </div>

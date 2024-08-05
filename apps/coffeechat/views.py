@@ -15,8 +15,10 @@ from django.utils.html import strip_tags
 from .models import CoffeeChat, Hashtag, CoffeeChatRequest
 from .forms import CoffeeChatForm
 from datetime import timedelta
+from django.http import JsonResponse
 import json
 from django.http import HttpResponseForbidden
+from django.db.models import Q
 
 def home(request):
     reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기
@@ -29,7 +31,7 @@ def list(req):
     query = req.GET.get('search')
     if query:
         profiles = CoffeeChat.objects.filter(
-            hashtags__name__icontains(query)
+            Q(hashtags__name__icontains=query) | Q(receiver__username__icontains=query) | Q(job__icontains=query)
         ).distinct()
     else:
         profiles = CoffeeChat.objects.all()
@@ -209,7 +211,7 @@ def update(req, pk):
             coffeechat.hashtags.set(hashtag_objects)
             
             coffeechat.save()
-            return redirect('coffeechat:coffeechat:coffeechat_detail', pk=profile.pk)
+            return redirect('coffeechat:coffeechat_detail', pk=profile.pk)
     else: # 수정 전(위한 load, GET)
         form = CoffeeChatForm(instance=profile)
         # 수정을 위해서 기존 콘텐츠와 해시태그 로드(JSON)

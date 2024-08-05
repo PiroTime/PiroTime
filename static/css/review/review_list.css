@@ -151,32 +151,3 @@
     color: #FF0000;
 }
 
-/* 페이지네이션 */
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    font-size: 0.9rem;
-}
-
-.step-links {
-    display: flex;
-    gap: 10px;
-}
-
-.step-links a {
-    color: #333;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.step-links a:hover {
-    background-color: #e0e0e0;
-}
-
-.current {
-    font-weight: bold;
-    color: #0BEC12;
-}
