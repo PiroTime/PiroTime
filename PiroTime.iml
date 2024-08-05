@@ -28,6 +28,7 @@
         <option value="$MODULE_DIR$/templates/accounts" />
         <option value="$MODULE_DIR$/templates/corboard" />
         <option value="$MODULE_DIR$/templates/coffeechat" />
+        <option value="$MODULE_DIR$/templates/mypage" />
       </list>
     </option>
   </component>

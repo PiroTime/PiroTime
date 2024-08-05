@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/account/start.css' %}">
+
 <section id="main">
     <div class="main-container">
         <div class="banner">
@@ -32,33 +34,40 @@
         </div>
         <section class="content-section">
             <div>
-                <h3>Project Review 인기글</h3>
-                <a href="{% url 'review:review_detail' pk=review_most.pk %}">
+                <h3 class="start-card-title">Project Review 인기글</h3>
+                <a href="{% url 'review:review_detail' pk=review_most.pk %}" >
                 <div class="content-card">
-                    <p>제목: {{ review_most.title }}</p>
-                    <p>작성자: {{ review_most.writer }}</p>
-                    <p>작성일: {{ review_most.date }}</p>
-                    <p></p>
+                    <p class="start-title">{{ review_most.title }}</p>
+                    <p class="start-content">{{ review_most.content }}</p>
                 </div>
                 </a>
             </div>
             <div>
-                <h3>Project Cooperation 인기글</h3>
+                <h3 class="start-card-title">Project Cooperation 인기글</h3>
+                <a{% if corboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}"> {% else %}href="#"{% endif %}>
                 <div class="content-card">
-                    <p>좋은 아이디어가 있어요? 같이 프로젝트 진행해요!</p>
+                    <p class="start-title">{{ coboard_most.title }}</p>
+                    <p class="start-content">{{ coboard_most.content }}</p>
                 </div>
+                </a>
             </div>
             <div>
-                <h3>CoffeeChat 인기글</h3>
+                <h3 class="start-card-title">CoffeeChat 인기글</h3>
+                <a{% if corboard_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}"> {% else %}href="#"{% endif %}>
                 <div class="content-card">
-                    <p>진로, 프로젝트 고민이 있어요? 커피챗 해요!</p>
+                    <p class="start-title">{{ coffeechat_most.title }}</p>
+                    <p class="start-content">{{ coffeechat_most.content }}</p>
                 </div>
+                </a>
             </div>
             <div>
-                <h3>IT Trend 인기글</h3>
+                <h3 class="start-card-title">IT Trend 인기글</h3>
+                <a{% if corboard_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}"> {% else %}href="#"{% endif %}>
                 <div class="content-card">
-                    <p>요즘 IT 업계의 따끈따끈한 소식 공유해요!</p>
+                    <p class="start-title">{{ trend_most.title }}</p>
+                    <p class="start-content">{{ trend_most.content }}</p>
                 </div>
+                </a>
             </div>
         </section>
     </div>
