@@ -1,7 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm, UserChangeForm
 from .models import CustomUser
 
+# 회원가입 폼
 class CustomUserCreationForm(forms.ModelForm):
     password1 = forms.CharField(
         label='Password',
@@ -20,7 +21,7 @@ class CustomUserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'nickname', 'profile_image')
+        fields = ('username', 'email', 'nickname', 'profile_image', 'cohort')  # 소개 필드 제외
         help_texts = {
             'username': '',
             'email': '',
@@ -43,14 +44,15 @@ class CustomUserCreationForm(forms.ModelForm):
             user.save()
         return user
 
-class CustomUserChangeForm(forms.ModelForm):
+# 프로필 수정 폼
+class CustomUserChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField(
         help_text='원하는 경우 비밀번호를 변경하세요.'
     )
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'nickname', 'profile_image', 'is_active', 'cohort', 'is_staff')
+        fields = ['username', 'email', 'password', 'nickname', 'profile_image', 'is_active', 'cohort', 'is_staff', 'intro']  # 소개 필드 포함
         help_texts = {
             'username': '사용자 이름을 입력하세요.',
             'email': '유효한 이메일 주소를 입력하세요.',
@@ -62,23 +64,9 @@ class CustomUserChangeForm(forms.ModelForm):
     def clean_password(self):
         return self.initial["password"]
 
+# 로그인 폼
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error_messages['invalid_login'] = '아이디/비밀번호를 다시 입력해주세요!'
         self.error_messages['inactive'] = '이 계정은 비활성화되었습니다.'
-
-from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from .models import CustomUser
-
-class CustomUserChangeForm(UserChangeForm):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'nickname', 'email', 'profile_image']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-input'}),
-            'nickname': forms.TextInput(attrs={'class': 'form-input'}),
-            'email': forms.EmailInput(attrs={'class': 'form-input'}),
-            'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
-        }

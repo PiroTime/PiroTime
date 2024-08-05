@@ -1,43 +1,60 @@
-{% extends 'base.html' %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
 {% load static %}
 {% block content %}
-<div class="profile-edit">
-    <h1>프로필 수정</h1>
-    <form method="post" enctype="multipart/form-data">
+<link rel="stylesheet" href="{% static 'css/mypage/profile_edit.css' %}">
+
+<div class="form-container">
+    <div class="logo">
+        <img src="{% static 'images/logo.svg' %}" alt="PiroTime Logo" width="170" height="170">
+        <h1>PiroTime</h1>
+    </div>
+    <h2 class="form-header">프로필 수정</h2>
+    <form method="post" action="{% url 'mypage:profile_edit' %}" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-            {{ form.username.label_tag }}  <!-- 아이디 필드 -->
-            {{ form.username }}
+            <input type="text" name="username" placeholder="아이디" class="form-input" value="{{ form.username.value|default_if_none:'' }}">
             {% if form.username.errors %}
                 <div class="error">{{ form.username.errors }}</div>
             {% endif %}
         </div>
 
         <div class="form-group">
-            {{ form.nickname.label_tag }}  <!-- 닉네임 필드 -->
-            {{ form.nickname }}
+            <input type="text" name="nickname" placeholder="닉네임" class="form-input" value="{{ form.nickname.value|default_if_none:'' }}">
             {% if form.nickname.errors %}
                 <div class="error">{{ form.nickname.errors }}</div>
             {% endif %}
         </div>
 
         <div class="form-group">
-            {{ form.email.label_tag }}  <!-- 이메일 필드 -->
-            {{ form.email }}
+            <input type="email" name="email" placeholder="이메일" class="form-input" value="{{ form.email.value|default_if_none:'' }}">
             {% if form.email.errors %}
                 <div class="error">{{ form.email.errors }}</div>
             {% endif %}
         </div>
 
         <div class="form-group">
-            {{ form.profile_image.label_tag }}  <!-- 프로필 이미지 필드 -->
-            {{ form.profile_image }}
-            {% if form.profile_image.errors %}
-                <div class="error">{{ form.profile_image.errors }}</div>
+            <input type="number" name="cohort" placeholder="기수" class="form-input" value="{{ form.cohort.value|default_if_none:'' }}">
+            {% if form.cohort.errors %}
+                <div class="error">{{ form.cohort.errors }}</div>
             {% endif %}
         </div>
 
-        <button type="submit" class="btn btn-primary">저장</button>
+        <div class="form-group">
+            <textarea name="intro" placeholder="소개" class="form-textarea">{{ form.intro.value|default_if_none:'' }}</textarea>
+            {% if form.intro.errors %}
+                <div class="error">{{ form.intro.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="image-upload">
+            <span>프로필 이미지 (선택)</span>
+            <label for="id_profile_image" class="upload-label">
+                <i class="fas fa-camera"></i>
+            </label>
+            <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img">
+        </div>
+        
+        <button type="submit" class="form-button">저장</button>
     </form>
 </div>
 {% endblock %}

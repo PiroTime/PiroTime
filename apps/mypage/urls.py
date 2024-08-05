@@ -6,8 +6,5 @@ app_name = 'mypage'
 urlpatterns = [
     path('', views.ProfileView.as_view(), name='profile'),
     path('edit/', views.ProfileEditView.as_view(), name='profile_edit'),
-    path('my_posts/', views.MyPostsView.as_view(), name='my_posts'),
-    path('liked_posts/', views.LikedPostsView.as_view(), name='liked_posts'),
-    path('bookmarked_posts/', views.BookmarkedPostsView.as_view(), name='bookmarked_posts'),
-    path('commented_posts/', views.CommentedPostsView.as_view(), name='commented_posts'),
+    path('ajax/activities/', views.ActivitiesAjaxView.as_view(), name='ajax_activities'),  # AJAX로 데이터 로드
 ]
