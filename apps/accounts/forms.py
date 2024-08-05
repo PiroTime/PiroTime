@@ -13,6 +13,10 @@ class CustomUserCreationForm(forms.ModelForm):
         widget=forms.PasswordInput,
         help_text=''
     )
+    cohort = forms.IntegerField(
+        label='Cohort',
+        help_text='몇기인지 입력하세요.'
+    )
 
     class Meta:
         model = CustomUser
@@ -22,6 +26,7 @@ class CustomUserCreationForm(forms.ModelForm):
             'email': '',
             'nickname': '',
             'profile_image': '',
+            'cohort': '',
         }
 
     def clean_password2(self):
@@ -45,12 +50,13 @@ class CustomUserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'password', 'nickname', 'profile_image', 'is_active', 'is_staff')
+        fields = ('username', 'email', 'password', 'nickname', 'profile_image', 'is_active', 'cohort', 'is_staff')
         help_texts = {
             'username': '사용자 이름을 입력하세요.',
             'email': '유효한 이메일 주소를 입력하세요.',
             'nickname': '닉네임을 입력하세요.',
             'profile_image': '프로필 이미지를 선택하세요.',
+            'cohort': '몇기인지 입력하세요.',
         }
 
     def clean_password(self):
@@ -61,3 +67,18 @@ class CustomAuthenticationForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.error_messages['invalid_login'] = '아이디/비밀번호를 다시 입력해주세요!'
         self.error_messages['inactive'] = '이 계정은 비활성화되었습니다.'
+
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from .models import CustomUser
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'nickname', 'email', 'profile_image']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-input'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input'}),
+            'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
+        }

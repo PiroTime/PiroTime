@@ -39,7 +39,8 @@ def cor_create(request):
 def cor_detail(request, pk):
     print("cor_detail")
     cor = get_object_or_404(Corboard, pk=pk)
-    return render(request, 'corboard/corboard_detail.html', {'cor':cor, 'comments': cor.comments.all(), 'commentForm':CorCommentForm()})
+    comments = cor.cor_comments.all()  # 여기서 related_name을 사용
+    return render(request, 'corboard/corboard_detail.html', {'cor': cor, 'comments': comments, 'commentForm': CorCommentForm()})
 
 @require_POST
 def cor_delete(request, pk):
@@ -53,9 +54,9 @@ def cor_update(request, pk):
         form = CorboardForm(instance = cor)
     else:
         form = CorboardForm(request.POST, instance=cor)
-        if form.is_vaild():
+        if form.is_valid():
             form.save()
-            return redirect("corboard:cor_detail", pk=form.id)
+            return redirect("corboard:cor_detail", pk=cor.pk)
     return render(request, 'corboard/corboard_update.html', {'form': form})
 
 @login_required
@@ -72,7 +73,7 @@ def cor_add_comment(request, pk):
             return redirect('corboard:cor_detail', pk = cor.id)
     else:
         commentForm = CorCommentForm()
-    return render(request, 'corboard/corboard_detail', {'cor': cor, 'comments': cor.comments.all(), 'commentForm':commentForm})
+    return render(request, 'corboard/corboard_detail', {'cor': cor, 'comments': cor.cor_comments.all(), 'commentForm':commentForm})
 
 def cor_delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)

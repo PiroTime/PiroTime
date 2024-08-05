@@ -1,361 +1,294 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee Chat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Hubballi', sans-serif; 
-            position: relative;
-            margin: 0;
-            padding: 0;
-            background-color: #fff;
-        }
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/profile.css' %}">
+<style>
+    .container {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    h2 {
+        font-size: 25px;
+        font-weight: bold;
+    }
+    .flex-center {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 
-        #main-header {
-            height: 3rem;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            background: linear-gradient(to bottom, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0) 100%);
-            z-index: 1000;
-            padding: 10px 0;
-        }
+    .job-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 92px;
+        width: 100px;
+        cursor: pointer;
+        gap: 1rem;
+        border-radius: 16px;
+        background: linear-gradient(104deg, rgba(131, 233, 255, .08), rgba(133, 160, 255, .08) 45.31%), #fff;
+        margin: 10px 10px;
+        border: 1px solid rgba(94, 103, 235, 0.2);
+    }
+    
+    .img-container {
+        width: 40px;
+        height: 120px;
+        padding: 2px;
+        border-radius: 50%;
+        border: 1px solid rgba(94, 103, 235, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-top: 5px;
+    }
 
-        .header--container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
-            margin: 0 auto;
-        }
+    .img-container img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
 
-        .max-width-1200 {
-            width: min(1200px, 100%);
-            margin: auto;
-            padding: 0 40px;
-        }
+    .text-chat {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        color: black;
+    }
+    
+    .card {
+        border: 2px solid #CCCCCC;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 0 5px;
+        color: black;
+    }
 
-        #main-header ul {
-            display: flex;
-            gap: 16px;
-            font-size: 1.6rem;
-        }
+    .review-container {
+        margin-bottom: 230px;
+    }
+    
 
-        ol, ul, li, a {
-            list-style: none;
-            text-decoration: none;
-            color: black;
-        }
+    .btn-primary {
+        background-color: rgba(11, 236, 18, 0.6);
+        color: black;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: background-color 0.3s, border 0.3s;
+    }
 
-        #main-header ul a:hover {
-            color: #0BEC12;
-        }
+    .btn-primary:hover {
+        background-color: rgba(11, 236, 18, 0.8);
+        color: black;
+    }
 
-        #main-header ul a::before {
-            content: " ";
-        }
-        
-        #main-header ul a:nth-child(1)::after, #main-header ul a:nth-child(2)::after, #main-header ul a:nth-child(3)::after
-        ,#main-header ul a:nth-child(4)::after  {
-            content: "|";
-            padding: 20px;
-            pointer-events: none;
-            color: black;
-        }
-        
-        .logo {
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
+    .card-text {
+        margin-bottom: 5rem;
+    }
 
-        .logo svg {
-            height: 40px; 
-            width: auto;
-            margin-right: 8px;
-        }
+    .card-hr {
+        margin: 10px 0;
+        border: 0;
+        border-top: 1px solid #e9ecef;
+    }
 
-        .container {
-            margin-top: 8rem;
-            width: 80%;
-            max-width: 1325px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    .profile-info {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+    }
 
-        h2 {
-            margin: 20px 0px;
-            font-size: 25px;
-            font-weight: bold;
-        }
+    .profile-info .profile-img img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+    }
 
-        .flex-center {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 0 210px;
-            padding: 0 20px;
-        }
+    .profile-info h5 {
+        margin: 0;
+    }
 
-        .job-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 92px;
-            width: 100px;
-            cursor: pointer;
-            gap: 1rem;
-            border-radius: 16px;
-            background: linear-gradient(104deg, rgba(131, 233, 255, .08), rgba(133, 160, 255, .08) 45.31%), #fff;
-            margin: 10px 10px;
-            border: 1px solid rgba(94, 103, 235, 0.2);
-        }
+    .profile-info p {
+        margin: 0;
+    }
 
-        .img-container {
-            width: 40px;
-            height: 120px;
-            padding: 2px;
-            border-radius: 50%;
-            border: 1px solid rgba(94, 103, 235, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin-top: 5px;
-        }
+    .max-width-1325 {
+        width: min(1325px, 100%);
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;    
+    }
 
-        .img-container img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
-
-        .text {
-            display: flex;
-            align-items: center;
-            height: 100%;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .card {
-            margin: 0px 20px;
-        }
-
-        .review-container{
-            margin-bottom: 80px;
-        }
-
-        .btn-primary {
-            background-color: rgba(11, 236, 18, 0.6);
-            color: black;
-            border: none;
-        }
-
-        .custom-btn:hover {
-            background-color: rgba(11, 236, 18, 0.8);
-            color: black;
-            border: 2px solid rgba(11, 236, 18, 0.8);
-        }
-
-        .card-text {
-            margin-bottom: 5rem;
-        }
-    </style>
-</head>
-
-<body>
-    <header id="main-header">
-        <div class="header--container max-width-1200">
-          <h1 class="logo">
-            <svg width="170" height="170" viewBox="0 0 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_30_60)">
-                <path d="M46.9272 93.8545C72.8444 93.8545 93.8545 72.8444 93.8545 46.9272C93.8545 21.01 72.8444 0 46.9272 0C21.01 0 0 21.01 0 46.9272C0 72.8444 21.01 93.8545 46.9272 93.8545Z" fill="#49BF4D" fill-opacity="0.6"/>
-                <path d="M46.9272 170C72.8444 170 93.8545 148.594 93.8545 122.187C93.8545 95.7811 72.8444 74.3746 46.9272 74.3746C21.01 74.3746 0 95.7811 0 122.187C0 148.594 21.01 170 46.9272 170Z" fill="#0BEC12" fill-opacity="0.8"/>
-                <path d="M123.073 93.8545C148.991 93.8545 170.001 72.8444 170.001 46.9272C170.001 21.01 148.991 0 123.073 0C97.1563 0 76.1462 21.01 76.1462 46.9272C76.1462 72.8444 97.1563 93.8545 123.073 93.8545Z" fill="#0BEC12" fill-opacity="0.8"/>
-                <path d="M123.073 170C148.991 170 170.001 148.594 170.001 122.187C170.001 95.7811 148.991 74.3746 123.073 74.3746C97.1563 74.3746 76.1462 95.7811 76.1462 122.187C76.1462 148.594 97.1563 170 123.073 170Z" fill="#49BF4D" fill-opacity="0.8"/>
-                </g>
-                <defs>
-                <clipPath id="clip0_30_60">
-                <rect width="170" height="170" fill="white"/>
-                </clipPath>
-                </defs>
-            </svg>
-            PiroTime
-          </h1>
-          <ul>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'review:review_list' %}">review</a></li>
-                <li><a href="{% url 'corboard:cor_list' %}">cooperation</a></li>
-                <li><a href="{% url 'coffeechat:coffeechat_home' %}">coffeechat</a></li>
-                <li><a href="{% url 'trend:trend_list' %}">ITtrend</a></li>
-                <li><a href="{% url 'accounts:logout' %}">logout</a></li>
-            {% else %}
-                <li><a href="{% url 'accounts:login' %}">login</a></li>
-                <li><a href="{% url 'accounts:signup' %}">signup</a></li>
-            {% endif %}
-          </ul>
-        </div>
-    </header>
-    <h2 class="container">기수별 모아보기</h2>
+    .d-flex {
+        display: flex;
+    }
+</style>
+<section class="container max-width-1325">
+    <h2>기수별 모아보기</h2>
     <div class="flex-center">
         <div class="job-box">
             <div class="img-container">
                 <img alt="1기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">1기</span>
+            <span class="text-chat">1기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">2기</span>
+            <span class="text-chat">2기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">3기</span>
+            <span class="text-chat">3기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">4기</span>
+            <span class="text-chat">4기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">5기</span>
+            <span class="text-chat">5기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">6기</span>
+            <span class="text-chat">6기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">7기</span>
+            <span class="text-chat">7기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">8기</span>
+            <span class="text-chat">8기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">9기</span>
+            <span class="text-chat">9기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">10기</span>
+            <span class="text-chat">10기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">11기</span>
+            <span class="text-chat">11기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">12기</span>
+            <span class="text-chat">12기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">13기</span>
+            <span class="text-chat">13기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">14기</span>
+            <span class="text-chat">14기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">15기</span>
+            <span class="text-chat">15기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">16기</span>
+            <span class="text-chat">16기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">17기</span>
+            <span class="text-chat">17기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">18기</span>
+            <span class="text-chat">18기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">19기</span>
+            <span class="text-chat">19기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">20기</span>
+            <span class="text-chat">20기</span>
         </div>
         <div class="job-box">
             <div class="img-container">
                 <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
                     src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
-            <span class="text">21기</span>
+            <span class="text-chat">21기</span>
         </div>
     </div>
-
+</section>
+<section class="container max-width-1325">
     <h2 class="container">커피챗 하기☕</h2>
     <div class="d-flex justify-content-center">
         <div class="card" style="width: 40rem;">
@@ -375,35 +308,36 @@
             </div>
         </div>
     </div>
-
-    <h2 class="container">커피챗 실시간 리뷰</h2>
+</section>
+<section class="container max-width-1325">
+    <h2>커피챗 실시간 리뷰</h2>
     <div class="review-container d-flex justify-content-center">
+        {% for review in reviews %}
         <div class="card" style="width: 26rem;">
             <div class="card-body">
-                <h5 class="card-title">하** 님의 리뷰</h5>
-                <p class="card-text">업무에 대한 경험과 경력이 많으시고, it 산업 및 회사에 대한 전반적인 내용을 많이 파악하고 계셔서 모든 질문에 막힘없이 설명을 해주셔서 너무 좋았습니다👍👍</p>
-                <hr>
-                <a href="#" class="btn btn-primary">리뷰 자세히 보기</a>
+                <h5 class="card-title">{{ review.reviewer.username }} 님의 리뷰</h5>
+                <p class="card-text">{{ review.content }}</p>
+                <hr class="card-hr">
+                <div class="profile-info">
+                    <div class="profile-img">
+                        <img src="{{ review.coffeechat_request.coffeechat.receiver.profile_picture.url }}"
+                            alt="Profile Picture" class="rounded-circle"
+                            style="width: 50px; height: 50px; margin-right: 10px;">
+                    </div>
+                    <div>
+                        <h5 class="card-title">
+                            <a href="{% url 'coffeechat:coffeechat_detail' review.coffeechat_request.coffeechat.pk %}">
+                                {{ review.coffeechat_request.coffeechat.receiver.username }}
+                            </a>
+                        </h5>
+                        <p>{{ review.coffeechat_request.coffeechat.receiver.job }}</p>
+                        <p>피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
+                        <p>커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card" style="width: 26rem;">
-            <div class="card-body">
-                <h5 class="card-title">김** 님의 리뷰</h5>
-                <p class="card-text">업무에 대한 경험과 경력이 많으시고, it 산업 및 회사에 대한 전반적인 내용을 많이 파악하고 계셔서 모든 질문에 막힘없이 설명을 해주셔서 너무 좋았습니다👍👍</p>
-                <hr>
-                <a href="#" class="btn btn-primary">리뷰 자세히 보기</a>
-            </div>
-        </div>
-        <div class="card" style="width: 26rem;">
-            <div class="card-body">
-                <h5 class="card-title">이** 님의 리뷰</h5>
-                <p class="card-text">업무에 대한 경험과 경력이 많으시고, it 산업 및 회사에 대한 전반적인 내용을 많이 파악하고 계셔서 모든 질문에 막힘없이 설명을 해주셔서 너무 좋았습니다👍👍</p>
-                <hr>
-                <a href="#" class="btn btn-primary">리뷰 자세히 보기</a>
-            </div>
-        </div>
+        {% endfor %}
     </div>
-    <div class="footer"></div>
-</body>
-
-</html>
+</section>
+{% endblock %}

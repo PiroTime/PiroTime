@@ -1,0 +1,16 @@
+<!-- coffeechat/review_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}Create Review{% endblock %}
+
+{% block content %}
+<h2>Create Review</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form>
+{% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+{% endif %}
+{% endblock %}

@@ -25,7 +25,7 @@ def review_list(request):
     else:
         reviews = Review.objects.filter(query).order_by('-date')
 
-    paginator = Paginator(reviews, 12)  # 페이지당 12개의 리뷰
+    paginator = Paginator(reviews, 6)  # 페이지당 12개의 리뷰
     page_number = request.GET.get('page')
 
     try:
@@ -35,11 +35,14 @@ def review_list(request):
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
 
+    image_files = ['back.png', 'back1.png', 'back2.png']
+
     context = {
         'page_obj': page_obj,
         'search_form': search_form,
         'order_by': order_by,
         'search': search,
+        'image_files': image_files,
     }
     return render(request, 'review/review_list.html', context)
 

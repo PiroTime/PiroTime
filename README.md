@@ -1,5 +1,5 @@
-# coffeechat
-1. 프로필 생성(create)
-2. 프로필 나열(list)
-3. 프로필 세부(detail) -> 커피챗 요청 부분 수정 필요(요청자 model생성 예정)
-4. 프로필 수정(update)
+# review/corboard/ITtrend
+1. 프로젝트 리뷰(create, detail, update,list)
+2. 프로젝트 협업(create, detail, update, list) => 좋아요, 스크랩 ajax 및 view함수 수정 필요
+3. IT동향(create, detail, update, list)
+

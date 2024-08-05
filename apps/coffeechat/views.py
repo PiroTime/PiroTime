@@ -1,13 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest
-from .forms import CoffeeChatForm
+from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review
+from .forms import CoffeeChatForm, ReviewForm
 from datetime import timedelta
 import json
+from django.http import HttpResponseForbidden
 
 def home(request):
-    return render(request, 'coffeechat/home.html')
+    reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기
+    context = {
+        'reviews': reviews
+    }
+    return render(request, 'coffeechat/home.html', context)
 
 def list(req):
     query = req.GET.get('search')
@@ -57,8 +62,54 @@ def create(req):
     }
     return render(req, 'coffeechat/create.html', ctx)
 
+@login_required
+def create_review(request, coffeechat_request_id):
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=coffeechat_request_id)
+
+    # 요청을 보낸 사용자가 요청을 받은 사용자인 경우 접근 금지
+    if request.user != coffeechat_request.user:
+        return HttpResponseForbidden("리뷰 작성 권한이 없습니다.")
+
+    # 이미 리뷰가 존재하는지 확인
+    if hasattr(coffeechat_request, 'review'):
+        return render(request, 'coffeechat/review_form.html', {
+            'error_message': '이미 이 요청에 대한 리뷰가 작성되었습니다.'
+        })
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.reviewer = request.user
+            review.coffeechat_request = coffeechat_request
+            review.save()
+            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+        else:
+            return render(request, 'coffeechat/review_form.html', {
+                'form': form,
+                'error_message': '폼이 유효하지 않습니다.'
+            })
+    else:
+        form = ReviewForm()
+    return render(request, 'coffeechat/review_form.html', {'form': form})
+
+@login_required
+def accept_request(request, request_id): 
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+    if request.user == coffeechat_request.coffeechat.receiver:
+        coffeechat_request.status = 'ACCEPTED'
+        coffeechat_request.save()
+        
+        coffeechat = coffeechat_request.coffeechat
+        coffeechat.count += 1
+        coffeechat.save()
+
+    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+
 def detail(request, pk):
     profile = CoffeeChat.objects.get(pk=pk)
+    coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
+    
     if request.method == "POST" and request.user != profile.receiver:
         existing_request = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile).exists()
         
@@ -71,48 +122,41 @@ def detail(request, pk):
                 status='WAITING'
             ).count()
 
-            if daily_requests < 5: # 아직 커피챗 가능
+            if daily_requests < 5:
                 CoffeeChatRequest.objects.create(
                     user=request.user,
                     coffeechat=profile,
                     status='WAITING'
                 )
-            else: # 커피챗 불가 -> 상태변경
+            else:
                 profile.status = 'LIMITED'
                 profile.save()
     
-    # 현재 로그인한 사람이 username이고, receiver, status를 통해서 filter 후 존재확인 -> 있으면 제안하기 버튼을 현재 수락대기중으로 변경
     is_waiting = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile, status='WAITING').exists()
-    # 커피챗 받은 수 계산
     waiting_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=profile.receiver, status='WAITING').count()
     is_limited = waiting_requests >= 5 and not is_waiting
     hashtags = profile.hashtags.all()
-
-    # 해당 프로필에 대한 모든 요청을 가져옵니다.
     requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
+
+    show_review_button = False
+    coffeechat_request = None
+    if profile.receiver == request.user:
+        for req in coffeechat_requests:
+            if req.status == 'ACCEPTED':
+                show_review_button = True
+                coffeechat_request = req
+                break
 
     ctx = {
         'profile': profile,
         'is_waiting': is_waiting,
         'is_limited': is_limited,
         'hashtags': hashtags,
-        'requests': requests  # 요청 목록을 컨텍스트에 추가
+        'requests': requests,
+        'show_review_button': show_review_button,
+        'coffeechat_request': coffeechat_request
     }
     return render(request, 'coffeechat/detail.html', ctx)
-
-@login_required
-def accept_request(request, request_id): #수락 시 
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
-    if request.user == coffeechat_request.coffeechat.receiver:
-        coffeechat_request.status = 'ACCEPTED'
-        coffeechat_request.save()
-        
-        # CoffeeChat 모델의 count 필드 증가
-        coffeechat = coffeechat_request.coffeechat
-        coffeechat.count += 1
-        coffeechat.save()
-        
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
 
 @login_required
 def update(req, pk):

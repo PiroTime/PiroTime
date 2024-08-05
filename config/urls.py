@@ -19,9 +19,10 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.accounts.urls')),  
-    path("review/", include("apps.review.urls")),
-    path("trend/", include("apps.trend.urls")),
-    path("corboard/", include('apps.corboard.urls')),
-    path('coffeechat/', include('apps.coffeechat.urls')),
+    path('', include(('apps.accounts.urls', 'accounts'), namespace='accounts')),  
+    path("review/", include(('apps.review.urls', 'review'), namespace='review')),
+    path("trend/", include(('apps.trend.urls', 'trend'), namespace='trend')),
+    path("corboard/", include(('apps.corboard.urls', 'corboard'), namespace='corboard')),
+    path('coffeechat/', include(('apps.coffeechat.urls', 'coffeechat'), namespace='coffeechat')),
+    path('mypage/', include(('apps.mypage.urls', 'mypage'), namespace='mypage')),
 ]

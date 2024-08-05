@@ -14,7 +14,7 @@
     }
 
     .profile-header {
-        background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+        background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
         padding: 20px;
         color: white;
         display: flex;
@@ -79,7 +79,8 @@
         display: flex;
         gap: 10px;
         align-items: center;
-        margin-left: auto; /* 오른쪽 정렬을 위해 추가 */
+        margin-left: auto;
+        /* 오른쪽 정렬을 위해 추가 */
     }
 
 
@@ -105,7 +106,7 @@
         background: #0056b3;
     }
 
-    .profile-img{
+    .profile-img {
         width: 100px;
         height: 100px;
         background-color: lightgray;
@@ -127,33 +128,34 @@
             </div>
             <div class="action-buttons">
                 {% if user.is_authenticated %}
-                    {% if user == profile.receiver %}
-                        <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}">프로필 수정하기</a>
-                        <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="button" onclick="confirmDelete()">프로필 삭제하기</button>
-                        </form>
-                        <a href="/">비공개로 전환하기</a>
-                    {% else %}
-                        {% if is_limited %}
-                            <p>오늘치 최대 커피챗을 신청받음</p>
-                        {% elif is_waiting %}
-                            <p>커피챗 수락대기중</p>
-                        {% else %}
-                            <form method="post">
-                                {% csrf_token %}
-                                <button type="submit">커피챗 제안하기</button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
+                {% if user == profile.receiver %}
+                <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}">프로필 수정하기</a>
+                <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
+                    style="display:inline;">
+                    {% csrf_token %}
+                    <button type="button" onclick="confirmDelete()">프로필 삭제하기</button>
+                </form>
+                <a href="/">비공개로 전환하기</a>
+                {% else %}
+                {% if is_limited %}
+                <p>오늘치 최대 커피챗을 신청받음</p>
+                {% elif is_waiting %}
+                <p>커피챗 수락대기중</p>
+                {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">커피챗 제안하기</button>
+                </form>
+                {% endif %}
+                {% endif %}
                 {% endif %}
             </div>
         </div>
     </div>
     <div class="profile-details">
-        <p><strong>Hashtags:</strong> 
+        <p><strong>Hashtags:</strong>
             {% for hashtag in hashtags %}
-                #{{ hashtag.name }}
+            #{{ hashtag.name }}
             {% endfor %}
         </p>
     </div>
@@ -165,18 +167,28 @@
     <div class="requests-list max-width-1200">
         <h3>요청받은 커피챗:</h3>
         {% for request in requests %}
-            <div class="request-item">
-                <p>{{ request.user.username }}: {{ request.get_status_display }}</p>
-                <p>요청 시간: {{ request.created_at }}</p>
-                {% if user.is_authenticated and user == profile.receiver and request.status == 'WAITING' %}
-                    <form method="post" action="{% url 'coffeechat:accept_request' request.id %}">
-                        {% csrf_token %}
-                        <button type="submit">수락하기</button>
-                    </form>
-                {% endif %}
-            </div>
+        <div class="request-item">
+            <p>{{ request.user.username }}: {{ request.get_status_display }}</p>
+            <p>요청 시간: {{ request.created_at }}</p>
+            {% if user.is_authenticated and user == profile.receiver and request.status == 'WAITING' %}
+            <form method="post" action="{% url 'coffeechat:accept_request' request.id %}">
+                {% csrf_token %}
+                <button type="submit">수락하기</button>
+            </form>
+            {% endif %}
+            <!-- 리뷰 버튼 추가 -->
+            {% if user.is_authenticated and request.status == 'ACCEPTED' %}
+            <a href="{% url 'coffeechat:review_create' request.id %}">
+                <button type="button">리뷰 작성하기</button>
+            </a>
+            {% endif %}
+        </div>
         {% endfor %}
     </div>
+    <!-- 리뷰 작성 링크 -->
+    {% if request.user == profile.receiver and show_review_button %}
+    <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}">Write Review</a>
+    {% endif %}
 </div>
 
 <script>

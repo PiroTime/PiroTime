@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>댓글 단 글</h1>
+
+<h2>트렌드 게시판</h2>
+<ul>
+    {% for item in commented_posts %}
+        {% if item.type == 'Trend' %}
+            <li><a href="{% url 'trend:trend_detail' item.post.id %}">{{ item.post.title }}</a></li>
+        {% endif %}
+    {% empty %}
+        <li>댓글 단 글이 없습니다.</li>
+    {% endfor %}
+</ul>
+
+<h2>리뷰 게시판</h2>
+<ul>
+    {% for item in commented_posts %}
+        {% if item.type == 'Review' %}
+            <li><a href="{% url 'review:review_detail' item.post.id %}">{{ item.post.title }}</a></li>
+        {% endif %}
+    {% empty %}
+        <li>댓글 단 글이 없습니다.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

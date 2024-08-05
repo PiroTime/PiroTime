@@ -3,16 +3,28 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/review/review_create.css' %}">
-
-<div class="container">
+<div class="container max-width-1200">
     <div class="review-create-card">
-        <h1 class="main-title">리뷰 수정하기</h1>
+        <h1 class="main-title">프로젝트 리뷰 수정하기</h1>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">수정 완료</button>
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">제목</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.content.id_for_label }}">내용</label>
+                {{ form.content }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.giturl.id_for_label }}">Git URL</label>
+                {{ form.giturl }}
+            </div>
+            <div class="btns">
+                <a href="{% url 'review:review_list' %}" class="btn btn-back">리뷰 목록으로 돌아가기</a>
+                <button type="submit" class="btn btn-primary">저장하기</button>
+            </div>
         </form>
-        <a href="{% url 'review:review_list' %}" class="btn btn-back">리뷰 목록으로 돌아가기</a>
     </div>
 </div>
 {% endblock %}

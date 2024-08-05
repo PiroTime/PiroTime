@@ -35,11 +35,14 @@ def trend_list(request):
     except EmptyPage:
         page_obj = paginator.page(paginator.num_pages)
 
+    image_files = ['back.png', 'back1.png', 'back2.png']
+
     context = {
         'page_obj': page_obj,
         'search_form': search_form,
         'order_by': order_by,
         'search': search,
+        'image_files': image_files,
     }
     return render(request, 'trend/trend_list.html', context)
 
