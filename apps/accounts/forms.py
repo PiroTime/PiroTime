@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserChangeForm, AuthenticationForm
 from .models import CustomUser
 
 class CustomUserCreationForm(forms.ModelForm):
@@ -39,11 +39,12 @@ class CustomUserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        user.cohort = self.cleaned_data.get("cohort")  # cohort 필드를 저장
         if commit:
             user.save()
         return user
 
-class CustomUserChangeForm(forms.ModelForm):
+class CustomUserChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField(
         help_text='원하는 경우 비밀번호를 변경하세요.'
     )
@@ -58,27 +59,26 @@ class CustomUserChangeForm(forms.ModelForm):
             'profile_image': '프로필 이미지를 선택하세요.',
             'cohort': '몇기인지 입력하세요.',
         }
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-input'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input'}),
+            'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
+            'cohort': forms.NumberInput(attrs={'class': 'form-input'}),
+        }
 
     def clean_password(self):
         return self.initial["password"]
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.cohort = self.cleaned_data.get("cohort")  # cohort 필드를 저장
+        if commit:
+            user.save()
+        return user
 
 class CustomAuthenticationForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.error_messages['invalid_login'] = '아이디/비밀번호를 다시 입력해주세요!'
         self.error_messages['inactive'] = '이 계정은 비활성화되었습니다.'
-
-from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from .models import CustomUser
-
-class CustomUserChangeForm(UserChangeForm):
-    class Meta:
-        model = CustomUser
-        fields = ['username', 'nickname', 'email', 'profile_image']
-        widgets = {
-            'username': forms.TextInput(attrs={'class': 'form-input'}),
-            'nickname': forms.TextInput(attrs={'class': 'form-input'}),
-            'email': forms.EmailInput(attrs={'class': 'form-input'}),
-            'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
-        }
