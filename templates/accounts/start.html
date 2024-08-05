@@ -55,7 +55,7 @@
                 <h3 class="start-card-title">CoffeeChat 인기글</h3>
                 <a {% if corboard_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
-                    <p class="start-title">{{ coffeechat_most.title }}</p>
+                    <p class="start-title">작성자: {{  coffeechat_most.receiver }}</p>
                     <p class="start-content">{{ coffeechat_most.content }}</p>
                 </div>
                 </a>
