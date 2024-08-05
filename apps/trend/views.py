@@ -52,7 +52,7 @@ def trend_create(request):
         if form.is_valid():
             trend = form.save(commit=False)
             trend.writer = request.user if request.user.is_authenticated else None
-            trend.date = timezone.now()
+            trend.created_at = timezone.now()
             trend.save()
             return redirect('trend:trend_detail', pk=trend.pk)
     else:
@@ -91,7 +91,7 @@ def trend_detail(request, pk):
             comment = comment_form.save(commit=False)
             comment.trend = trend
             comment.writer = request.user if request.user.is_authenticated else None
-            comment.date = timezone.now()
+            comment.created_at = timezone.now()
             comment.save()
             return redirect('trend:trend_detail', pk=trend.pk)
 
@@ -110,7 +110,7 @@ def add_comment(request, pk):
             comment = form.save(commit=False)
             comment.trend = trend
             comment.writer = request.user if request.user.is_authenticated else None
-            comment.date = timezone.now()
+            comment.created_at = timezone.now()
             comment.save()
             return redirect('trend:trend_detail', pk=trend.pk)
     else:

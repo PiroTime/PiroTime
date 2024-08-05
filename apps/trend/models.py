@@ -26,6 +26,8 @@ class Trend(models.Model):
 
     def total_likes(self):
         return self.likes.count()
+    def total_bookmark(self):
+        return self.bookmarks.count()
 
     def __str__(self):
         return self.title

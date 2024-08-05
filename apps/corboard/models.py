@@ -17,8 +17,10 @@ class Corboard(models.Model):
     likes = models.ManyToManyField(CustomUser, related_name='cor_likes', blank=True)
     bookmarks = models.ManyToManyField(CustomUser, related_name='cor_bookmarks', blank=True)
 
-    def count_like(self):
+    def total_likes(self):
         return self.likes.count()
+    def total_bookmark(self):
+        return self.bookmarks.count()
 
 class Comment(models.Model):
     corboard = models.ForeignKey(Corboard, related_name='cor_comments', on_delete=models.CASCADE)

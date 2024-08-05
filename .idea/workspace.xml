@@ -2,29 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="da83f1a5-5973-4b1d-ba6a-340ff6903f3a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_17 PM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_17 PM_[Changes]/이미지.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_17 PM_[Changes]/이미지_yrpBRvC.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_17 PM_[Changes]1/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_17 PM_[Changes]1/이미지.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_17 PM_[Changes]1/이미지_yrpBRvC.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_5_27 PM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24,_6_29 PM_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24__5_17PM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24__5_17PM__Changes_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24__5_27PM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_8_2_24__6_29PM__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/account/start.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PiroTime.iml" beforeDir="false" afterPath="$PROJECT_DIR$/PiroTime.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coffeechat/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/coffeechat/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coffeechat/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/coffeechat/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coffeechat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/coffeechat/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accounts/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accounts/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accounts/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/coffeechat/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/coffeechat/migrations/0002_review.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/coffeechat/migrations/0003_rename_comment_review_content.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/coffeechat/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/coffeechat/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/coffeechat/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/coffeechat/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/coffeechat/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/coffeechat/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/corboard/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/corboard/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/corboard/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/corboard/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/corboard/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/review/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/review/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/review/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/review/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/review/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/trend/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/trend/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/trend/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/trend/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/trend/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/trend/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/accounts/start.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/accounts/start.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/corboard/corboard_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/corboard/corboard_detail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,17 +57,17 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <option name="INTERPRETER_OPTIONS" value="" />

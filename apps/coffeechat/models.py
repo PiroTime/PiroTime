@@ -1,4 +1,6 @@
 from django.db import models
+
+from apps import coffeechat
 from apps.accounts.models import CustomUser
 from django.utils import timezone
 
@@ -15,6 +17,13 @@ class CoffeeChat(models.Model):
     hashtags = models.ManyToManyField(Hashtag, related_name='coffeechats') #해시태그
     content = models.TextField(null=True, blank=True) #자기소개
     count = models.IntegerField(default=0) #요청 수
+
+    # def date(self):
+    #     return self.created_at
+    def total_likes(self):
+        return self.count
+    def total_bookmark(self):
+        return CoffeeChatRequest.objects.filter(coffeechat=self)
 
 class CoffeeChatRequest(models.Model):
     STATUS_CHOICES = [
