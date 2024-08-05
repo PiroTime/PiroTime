@@ -26,7 +26,7 @@ def cor_create(request):
         if form.is_valid():
             cor = form.save(commit = False)
             cor.writer = request.user
-            cor.date = timezone.now()
+            cor.created_at = timezone.now()
             cor.save()
 
             return redirect('corboard:cor_detail', pk = cor.id)
@@ -65,7 +65,7 @@ def cor_add_comment(request, pk):
         form = CorCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.date = timezone.now()
+            comment.created_at = timezone.now()
             comment.corboard = cor
             comment.writer = request.user
             comment.save()

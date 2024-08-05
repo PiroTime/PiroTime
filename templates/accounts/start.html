@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 <section id="main">
@@ -32,9 +33,14 @@
         <section class="content-section">
             <div>
                 <h3>Project Review 인기글</h3>
+                <a href="{% url 'review:review_detail' pk=review_most.pk %}">
                 <div class="content-card">
-                    <p>프로젝트 공유합니다. 피드백&리뷰 받아요!</p>
+                    <p>제목: {{ review_most.title }}</p>
+                    <p>작성자: {{ review_most.writer }}</p>
+                    <p>작성일: {{ review_most.date }}</p>
+                    <p></p>
                 </div>
+                </a>
             </div>
             <div>
                 <h3>Project Cooperation 인기글</h3>

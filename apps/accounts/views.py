@@ -45,30 +45,21 @@ def logout_view(request):
     logout(request)
     return redirect('accounts:index')
 
-def start(request):
-    return render(request, 'accounts/start.html')
-
-#===========================
-#main page 기능 구성
-#===========================
-
-def main(req):
-
-    #인기글은 무조건 3개월 이내의 데이터에서만 가져올 것
-    #오늘로부터 3개월 전 날짜 계산
+def start(req):
     now = timezone.now()
 
     three_months_ago = now - timedelta(days=90)
 
     #인기있는 project review
     reviews = Review.objects.filter(date__gte=three_months_ago)
+    print("reviews count:", reviews.count())
     review_most = find_most_popular(reviews)
 
     corboards = Corboard.objects.filter(date__gte=three_months_ago)
     coboard_most = find_most_popular(corboards)
 
-    coffeechats = CoffeeChat.objects.filter(date__gte=three_months_ago)
-    coffeechat_most = find_most_popular(coffeechats)
+    coffeechats = CoffeeChat.objects.filter(created_at=three_months_ago)
+    coffeechat_most = find_most_popular_coffeeChat(coffeechats)
 
     trends = Trend.objects.filter(date__gte=three_months_ago)
     trend_most = find_most_popular(trends)
@@ -80,7 +71,11 @@ def main(req):
         'trend_most': trend_most,
     }
 
-    return render(req, 'accounts/main.html', ctx)
+    return render(req, 'accounts/start.html', ctx)
+
+#===========================
+#main page 기능 구성
+#===========================
 
 def find_most_popular(items):
     now = timezone.now()
@@ -91,6 +86,29 @@ def find_most_popular(items):
     # 각 항목에 대해 인기 점수 계산
     for item in items:
         time_diff_hours = (now - item.date).total_seconds() / 3600
+        score = (item.total_likes() + item.total_bookmark()) / (time_diff_hours + 2) ** G
+        print("reviews score:", score)
+
+
+    # 현재 항목의 점수가 최고 점수보다 높으면 업데이트
+        if score > highest_score:
+            highest_score = score
+            most_popular_item = item
+    if most_popular_item:
+        print("MOST: ", most_popular_item.id)
+    else:
+        print("NULL")
+    return most_popular_item
+
+def find_most_popular_coffeeChat(items):
+    now = timezone.now()
+    most_popular_item = None
+    highest_score = 0
+    G = 1.8  # 시간 가중치
+
+    # 각 항목에 대해 인기 점수 계산
+    for item in items:
+        time_diff_hours = (now - item.created_at).total_seconds() / 3600
         score = (item.total_likes() + item.total_bookmark()) / (time_diff_hours + 2) ** G
 
         # 현재 항목의 점수가 최고 점수보다 높으면 업데이트

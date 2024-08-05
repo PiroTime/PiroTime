@@ -49,7 +49,7 @@ def review_create(request):
         if form.is_valid():
             review = form.save(commit=False)
             review.writer = request.user if request.user.is_authenticated else None
-            review.date = timezone.now()
+            review.created_at = timezone.now()
             review.save()
             return redirect('review:review_detail', pk=review.pk)
     else:
@@ -88,7 +88,7 @@ def review_detail(request, pk):
             comment = comment_form.save(commit=False)
             comment.review = review
             comment.writer = request.user if request.user.is_authenticated else None
-            comment.date = timezone.now()
+            comment.created_at = timezone.now()
             comment.save()
             return redirect('review:review_detail', pk=review.pk)
 
@@ -107,7 +107,7 @@ def add_comment(request, pk):
             comment = form.save(commit=False)
             comment.review = review
             comment.writer = request.user if request.user.is_authenticated else None
-            comment.date = timezone.now()
+            comment.created_at = timezone.now()
             comment.save()
             return redirect('review:review_detail', pk=review.pk)
     else:
