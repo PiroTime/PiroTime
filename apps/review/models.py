@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 # 리뷰 모델
 class Review(models.Model):
@@ -31,6 +32,9 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse('review:review_detail', args=[self.id])
 
 # 리뷰에 대한 댓글 모델
 class Comment(models.Model):

@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 # 트렌드 모델
 class Trend(models.Model):
@@ -31,6 +32,9 @@ class Trend(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse('trend:trend_detail', args=[self.id])
 
 
 # 트렌드에 대한 댓글 모델

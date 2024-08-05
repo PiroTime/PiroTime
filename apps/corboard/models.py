@@ -1,9 +1,8 @@
-
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 from apps.accounts.models import CustomUser
-
 
 class Corboard(models.Model):
     title = models.CharField(max_length=100)
@@ -22,6 +21,9 @@ class Corboard(models.Model):
     def total_bookmark(self):
         return self.bookmarks.count()
 
+    def get_absolute_url(self):
+        return reverse('corboard:cor_detail', args=[self.id])
+
 class Comment(models.Model):
     corboard = models.ForeignKey(Corboard, related_name='cor_comments', on_delete=models.CASCADE)
 
@@ -30,4 +32,3 @@ class Comment(models.Model):
 
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
-
