@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
+<div class="max-width-1200">
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>{{ user.username }}의 프로필</h1>
+        </div>
+        <div class="profile-content">
+            <div class="profile-image">
+                {% if profile and profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ user.username }}의 프로필 이미지">
+                {% else %}
+                    <img src="{% static 'images/logo.svg' %}" alt="기본 프로필 이미지">
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <p class="profile-intro"><strong>소개:</strong> {{ profile.profile|default:"소개가 없습니다." }}</p>
+                <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
+            </div>
+        </div>
+        <div class="profile-activities">
+            <h2>내 활동</h2>
+            <div class="activity-grid">
+                <a href="{% url 'mypage:my_posts' %}" class="activity-card">
+                    <i class="fas fa-pencil-alt"></i>
+                    <span>내가 쓴 글</span>
+                </a>
+                <a href="{% url 'mypage:bookmarked_posts' %}" class="activity-card">
+                    <i class="fas fa-bookmark"></i>
+                    <span>북마크한 글</span>
+                </a>
+                <a href="{% url 'mypage:liked_posts' %}" class="activity-card">
+                    <i class="fas fa-heart"></i>
+                    <span>좋아요한 글</span>
+                </a>
+                <a href="{% url 'mypage:commented_posts' %}" class="activity-card">
+                    <i class="fas fa-comment"></i>
+                    <span>댓글 단 글</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

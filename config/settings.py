@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "apps.review",  
     "apps.trend", 
     "apps.corboard",
+    "apps.mypage",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -129,8 +130,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
-
 # ----------------------------
 #email 관련 설정
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -151,7 +150,3 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     import PIL
 # except ImportError:
 #     os.system("pip install Pillow")
-
-
-
-

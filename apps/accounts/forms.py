@@ -61,3 +61,18 @@ class CustomAuthenticationForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.error_messages['invalid_login'] = '아이디/비밀번호를 다시 입력해주세요!'
         self.error_messages['inactive'] = '이 계정은 비활성화되었습니다.'
+
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from .models import CustomUser
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'nickname', 'email', 'profile_image']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-input'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input'}),
+            'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
+        }
