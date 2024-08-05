@@ -4,13 +4,63 @@
 {% block title %}Create Review{% endblock %}
 
 {% block content %}
-<h2>Create Review</h2>
+{% load static %}
+<style>
+    h2 {
+        font-size: 40px;
+        font-weight: bold;
+        justify-content: center;
+        display: flex;
+        margin-top: 120px;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: bold;
+        justify-content: center;
+        display: flex;
+        margin-top: 50px;
+    }
+
+    form {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 120px;
+    }
+
+    button {
+        background-color: rgba(11, 236, 18, 0.6);
+        color: rgb(255, 255, 255);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: background-color 0.3s, border 0.3s;
+    }
+
+    button:hover {
+        background-color: rgba(11, 236, 18, 0.8);
+        color: black;
+    }
+</style>
+
+<h2>Coffeechat Review</h2>
+<h3>선배님과의 커피챗 리뷰를 남겨주세요! 따뜻한 리뷰 부탁드립니다❣️</h3>
 <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+    <input type="hidden" name="csrfmiddlewaretoken"
+        value="VVtiSyEfofZ9lDilaiK1eJaSusoBt7YfxnsrZkM6QItMF03eaxz9JRepO35L3JbF">
+    <p>
+        <label for="id_content"></label>
+        <textarea name="content" cols="40" rows="10" id="id_content" style="width: 672px; height: 304px;"></textarea>
+
+
+
+
+    </p>
     <button type="submit">Submit</button>
 </form>
 {% if error_message %}
-    <p style="color: red;">{{ error_message }}</p>
+<p style="color: red;">{{ error_message }}</p>
 {% endif %}
 {% endblock %}
