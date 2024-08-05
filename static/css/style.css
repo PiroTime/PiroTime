@@ -50,9 +50,8 @@ ol, ul, li, a {
     content: " ";
 }
 
-#main-header ul a:nth-child(1)::after, #main-header ul a:nth-child(2)::after, #main-header ul a:nth-child(3)::after
-,#main-header ul a:nth-child(4)::after  {
-    content: "|";
+#main-header ul li:not(:last-child) a::after {
+    content: "| ";
     padding: 20px;
     pointer-events: none;
     color: black;
