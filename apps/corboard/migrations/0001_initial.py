@@ -15,15 +15,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Trend',
+            name='Corboard',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=100)),
                 ('content', models.TextField()),
                 ('date', models.DateTimeField(auto_now_add=True)),
-                ('refer_url', models.URLField(blank=True, null=True)),
-                ('bookmarks', models.ManyToManyField(blank=True, related_name='trend_bookmarks', to=settings.AUTH_USER_MODEL)),
-                ('likes', models.ManyToManyField(blank=True, related_name='trend_likes', to=settings.AUTH_USER_MODEL)),
+                ('corboardImg', models.ImageField(blank=True, null=True, upload_to='')),
+                ('bookmarks', models.ManyToManyField(blank=True, related_name='cor_bookmarks', to=settings.AUTH_USER_MODEL)),
+                ('likes', models.ManyToManyField(blank=True, related_name='cor_likes', to=settings.AUTH_USER_MODEL)),
                 ('writer', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('content', models.TextField()),
                 ('date', models.DateTimeField(auto_now_add=True)),
-                ('writer', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='trend_comments', to=settings.AUTH_USER_MODEL)),
-                ('trend', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='trend.trend')),
+                ('writer', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('corboard', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cor_comments', to='corboard.corboard')),
             ],
         ),
     ]

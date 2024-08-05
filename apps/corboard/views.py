@@ -84,7 +84,6 @@ def cor_delete_comment(request, pk):
 
 def cor_like(request,  pk):
     cor = get_object_or_404(Corboard, pk=pk)
-    print("like:", cor.count_like())
 
     if cor.likes.filter(id=request.user.id).exists():
         cor.likes.remove(request.user.id)
@@ -93,7 +92,7 @@ def cor_like(request,  pk):
         cor.likes.add(request.user)
         liked = True
 
-    return JsonResponse({'liked': liked, 'total_likes': cor.count_like()})
+    return JsonResponse({'liked': liked, 'total_likes': cor.total_likes()})
 
 def cor_bookmark(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
@@ -103,7 +102,7 @@ def cor_bookmark(request, pk):
     else:
         cor.bookmarks.add(request.user)
         bookmarked = True
-    return JsonResponse({'bookmarked': bookmarked, 'total_likes': cor.count_like()})
+    return JsonResponse({'bookmarked': bookmarked, 'total_likes': cor.total_bookmark()})
 
 def cor_search(request):
     query = request.GET.get('searchContent')
