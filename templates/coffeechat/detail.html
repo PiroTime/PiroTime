@@ -2,205 +2,9 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/detail.css' %}"> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <meta name="csrf-token" content="{{ csrf_token }}">
-<style>
-    .container {
-        margin-top: 60px;
-        margin-bottom: 60px;
-    }
-
-    .max-width-1200 {
-        width: min(1200px, 100%);
-        padding: 0 40px;
-    }
-
-    .profile-header {
-        background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-        padding: 20px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0px;
-    }
-
-    .profile-header img {
-        border-radius: 50%;
-        width: 80px;
-        height: 80px;
-        margin-right: 20px;
-    }
-
-    .profile-header .profile-info {
-        display: flex;
-        align-items: center;
-    }
-
-    .profile-header h1 {
-        margin: 0;
-        font-size: 2.5em;
-    }
-
-    .profile-header p {
-        margin: 5px 0;
-    }
-
-    .profile-details {
-        background: white;
-        padding: 20px 20px 0 20px;
-        border-radius: 10px;
-    }
-
-    .flex {
-        display: flex;
-    }
-
-    .profile-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .profile-content h2 {
-        font-size: 1.5em;
-        margin-bottom: 10px;
-    }
-
-    .profile-content div {
-        line-height: 1.6;
-        font-size: 1.2em;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 5px;
-        justify-content: flex-end;
-    }
-
-    .btn-action {
-        background: none;
-        cursor: pointer;
-        color: #333;
-        font-size: 1.2rem;
-        transition: color 0.3s ease, transform 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        border: 1px solid #CCCCCC;
-    }
-
-
-    .btn-bookmark.bookmarked {
-        background-color: black;
-        color: yellow;
-    }
-
-    .fa-bookmark:hover {
-        color: yellow;
-    }
-
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-
-        margin-left: auto;
-    }
-
-    .action-buttons form,
-    .action-buttons a {
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .action-buttons button,
-    .action-buttons a {
-        background: rgba(255, 255, 255, 0.95);
-        color: black;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-    }
-
-    .action-buttons button:hover{
-        background-color: black;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .profile-img {
-        width: 100px;
-        height: 100px;
-        background-color: lightgray;
-        border-radius: 50%;
-        margin-right: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-
-    .profile-img i {
-        font-size: 4rem;
-        color: #BBBBBB;
-    }
-
-    .profile-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .hashtag {
-        display: inline-block;
-        border-radius: 5px;
-        padding: 5px 10px;
-        margin-right: 10px;
-        margin-bottom: 5px;
-        border: 1px solid #CCCCCC;
-    }
-    
-    .hashtag:hover {
-        transform: scale(1.1);
-    }
-
-    .btn-container {
-        display: flex;
-        justify-content: flex-end;
-        margin-right: 60px;
-    }
-
-    .btn-back {
-        background: rgba(211, 211, 211, 0.822);
-        color: black;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        margin-top: 20px;
-    }
-
-    .btn-back:hover {
-        background-color: rgb(163, 163, 163);
-        color: white;
-    }
-
-    .action-buttons p {
-        background-color: black;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-</style>
 <div class="container">
     <div class="profile-header">
         <div class="header-container max-width-1200">
@@ -222,27 +26,33 @@
             <div class="action-buttons">
                 {% if user.is_authenticated %}
                     {% if user == profile.receiver %}
-                    <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}">프로필 수정하기</a>
-                    <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="button" onclick="confirmDelete()">프로필 삭제하기</button>
-                    </form>
-                    <a href="/">비공개로 전환하기</a>
+                    <div>
+                        <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
+                            <i class="fas fa-edit"></i> 수정
+                        </a>
+                        <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="button" onclick="confirmDelete()" class="btn-delete">
+                                <i class="fas fa-trash-alt"></i> 삭제
+                            </button>
+                        </form>
+                        <a href="/" class="btn-private">비공개로 전환하기</a>
+                    </div>
                     {% else %}
                         {% if is_limited %}
-                        <p>오늘치 최대 커피챗을 신청받음</p>
+                        <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
                         <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
                             <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
                         </button>
                         {% elif is_waiting %}
-                        <p>커피챗 수락대기중</p>
+                        <p class="status-message">커피챗 수락대기중</p>
                         <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
                             <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
                         </button>
                         {% else %}
                         <form method="post">
                             {% csrf_token %}
-                            <button type="submit">커피챗 제안하기</button>
+                            <button type="submit" class="btn-coffeechat">커피챗 제안하기</button>
                         </form>
                         <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
                             <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
