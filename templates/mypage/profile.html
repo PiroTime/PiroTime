@@ -84,13 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         const postElement = document.createElement('div');
                         postElement.classList.add('activity-card');
                         postElement.innerHTML = `
+                            {% with random_image=image_files|random %}
+                            <div class="card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
                             <div class="card-content">
-                                <h3><a href="${post.url}">${post.title}</a></h3> <!-- 제목에 링크 추가 -->
-                                <p>${post.content}</p>
+                                <h3><a href="${post.url}">${post.title}</a></h3>
                                 <span>작성자: ${post.writer}</span>
-                                <span>작성일: ${new Date(post.date).toLocaleDateString()}</span>
-                                <span class="card-category">${post.category}</span>
+                                <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
                             </div>
+                            {% endwith %}
                         `;
                         activityContent.appendChild(postElement);
                     });
