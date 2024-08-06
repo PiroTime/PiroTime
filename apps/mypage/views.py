@@ -97,19 +97,18 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         list(Review.objects.filter(id__in=review_ids)) + \
                         list(Corboard.objects.filter(id__in=corboard_ids))
 
-        else:  # 기본값
+        else:
             posts = list(Trend.objects.filter(writer=request.user)) + \
                     list(Review.objects.filter(writer=request.user)) + \
                     list(Corboard.objects.filter(writer=request.user))
 
-        # JSON 응답 데이터 준비
         posts_data = [{
             'title': post.title, 
             'content': post.content[:100],
             'writer': post.writer.username, 
             'date': post.date.isoformat(),
             'url': post.get_absolute_url(),
-            'category': getattr(post, 'category', '일반')  # 카테고리 명이 없는 경우 '일반'
+            'category': getattr(post, 'category', '일반')
         } for post in posts]
 
         return JsonResponse({'posts': posts_data})

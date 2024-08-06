@@ -5,10 +5,6 @@
 
 <div class="profile-container">
     <div class="profile-header">
-        <h1>{{ user.username }}의 프로필</h1>
-    </div>
-
-    <div class="profile-content">
         <div class="profile-image">
             {% if profile and profile.profile_image %}
                 <img src="{{ profile.profile_image.url }}" alt="{{ user.username }}의 프로필 이미지">
@@ -16,30 +12,33 @@
                 <img src="{% static 'images/logo.svg' %}" alt="기본 프로필 이미지">
             {% endif %}
         </div>
-
         <div class="profile-info">
-            <p class="profile-intro">{{ profile.intro|default:"소개가 없습니다." }}</p>
+            <h1>{{ user.username }}의 프로필</h1>
+            <p>{{ profile.intro|default:"소개가 없습니다." }}</p>
             <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
         </div>
     </div>
 
     <div class="profile-activities">
-        <div class="activity-navbar">
-            <a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a>
-            <a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a>
-            <a href="#" class="activity-link" data-filter="liked">좋아요한 글</a>
-            <a href="#" class="activity-link" data-filter="commented">댓글 단 글</a>
-        </div>
-
         <div class="activity-filter">
-            <a href="#" class="filter-link active" data-category="all">전체</a>
-            <a href="#" class="filter-link" data-category="review">리뷰</a>
-            <a href="#" class="filter-link" data-category="trend">트렌드</a>
-            <a href="#" class="filter-link" data-category="corboard">협업</a>
+            <a href="#" class="filter-link active" data-category="all">All</a>
+            <a href="#" class="filter-link" data-category="review">review</a>
+            <a href="#" class="filter-link" data-category="corboard">cooperation</a>
+            {% comment %} <a href="#" class="filter-link" data-category="coffechat">coffechat</a> {% endcomment %}
+            <a href="#" class="filter-link" data-category="trend">ITtrend</a>
         </div>
 
-        <div id="activity-content" class="activity-content">
-            <!-- AJAX -->
+        <div class="activity-content-wrapper">
+            <div class="activity-navbar">
+                <a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a>
+                <a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a>
+                <a href="#" class="activity-link" data-filter="liked">좋아요한 글</a>
+                <a href="#" class="activity-link" data-filter="commented">댓글 단 글</a>
+            </div>
+
+            <div id="activity-content" class="activity-content">
+                <!-- AJAX -->
+            </div>
         </div>
     </div>
 </div>
