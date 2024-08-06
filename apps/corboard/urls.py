@@ -17,5 +17,5 @@ urlpatterns = [
     #etc
     path('bookmark/<int:pk>/', cor_bookmark, name='cor_bookmark'),
     path('search/', cor_search, name='cor_search'),
-    path('email<int:pk>/', cor_mail, name='cor_mail'),
+    path('cor_mail/<int:pk>/', cor_mail, name='cor_mail'),
 ]
