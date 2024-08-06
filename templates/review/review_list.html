@@ -156,14 +156,14 @@
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'review:review_list' %}" method="get" class="search-form">
-            <input type="text" name="search" placeholder="리뷰 검색" value="{{ search }}">
+            <input type="text" name="search" placeholder="게시글 검색" value="{{ search }}">
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
         
         <div class="button-group">
             <button data-order-by="date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</button>
             <button data-order-by="likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</button>
-            <a href="{% url 'review:review_create' %}" class="btn btn-create">새로운 리뷰 작성하기</a>
+            <a href="{% url 'review:review_create' %}" class="btn btn-create">새로운 게시글 작성하기</a>
         </div>
     </div>
 
@@ -286,7 +286,7 @@ $(document).ready(function() {
 
     // 검색 버튼 클릭 이벤트 핸들러
     $('.search-form').submit(function(event) {
-        event.preventDefault(); // 기본 폼 제출 방지
+        event.preventDefault();
         $.ajax({
             url: $(this).attr('action'),
             data: $(this).serialize(),
@@ -330,7 +330,7 @@ $(document).ready(function() {
         $.ajax({
             url: form.attr('action'),
             method: 'POST',
-            data: form.serialize(), // CSRF 토큰 포함
+            data: form.serialize(),
             success: function(response) {
                 if (response.liked) {
                     button.addClass('liked');
@@ -355,7 +355,7 @@ $(document).ready(function() {
         $.ajax({
             url: form.attr('action'),
             method: 'POST',
-            data: form.serialize(), // CSRF 토큰 포함
+            data: form.serialize(),
             success: function(response) {
                 if (response.bookmarked) {
                     button.addClass('scrapped');

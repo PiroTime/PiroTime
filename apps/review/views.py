@@ -1,14 +1,15 @@
+# Django 내장 모듈
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.db.models import Count, Q
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.urls import reverse
-from .models import Review, Comment
-from .forms import ReviewForm, ReviewSearchForm, CommentForm
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponseForbidden, JsonResponse
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.db.models import Count
+
+# 프로젝트 내 모듈
+from .models import Review, Comment
+from .forms import ReviewForm, CommentForm
 
 def review_list(request):
     search = request.GET.get('search', '')

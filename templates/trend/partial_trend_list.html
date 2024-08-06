@@ -1,0 +1,54 @@
+{% load static %}
+
+<div class="review-grid">
+    {% for trend in page_obj %}
+    {% with random_image=image_files|random %}
+    <div class="review-card">
+        <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+        <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
+            {% csrf_token %}
+            <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
+                <i class="fas fa-bookmark"></i>
+            </button>
+        </form>
+        <div class="review-card-content">
+            <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
+            <p>작성자: {{ trend.writer }}</p>
+            <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
+            <div class="review-likes">
+                <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="button" class="like-button">
+                        <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% empty %}
+    <p>리뷰가 없습니다.</p>
+    {% endfor %}
+</div>
+</div>
+
+<!-- 페이지네이션 -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1&order_by={{ order_by }}&search={{ search|urlencode }}">« 처음</a>
+            <span class="current">
+                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+            <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">이전</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">다음</a>
+            <span class="current">
+                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+            <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&search={{ search|urlencode }}">마지막 »</a>
+        {% endif %}
+    </span>
+</div>

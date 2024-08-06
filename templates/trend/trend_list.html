@@ -143,13 +143,13 @@
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'trend:trend_list' %}" method="get" class="search-form">
-            <input type="text" name="search" placeholder="게시글 검색" value="{{ search_form.search.value|default:'' }}">
+            <input type="text" name="search" placeholder="게시글 검색" value="{{ search }}">
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
-        
+
         <div class="button-group">
-            <a href="{% url 'trend:trend_list' %}?order_by=date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</a>
-            <a href="{% url 'trend:trend_list' %}?order_by=likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</a>
+            <button data-order-by="date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</button>
+            <button data-order-by="likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</button>
             <a href="{% url 'trend:trend_create' %}" class="btn btn-create">새로운 게시글 작성하기</a>
         </div>
     </div>
@@ -159,27 +159,28 @@
         <div class="review-grid">
             {% for trend in page_obj %}
             {% with random_image=image_files|random %}
-            <a href="{% url 'trend:trend_detail' pk=trend.pk %}">
-                <div class="review-card">
-                    <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                    <div class="scrap-icon{% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
+            <div class="review-card">
+                <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
                         <i class="fas fa-bookmark"></i>
-                    </div>
-                    <div class="review-card-content">
-                        <h2>{{ trend.title }}</h2>
-                        <p>작성자: {{ trend.writer }}</p>
-                        <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
-                        <div class="review-likes">
-                            <form action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="like-button">
-                                    <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> {{ trend.total_likes }}
-                                </button>
-                            </form>
-                        </div>
+                    </button>
+                </form>
+                <div class="review-card-content">
+                    <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
+                    <p>작성자: {{ trend.writer }}</p>
+                    <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
+                    <div class="review-likes">
+                        <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="like-button">
+                                <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
-            </a>
+            </div>
             {% endwith %}
             {% empty %}
             <p>리뷰가 없습니다.</p>
@@ -208,4 +209,145 @@
         </span>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// CSRF 토큰을 자동으로 AJAX 요청에 포함하기 위한 설정
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // 상대 경로에 대해 CSRF 토큰 설정
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(document).ready(function() {
+    function updateContent(data) {
+        var newContent = $('<div>').html(data);
+        $('.review-grid').html(newContent.find('.review-grid').html());
+        $('.pagination').html(newContent.find('.pagination').html());
+    }
+
+    // 필터 버튼 클릭 이벤트 핸들러
+    $('.btn-filter').click(function() {
+        var orderBy = $(this).data('order-by');
+        $.ajax({
+            url: '{% url "trend:trend_list" %}',
+            data: {
+                'order_by': orderBy,
+                'search': $('input[name="search"]').val(),
+            },
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 검색 버튼 클릭 이벤트 핸들러
+    $('.search-form').submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 페이지네이션 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.page-link', function() {
+        var page = $(this).data('page');
+        var orderBy = $(this).data('order-by');
+        var search = $(this).data('search');
+        $.ajax({
+            url: '{% url "trend:trend_list" %}',
+            data: {
+                'page': page,
+                'order_by': orderBy,
+                'search': search
+            },
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 좋아요 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.like-button', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var form = button.closest('.like-form');
+        var trendId = form.data('trend-id');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.liked) {
+                    button.addClass('liked');
+                } else {
+                    button.removeClass('liked');
+                }
+                button.find('.like-count').text(response.total_likes);
+            },
+            error: function(xhr) {
+                alert('좋아요 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 북마크 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.scrap-icon', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var form = button.closest('.bookmark-form');
+        var trendId = form.data('trend-id');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.bookmarked) {
+                    button.addClass('scrapped');
+                } else {
+                    button.removeClass('scrapped');
+                }
+            },
+            error: function(xhr) {
+                alert('북마크 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
