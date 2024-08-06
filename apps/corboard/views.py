@@ -1,6 +1,7 @@
 # Django 모듈
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage, send_mail
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -8,16 +9,42 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
+from django.db.models import Count
 
 # 프로젝트 내 모듈
 from apps.corboard.forms import CorboardForm, CorCommentForm
 from apps.corboard.models import Corboard, Comment
 
 def cor_list(request):
-    cors = Corboard.objects.all()
+    search_content = request.GET.get('searchContent', '')
+    order_by = request.GET.get('order_by', 'date')
+    page_number = request.GET.get('page', 1)
 
-    return render(request, 'corboard/corboard_list.html', {'corboards': cors})
+    corboards = Corboard.objects.all()
 
+    if search_content:
+        corboards = corboards.filter(title__icontains=search_content)
+
+    if order_by == 'likes':
+        corboards = corboards.annotate(total_likes=Count('likes__id')).order_by('-total_likes')
+    else:
+        corboards = corboards.order_by('-date')
+
+    paginator = Paginator(corboards, 6)
+    page_obj = paginator.get_page(page_number)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'corboard/partial_corboard_list.html', {
+            'page_obj': page_obj,
+            'order_by': order_by,
+            'search_content': search_content
+        })
+
+    return render(request, 'corboard/corboard_list.html', {
+        'page_obj': page_obj,
+        'order_by': order_by,
+        'search_content': search_content
+    })
 
 def cor_create(request):
     if request.method == "POST":
@@ -36,12 +63,6 @@ def cor_create(request):
         form = CorboardForm()
         return render(request, 'corboard/corboard_create.html', {'form': form})
 
-def cor_detail(request, pk):
-    print("cor_detail")
-    cor = get_object_or_404(Corboard, pk=pk)
-    comments = cor.cor_comments.all()  # 여기서 related_name을 사용
-    return render(request, 'corboard/corboard_detail.html', {'cor': cor, 'comments': comments, 'commentForm': CorCommentForm()})
-
 @require_POST
 def cor_delete(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
@@ -58,6 +79,12 @@ def cor_update(request, pk):
             form.save()
             return redirect("corboard:cor_detail", pk=cor.pk)
     return render(request, 'corboard/corboard_update.html', {'form': form})
+
+def cor_detail(request, pk):
+    print("cor_detail")
+    cor = get_object_or_404(Corboard, pk=pk)
+    comments = cor.cor_comments.all()
+    return render(request, 'corboard/corboard_detail.html', {'cor': cor, 'comments': comments, 'commentForm': CorCommentForm()})
 
 @login_required
 def cor_add_comment(request, pk):
@@ -82,28 +109,6 @@ def cor_delete_comment(request, pk):
         comment.delete()
     return redirect('corboard:cor_detail', pk=corboard_id)
 
-def cor_like(request,  pk):
-    cor = get_object_or_404(Corboard, pk=pk)
-
-    if cor.likes.filter(id=request.user.id).exists():
-        cor.likes.remove(request.user.id)
-        liked = False
-    else:
-        cor.likes.add(request.user)
-        liked = True
-
-    return JsonResponse({'liked': liked, 'total_likes': cor.total_likes()})
-
-def cor_bookmark(request, pk):
-    cor = get_object_or_404(Corboard, pk=pk)
-    if cor.bookmarks.filter(id=request.user.id).exists():
-        cor.bookmarks.remove(request.user.id)
-        bookmarked = False
-    else:
-        cor.bookmarks.add(request.user)
-        bookmarked = True
-    return JsonResponse({'bookmarked': bookmarked, 'total_likes': cor.total_bookmark()})
-
 def cor_search(request):
     query = request.GET.get('searchContent')
     if query:
@@ -111,6 +116,29 @@ def cor_search(request):
     else:
         result = Corboard.objects.none()
     return render(request, 'corboard/corboard_list.html', {'corboards': result})
+
+@login_required
+def cor_like(request, pk):
+    corboard = get_object_or_404(Corboard, pk=pk)
+    if request.user in corboard.likes.all():
+        corboard.likes.remove(request.user)
+        liked = False
+    else:
+        corboard.likes.add(request.user)
+        liked = True
+    # Use total_likes() method to get the correct count
+    return JsonResponse({'liked': liked, 'total_likes': corboard.total_likes()})
+
+@login_required
+def cor_bookmark(request, pk):
+    corboard = get_object_or_404(Corboard, pk=pk)
+    if request.user in corboard.bookmarks.all():
+        corboard.bookmarks.remove(request.user)
+        bookmarked = False
+    else:
+        corboard.bookmarks.add(request.user)
+        bookmarked = True
+    return JsonResponse({'bookmarked': bookmarked})
 
 # def cor_mail(request, pk):
 #     receiver = get_object_or_404(Corboard, pk=pk).writer

@@ -36,19 +36,15 @@
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1&order_by={{ order_by }}&search={{ search|urlencode }}">« 처음</a>
-            <span class="current">
-                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-            </span>
-            <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">이전</a>
+            <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">« 처음</button>
+            <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">이전</button>
         {% endif %}
-
+        <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">다음</a>
-            <span class="current">
-                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-            </span>
-            <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&search={{ search|urlencode }}">마지막 »</a>
+            <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">다음</button>
+            <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">마지막 »</button>
         {% endif %}
     </span>
 </div>

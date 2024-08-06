@@ -1,0 +1,52 @@
+{% load static %}
+
+<div class="review-grid" id="corboard-list">
+    {% load static %}
+    {% for corboard in page_obj %}
+    {% with random_image=image_files|random %}
+    <div class="review-card">
+        <a href="{% url 'corboard:cor_detail' pk=corboard.pk %}" style="text-decoration: none; color: inherit;">
+            <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+            <form class="bookmark-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_bookmark' pk=corboard.pk %}" method="post">
+                {% csrf_token %}
+                <button type="button" class="scrap-icon {% if request.user in corboard.bookmarks.all %} scrapped{% endif %}">
+                    <i class="fas fa-bookmark"></i>
+                </button>
+            </form>
+            <div class="review-card-content">
+                <h2>{{ corboard.title }}</h2>
+                <p>작성자: {{ corboard.writer }}</p>
+                <p>날짜: {{ corboard.date|date:"Y년 m월 d일" }}</p>
+                <div class="review-likes">
+                    <form class="like-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="like-button">
+                            <i class="fas fa-heart{% if request.user in corboard.likes.all %} liked{% endif %}"></i> 
+                            <span class="like-count">{{ corboard.total_likes }}</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endwith %}
+    {% empty %}
+    <p>게시글이 없습니다.</p>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">« 처음</button>
+            <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">이전</button>
+        {% endif %}
+        <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+            <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">다음</button>
+            <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">마지막 »</button>
+        {% endif %}
+    </span>
+</div>
