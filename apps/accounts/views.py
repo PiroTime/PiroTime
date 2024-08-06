@@ -94,10 +94,7 @@ def find_most_popular(items):
         if score > highest_score:
             highest_score = score
             most_popular_item = item
-    if most_popular_item:
-        print("MOST: ", most_popular_item.id)
-    else:
-        print("NULL")
+        print(item.title, score)
     return most_popular_item
 
 def find_most_popular_coffeeChat(items):
