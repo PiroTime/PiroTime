@@ -141,6 +141,7 @@ def detail(request, pk):
                     coffeechat=profile,
                     status='WAITING'
                 )
+                sending_mail(profile.receiver, request.user)
             else:
                 profile.status = 'LIMITED'
                 profile.save()
@@ -171,6 +172,17 @@ def detail(request, pk):
     }
     return render(request, 'coffeechat/detail.html', ctx)
 
+def coffeechat_request(request, post_id):
+    coffeechat = CoffeeChat.objects.get(post_id)
+    receiver = coffeechat.receiver
+    chat_request = CoffeeChatRequest()
+
+    chat_request.coffeechat = coffeechat
+    chat_request.user = request.user
+
+
+
+
 @login_required
 def accept_request(request, request_id): #수락 시 
     coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
@@ -184,7 +196,7 @@ def accept_request(request, request_id): #수락 시
         coffeechat.save()
 
         #메일 보내기
-        if not cor_mail(coffeechat.receiver, coffeechat_request.user):
+        if not sending_mail(coffeechat.receiver, coffeechat_request.user):
             return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
 
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
@@ -244,7 +256,7 @@ def generate_email_content(sender, receiver):
     recipient_list = [receiver.email]
     return subject, message, from_email, recipient_list
 
-def cor_mail(receiver, sender):
+def sending_mail(receiver, sender):
 
     subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
 

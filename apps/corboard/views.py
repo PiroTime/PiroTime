@@ -160,4 +160,4 @@ def cor_mail(request, pk):
         recipient_list,
         html_message=html_message,
     )
-    return HttpResponse('Email sent successfully')
+    return True
