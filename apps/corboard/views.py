@@ -1,17 +1,17 @@
-from django.template.loader import render_to_string
-from django.utils import timezone
+# Django 모듈
+from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage, send_mail
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
 
+# 프로젝트 내 모듈
 from apps.corboard.forms import CorboardForm, CorCommentForm
 from apps.corboard.models import Corboard, Comment
-from django.contrib.auth.decorators import login_required
-# Create your views here.
 
 def cor_list(request):
     cors = Corboard.objects.all()

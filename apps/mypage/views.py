@@ -1,13 +1,16 @@
+# Django 내장 모듈
 from django.views.generic import TemplateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+
+# 프로젝트 내 모듈
 from apps.accounts.models import CustomUser
 from apps.accounts.forms import CustomUserChangeForm
-from apps.trend.models import Trend, Comment as TrendComment
 from apps.review.models import Review, Comment as ReviewComment
 from apps.corboard.models import Corboard, Comment as CorboardComment
+from apps.trend.models import Trend, Comment as TrendComment
 
 # 프로필 보기 뷰
 class ProfileView(LoginRequiredMixin, TemplateView):
@@ -15,7 +18,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        context['profile'] = self.request.user
         return context
 
 # 프로필 수정 뷰
@@ -26,12 +29,16 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('mypage:profile')
 
     def get_object(self, queryset=None):
-        return get_object_or_404(CustomUser, pk=self.request.user.pk)
+        return self.request.user
 
-    def get_initial(self):
-        initial = super().get_initial()
-        initial['intro'] = self.request.user.intro
-        return initial
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # messages.success(self.request, '프로필이 성공적으로 업데이트되었습니다.')
+        return response
+
+    def form_invalid(self, form):
+        messages.error(self.request, '오류가 발생했습니다. 입력 내용을 다시 확인해 주세요.')
+        return super().form_invalid(form)
 
 # AJAX
 class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):

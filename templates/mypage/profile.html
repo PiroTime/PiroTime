@@ -14,7 +14,7 @@
         </div>
         <div class="profile-info">
             <h1>{{ user.username }}의 프로필</h1>
-            <p>{{ profile.intro|default:"소개가 없습니다." }}</p>
+            <p>{{ profile.intro|default_if_none:"소개가 없습니다." }}</p>
             <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
         </div>
     </div>

@@ -1,11 +1,14 @@
+# 표준 라이브러리
 from datetime import timedelta
 
+# Django 모듈
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.utils import timezone
 
+# 프로젝트 내 모듈
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from ..coffeechat.models import CoffeeChat
 from ..corboard.models import Corboard
