@@ -262,3 +262,15 @@ def cor_mail(receiver, sender):
         html_message=html_message,
     )
     return True
+
+@login_required
+def bookmark_profile(request, pk):
+    profile = get_object_or_404(CoffeeChat, pk=pk)
+    if request.user in profile.bookmarks.all():
+        profile.bookmarks.remove(request.user)
+        bookmarked = False
+    else:
+        profile.bookmarks.add(request.user)
+        bookmarked = True
+    print(bookmarked)
+    return JsonResponse({'bookmarked': bookmarked})
