@@ -1,3 +1,4 @@
+from django.db.models import Q, Count
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.mail import EmailMessage, send_mail
@@ -8,15 +9,35 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
 
-from apps.corboard.forms import CorboardForm, CorCommentForm
+from apps.corboard.forms import CorboardForm, CorCommentForm, CorSearchForm
 from apps.corboard.models import Corboard, Comment
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def cor_list(request):
-    cors = Corboard.objects.all()
+    search_form = CorSearchForm(request.GET)
+    query = Q()
 
-    return render(request, 'corboard/corboard_list.html', {'corboards': cors})
+    if search_form.is_valid():
+        search = search_form.cleaned_data.get('search', '')
+        if search:
+            query &= Q(title__icontains=search)
+    order_by = request.GET.get('order_by')
+    if  order_by == "likes":
+        cors = Corboard.objects.annotate(num_likes=Count('likes')).order_by('-num_likes')
+    else:
+        cors = Corboard.objects.filter(query).order_by('-date')
+
+
+
+    ctx = {
+        'corboards': cors,
+        'search_form' : search_form,
+        'search': search,
+        'order_by': order_by,
+    }
+
+    return render(request, 'corboard/corboard_list.html', ctx)
 
 
 def cor_create(request):
@@ -106,29 +127,13 @@ def cor_bookmark(request, pk):
 
 def cor_search(request):
     query = request.GET.get('searchContent')
+    print(query)
     if query:
         result = Corboard.objects.filter(title__icontains=query) | Corboard.objects.filter(content__icontains=query)
     else:
         result = Corboard.objects.none()
     return render(request, 'corboard/corboard_list.html', {'corboards': result})
 
-# def cor_mail(request, pk):
-#     receiver = get_object_or_404(Corboard, pk=pk).writer
-#     sender = request.user
-#
-#
-#
-#     subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
-#     # send_mail(
-#     #     subject,
-#     #     message,
-#     #     from_email,
-#     #     recipient_list,
-#     #     fail_silently=False,
-#     # )
-#     EmailMessage(subject=subject, body=message, to=recipient_list, from_email=from_email).send()
-#     return HttpResponse('Email sent successfully')
-#     # return render(request, 'send_email.html')
 
 def generate_email_content(sender, receiver):
     subject = "PiroTime: 협력 제안이 왔습니다!"

@@ -16,7 +16,7 @@ def review_list(request):
 
     if search_form.is_valid():
         search = search_form.cleaned_data.get('search', '')
-        if search:
+    if search:
             query &= Q(title__icontains=search)
 
     order_by = request.GET.get('order_by', 'date')
