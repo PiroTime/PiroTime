@@ -9,6 +9,11 @@
     <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        .active-nav {
+            color: #0BEC12 !important;
+        }
+    </style>
 </head>
 <body>
     <header id="main-header">
@@ -20,12 +25,12 @@
             </a>
             <ul>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'review:review_list' %}">review</a></li>
-                    <li><a href="{% url 'corboard:cor_list' %}">cooperation</a></li>
-                    <li><a href="{% url 'coffeechat:coffeechat_home' %}">coffeechat</a></li>
-                    <li><a href="{% url 'trend:trend_list' %}">ITtrend</a></li>
+                    <li><a href="{% url 'review:review_list' %}" id="nav-review">review</a></li>
+                    <li><a href="{% url 'corboard:cor_list' %}" id="nav-cooperation">cooperation</a></li>
+                    <li><a href="{% url 'coffeechat:coffeechat_home' %}" id="nav-coffeechat">coffeechat</a></li>
+                    <li><a href="{% url 'trend:trend_list' %}" id="nav-ittrend">ITtrend</a></li>
                     <li><a href="{% url 'accounts:logout' %}">logout</a></li>
-                    <li><a href='{% url "mypage:profile" %}'><i class="fas fa-user"></i></a></li>
+                    <li><a href='{% url "mypage:profile" %}' id="nav-mypage"><i class="fas fa-user"></i></a></li>
                 {% else %}
                     <li><a href="{% url 'accounts:login' %}">login</a></li>
                     <li><a href="{% url 'accounts:signup' %}">signup</a></li>
@@ -71,5 +76,24 @@
         </div>
         <p>© Pirogramming, 2023 All rights reserved.</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUrl = window.location.pathname;
+            const navLinks = {
+                'review': document.getElementById('nav-review'),
+                'corboard': document.getElementById('nav-cooperation'),
+                'coffeechat': document.getElementById('nav-coffeechat'),
+                'trend': document.getElementById('nav-ittrend'),
+                'mypage': document.getElementById('nav-mypage')
+            };
+
+            for (const [key, element] of Object.entries(navLinks)) {
+                if (currentUrl.includes(key) && element) {
+                    element.classList.add('active-nav');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
