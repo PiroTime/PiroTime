@@ -5,13 +5,19 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/detail.css' %}"> 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <meta name="csrf-token" content="{{ csrf_token }}">
+<style>
+    .container {
+        min-height: calc(100vh - 11rem);
+        margin-bottom: 0;
+    }
+</style>
 <div class="container">
     <div class="profile-header">
         <div class="header-container max-width-1200">
             <div class="profile-info">
                 <div class="profile-img">
-                    {% if profile.profile_image %}
-                        <img src="{{ profile.profile_image.url }}" alt="Profile Image">
+                    {% if profile.receiver.profile_image %}
+                        <img src="{{ profile.receiver.profile_image.url }}" alt="Profile Image">
                     {% else %}
                         <i class="fas fa-user"></i>
                     {% endif %}
@@ -63,7 +69,7 @@
             </div>
         </div>
     </div>
-    <div class="profile-details">
+    <div class="profile-details max-width-1200">
         <div class="flex" style="margin: 0 100px;">
             {% for hashtag in hashtags %}
             <p>
@@ -104,7 +110,7 @@
     {% endif %}
 
     <div class="btn-container">
-        <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn-back">목록보기</a>
+        <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn-back"> <i class="fas fa-arrow-left"></i>목록보기</a>
     </div>
 </div>
 <script>
