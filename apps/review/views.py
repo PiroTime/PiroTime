@@ -11,40 +11,35 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
 def review_list(request):
-    search_form = ReviewSearchForm(request.GET)
-    query = Q()
-
-    if search_form.is_valid():
-        search = search_form.cleaned_data.get('search', '')
-        if search:
-            query &= Q(title__icontains=search)
-
+    search = request.GET.get('search', '')
     order_by = request.GET.get('order_by', 'date')
+    page_number = request.GET.get('page', 1)
+
+    reviews = Review.objects.all()
+
+    if search:
+        reviews = reviews.filter(title__icontains=search)
+
     if order_by == 'likes':
-        reviews = Review.objects.filter(query).annotate(total_likes=Count('likes')).order_by('-total_likes', '-date')
+        reviews = reviews.annotate(total_likes=Count('likes')).order_by('-total_likes')
     else:
-        reviews = Review.objects.filter(query).order_by('-date')
+        reviews = reviews.order_by('-date')
 
-    paginator = Paginator(reviews, 6)  # 페이지당 12개의 리뷰
-    page_number = request.GET.get('page')
+    paginator = Paginator(reviews, 6)
+    page_obj = paginator.get_page(page_number)
 
-    try:
-        page_obj = paginator.page(page_number)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'review/partial_review_list.html', {
+            'page_obj': page_obj,
+            'order_by': order_by,
+            'search': search
+        })
 
-    image_files = ['back.png', 'back1.png', 'back2.png']
-
-    context = {
+    return render(request, 'review/review_list.html', {
         'page_obj': page_obj,
-        'search_form': search_form,
         'order_by': order_by,
-        'search': search,
-        'image_files': image_files,
-    }
-    return render(request, 'review/review_list.html', context)
+        'search': search
+    })
 
 def review_create(request):
     if request.method == "POST":

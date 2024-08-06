@@ -150,3 +150,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     import PIL
 # except ImportError:
 #     os.system("pip install Pillow")
+
+# CSRF 설정
+CSRF_COOKIE_SECURE = False
+CSRF_USE_SESSIONS = False

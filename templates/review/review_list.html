@@ -156,13 +156,13 @@
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'review:review_list' %}" method="get" class="search-form">
-            <input type="text" name="search" placeholder="리뷰 검색" value="{{ search_form.search.value|default:'' }}">
+            <input type="text" name="search" placeholder="리뷰 검색" value="{{ search }}">
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
         
         <div class="button-group">
-            <a href="{% url 'review:review_list' %}?order_by=date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</a>
-            <a href="{% url 'review:review_list' %}?order_by=likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</a>
+            <button data-order-by="date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</button>
+            <button data-order-by="likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</button>
             <a href="{% url 'review:review_create' %}" class="btn btn-create">새로운 리뷰 작성하기</a>
         </div>
     </div>
@@ -170,21 +170,26 @@
     <div class="list-container">
         <!-- 리뷰 그리드 -->
         <div class="review-grid">
+            {% load static %}
             {% for review in page_obj %}
             {% with random_image=image_files|random %}
             <div class="review-card">
                 <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                <div class="scrap-icon{% if request.user in review.bookmarks.all %} scrapped{% endif %}">
-                    <i class="fas fa-bookmark"></i>
-                </div>
+                <form class="bookmark-form" data-review-id="{{ review.pk }}" action="{% url 'review:bookmark_review' review.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="button" class="scrap-icon {% if request.user in review.bookmarks.all %} scrapped{% endif %}">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                </form>
+
                 <div class="review-card-content">
                     <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
                     <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
                     <div class="review-likes">
-                        <form action="{% url 'review:like_review' pk=review.pk %}" method="post">
+                        <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="like-button">
-                                <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> {{ review.total_likes }}
+                            <button type="button" class="like-button">
+                                <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ review.likes.count }}</span>
                             </button>
                         </form>
                     </div>
@@ -211,21 +216,159 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1&order_by={{ order_by }}&search={{ search|urlencode }}">« 처음</a>
-                <span class="current">
-                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-                </span>
-                <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">이전</a>
+                <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">« 처음</button>
+                <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">이전</button>
             {% endif %}
-
+            <span class="current">
+                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">다음</a>
-                <span class="current">
-                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-                </span>
-                <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&search={{ search|urlencode }}">마지막 »</a>
+                <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">다음</button>
+                <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">마지막 »</button>
             {% endif %}
         </span>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// CSRF 토큰을 자동으로 AJAX 요청에 포함하기 위한 설정
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // 상대 경로에 대해 CSRF 토큰 설정
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(document).ready(function() {
+    function updateContent(data) {
+        var newContent = $('<div>').html(data);
+        $('.review-grid').html(newContent.find('.review-grid').html());
+        $('.pagination').html(newContent.find('.pagination').html());
+    }
+
+    // 필터 버튼 클릭 이벤트 핸들러
+    $('.btn-filter').click(function() {
+        var orderBy = $(this).data('order-by');
+        $.ajax({
+            url: '{% url "review:review_list" %}',
+            data: {
+                'order_by': orderBy,
+                'search': $('input[name="search"]').val(),
+            },
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 검색 버튼 클릭 이벤트 핸들러
+    $('.search-form').submit(function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+        $.ajax({
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 페이지네이션 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.page-link', function() {
+        var page = $(this).data('page');
+        var orderBy = $(this).data('order-by');
+        var search = $(this).data('search');
+        $.ajax({
+            url: '{% url "review:review_list" %}',
+            data: {
+                'page': page,
+                'order_by': orderBy,
+                'search': search
+            },
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+     // 좋아요 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.like-button', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var form = button.closest('.like-form');
+        var reviewId = form.data('review-id');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(), // CSRF 토큰 포함
+            success: function(response) {
+                if (response.liked) {
+                    button.addClass('liked');
+                } else {
+                    button.removeClass('liked');
+                }
+                button.find('.like-count').text(response.total_likes);
+            },
+            error: function(xhr) {
+                alert('좋아요 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 북마크 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.scrap-icon', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var form = button.closest('.bookmark-form');
+        var reviewId = form.data('review-id');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(), // CSRF 토큰 포함
+            success: function(response) {
+                if (response.bookmarked) {
+                    button.addClass('scrapped');
+                } else {
+                    button.removeClass('scrapped');
+                }
+            },
+            error: function(xhr) {
+                alert('북마크 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+});
+</script>
+    
 {% endblock %}
