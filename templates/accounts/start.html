@@ -3,6 +3,12 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/account/start.css' %}">
+<style>
+    .description {
+        font-size: 1.2rem;
+    }
+
+</style>
 <section id="main">
     <div class="main-container">
         <div class="banner">
@@ -11,20 +17,34 @@
             </div>
             <div class="banner-content">
                 <div class="text active">
-                    <span class="title">PiroTime 1</span>
-                    <span class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                    <span class="title">PiroTime</span>
+                    <span class="description">피로그래밍 동아리부원들을 위한 휴식공간입니다.
+                        <br/> 프로젝트 리뷰, 프로젝트 협업, 커피챗, IT동향 공유 게시판을 통해서 피로그래머들과 소통해보세요!
+                    </span>
                 </div>
                 <div class="text">
-                    <span class="title">PiroTime 2</span>
-                    <span class="description">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span>
+                    <span class="title">Project Review</span>
+                    <span class="description">프로젝트에 대한 피드백과 리뷰를 받을 수 있는 공간입니다.
+                        <br/> 프로젝트에 대한 아이디어나 진행중인 프로젝트에 대한 의견을 공유해보세요!
+                    </span>
                 </div>
                 <div class="text">
-                    <span class="title">PiroTime 3</span>
-                    <span class="description">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</span>
+                    <span class="title">Project Cooperation</span>
+                    <span class="description">프로젝트 팀원들을 구할 수 있는 공간입니다.
+                        <br/>좋은 아이디어가 있는데 팀원이 부족하다면 같이 프로젝트를 진행할 팀원을 구해보세요!
+                    </span>
                 </div>
                 <div class="text">
-                    <span class="title">PiroTime 4</span>
-                    <span class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</span>
+                    <span class="title">Coffee Chat</span>
+                    <span class="description">피로그래밍 선배들과 커피챗을 할 수 있는 공간입니다. 
+                        <br/>진로, 프로젝트에 대한 고민이 있다면 커피챗 해보세요!
+                    </span>
+                </div>
+                <div class="text">
+                    <span class="title">IT Trend</span>
+                    <span class="description">요즘 IT업계의 소식을 공유할 수 있는 공간입니다.
+                        <br/> 공유하고 싶은 따끈따끈한 소식이 있다면 공유해보세요!
+                    </span>
                 </div>
             </div>
             <div class="icon-container right" onclick="nextSlide()">
