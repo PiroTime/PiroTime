@@ -50,9 +50,11 @@
                             <h2>{{ profile.receiver.username }}</h2>
                             <p>{{ profile.job }}</p>
                         </div>
-                        <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
-                            <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
-                        </button>
+                        {% if user != profile.receiver %}
+                            <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
+                                <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
+                            </button>
+                        {% endif %}
                     </div>
                     <div class="profile-content">
                         <div class="hashtag-container">
