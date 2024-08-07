@@ -161,3 +161,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 CSRF_COOKIE_SECURE = True
 # CSRF_USE_SESSIONS = False
 DEBUG = True
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

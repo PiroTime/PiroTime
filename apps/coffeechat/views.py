@@ -195,9 +195,6 @@ def coffeechat_request(request, post_id):
     chat_request.coffeechat = coffeechat
     chat_request.user = request.user
 
-
-
-
 @login_required
 def accept_request(request, request_id): #수락 시 
     coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
@@ -310,3 +307,15 @@ def how_received(request):
 def cohort_profiles(request, cohort):
     profiles = CustomUser.objects.filter(cohort=cohort)
     return render(request, 'coffeechat/cohort_profiles.html', {'profiles': profiles, 'cohort': cohort})
+
+@login_required
+def bookmark_profile(request, pk):
+    profile = get_object_or_404(CoffeeChat, pk=pk)
+    if request.user in profile.bookmarks.all():
+        profile.bookmarks.remove(request.user)
+        bookmarked = False
+    else:
+        profile.bookmarks.add(request.user)
+        bookmarked = True
+    print(bookmarked)
+    return JsonResponse({'bookmarked': bookmarked})

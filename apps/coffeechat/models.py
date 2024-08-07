@@ -17,6 +17,7 @@ class CoffeeChat(models.Model):
     hashtags = models.ManyToManyField(Hashtag, related_name='coffeechats') #해시태그
     content = models.TextField(null=True, blank=True) #자기소개
     count = models.IntegerField(default=0) #요청 수
+    bookmarks = models.ManyToManyField(CustomUser, related_name='coffeechat_bookmarks', blank=True) #북마크
 
     # def date(self):
     #     return self.created_at

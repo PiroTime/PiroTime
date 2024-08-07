@@ -199,13 +199,41 @@ ol, ul, li, a {
 }
 
 footer {
-    padding: 20px 0;
+    padding: 10px 0;
     background-color: #f7f7f7;
     text-align: center;
     position: relative;
-    bottom: 0;
     width: 100%;
-    position: fixed;
+}
+
+.fa-user {
+    font-size: 1.6rem;
+}
+
+.emoji {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: black;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.emoji i {
+    color: white;
+}
+
+.footer--contact {
+    display: flex;
+    gap: 40px;
+}
+
+.footer--contact a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .social-links {
