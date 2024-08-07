@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.utils import timezone
 
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review
+from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
 from .forms import CoffeeChatForm, ReviewForm
 from django.utils.html import strip_tags
 
@@ -19,11 +19,14 @@ from django.http import JsonResponse
 import json
 from django.http import HttpResponseForbidden
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_protect
 
 def home(request):
+    cohort_range = range(1, 22)  # 1기부터 21기까지의 범위
     reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기
     context = {
-        'reviews': reviews
+        'reviews': reviews,
+        'cohort_range': cohort_range,
     }
     return render(request, 'coffeechat/home.html', context)
 
@@ -75,6 +78,7 @@ def create(req):
     }
     return render(req, 'coffeechat/create.html', ctx)
 
+@csrf_protect
 @login_required
 def create_review(request, coffeechat_request_id):
     coffeechat_request = get_object_or_404(CoffeeChatRequest, id=coffeechat_request_id)
@@ -96,6 +100,12 @@ def create_review(request, coffeechat_request_id):
             review.reviewer = request.user
             review.coffeechat_request = coffeechat_request
             review.save()
+            
+            # 리뷰 작성 시 profile.count 증가
+            coffeechat = coffeechat_request.coffeechat
+            coffeechat.count += 1
+            coffeechat.save()
+
             return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
         else:
             return render(request, 'coffeechat/review_form.html', {
@@ -262,3 +272,16 @@ def cor_mail(receiver, sender):
         html_message=html_message,
     )
     return True
+
+
+def howto(request):  
+
+    return render(request, 'coffeechat/howto.html')
+
+def how_received(request):  
+
+    return render(request, 'coffeechat/how_received.html')
+
+def cohort_profiles(request, cohort):
+    profiles = CustomUser.objects.filter(cohort=cohort)
+    return render(request, 'coffeechat/cohort_profiles.html', {'profiles': profiles, 'cohort': cohort})

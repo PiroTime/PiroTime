@@ -71,10 +71,20 @@
 
     .card {
         border: 1px solid #CCCCCC;
-        border-radius: 5px;
+        border-radius: 10px;
         padding: 10px;
         margin: 0 5px;
         color: black;
+        position: relative;
+        height: 200px;
+    }
+
+    .card-hr {
+        margin: 10px 0;
+        border: 0;
+        border-top: 1px solid #e9ecef;
+        position: absolute;
+        bottom: -50px;
     }
 
     .card-title {
@@ -86,8 +96,18 @@
         margin-bottom: 62px;
     }
 
-    .card-url{
+    .card-url {
         margin-bottom: 20px;
+    }
+
+    .card-review {
+        border: 1px solid #CCCCCC;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 0 5px;
+        color: black;
+        position: relative;
+        height: 400px;
     }
 
     .review-container {
@@ -109,18 +129,17 @@
         color: black;
     }
 
-    .card-hr {
-        margin: 10px 0;
-        border: 0;
-        border-top: 1px solid #e9ecef;
-    }
-
     .profile-info {
         display: flex;
         align-items: center;
         padding: 10px;
         background: #f8f9fa;
         border-top: 1px solid #e9ecef;
+        position: absolute;
+        bottom: 0px;
+        border-radius: 10px;
+        justify-items: center;
+        margin: 15px 0px;
     }
 
     .profile-info .profile-img img {
@@ -147,159 +166,27 @@
 
     .d-flex {
         display: flex;
+        width: 95%;
+        justify-content: center;
+    }
+
+    .card-profile {
+        color: black;
     }
 </style>
 <section class="container max-width-1325">
     <h2>기수별 모아보기</h2>
-    <div class="flex-center">
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="1기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">1기</span>
+        <div class="flex-center">
+            {% for i in cohort_range %}
+            <a href="{% url 'coffeechat:cohort_profiles' cohort=i %}" class="job-box">
+                <div class="img-container">
+                    <img alt="{{ i }}기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
+                        src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
+                </div>
+                <span class="text-chat">{{ i }}기</span>
+            </a>
+            {% endfor %}
         </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">2기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">3기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">4기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">5기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">6기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">7기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">8기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">9기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">10기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">11기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">12기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">13기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">14기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">15기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">16기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">17기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">18기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">19기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">20기</span>
-        </div>
-        <div class="job-box">
-            <div class="img-container">
-                <img alt="2기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                    src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-            </div>
-            <span class="text-chat">21기</span>
-        </div>
-    </div>
 </section>
 <section class="container max-width-1325">
     <h2 class="container">커피챗 하기☕</h2>
@@ -310,7 +197,7 @@
                 <p class="card-text">궁금한 회사에 현재 재직중인 선배님과의 커피챗은 물론, 1:1 매칭이 가능해요.</p>
                 <div class="card-url">
                     <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn btn-primary">선배님께 커피챗 신청하기</a>
-                    <a href="#" class="btn btn-primary">커피챗 하기 이용방법</a>
+                    <a href="{% url 'coffeechat:coffeechat_howto' %}" class="btn btn-primary">커피챗 하기 이용방법</a>
                 </div>
             </div>
         </div>
@@ -320,7 +207,7 @@
                 <p class="card-text">궁금한 피로그래머와 다이렉트로 연결되고, 피로그래밍의 멋쟁이 후배들을 만나보세요</p>
                 <div class="card-url">
                     <a href="{% url 'coffeechat:coffeechat_create' %}" class="btn btn-primary">후배에게 커피챗 제안받기</a>
-                    <a href="#" class="btn btn-primary">커피챗 받기 이용 방법</a>
+                    <a href="{% url 'coffeechat:coffeechat_how_received' %}" class="btn btn-primary">커피챗 받기 이용 방법</a>
                 </div>
             </div>
         </div>
@@ -330,7 +217,7 @@
     <h2>커피챗 실시간 리뷰</h2>
     <div class="review-container d-flex justify-content-center">
         {% for review in reviews %}
-        <div class="card" style="width: 26rem;">
+        <div class="card-review" style="width: 26rem;">
             <div class="card-body">
                 <h5 class="card-title">{{ review.reviewer.username }} 님의 리뷰</h5>
                 <p class="card-text">{{ review.content }}</p>
@@ -347,9 +234,13 @@
                                 {{ review.coffeechat_request.coffeechat.receiver.username }}
                             </a>
                         </h5>
-                        <p>{{ review.coffeechat_request.coffeechat.receiver.job }}</p>
-                        <p>피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
-                        <p>커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
+                        <!-- {% if review.coffeechat_request.coffeechat.receiver.job %}
+                        <p class="card-profile">{{ review.coffeechat_request.coffeechat.receiver.job }}</p>
+                        {% else %}
+                        <p class="card-profile">Job information not available</p>
+                        {% endif %} -->
+                        <p class="card-profile">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
+                        <p class="card-profile">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
                     </div>
                 </div>
             </div>

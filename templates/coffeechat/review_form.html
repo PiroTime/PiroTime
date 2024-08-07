@@ -48,18 +48,14 @@
 <h2>Coffeechat Review</h2>
 <h3>선배님과의 커피챗 리뷰를 남겨주세요! 따뜻한 리뷰 부탁드립니다❣️</h3>
 <form method="post">
-    <input type="hidden" name="csrfmiddlewaretoken"
-        value="VVtiSyEfofZ9lDilaiK1eJaSusoBt7YfxnsrZkM6QItMF03eaxz9JRepO35L3JbF">
+    {% csrf_token %}
     <p>
         <label for="id_content"></label>
         <textarea name="content" cols="40" rows="10" id="id_content" style="width: 672px; height: 304px;"></textarea>
-
-
-
-
     </p>
     <button type="submit">Submit</button>
 </form>
+
 {% if error_message %}
 <p style="color: red;">{{ error_message }}</p>
 {% endif %}
