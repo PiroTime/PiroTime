@@ -1,50 +1,46 @@
+# Django 내장 모듈
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.db.models import Count, Q
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.urls import reverse
-from .models import Trend, Comment
-from .forms import TrendForm, TrendSearchForm, CommentForm
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponseForbidden, JsonResponse
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.db.models import Count
+
+# 프로젝트 내 모듈
+from .models import Trend, Comment
+from .forms import TrendForm, CommentForm
 
 def trend_list(request):
-    search_form = TrendSearchForm(request.GET)
-    query = Q()
-
-    if search_form.is_valid():
-        search = search_form.cleaned_data.get('search', '')
-        if search:
-            query &= Q(title__icontains=search)
-
+    search = request.GET.get('search', '')
     order_by = request.GET.get('order_by', 'date')
+    page_number = request.GET.get('page', 1)
+
+    trends = Trend.objects.all()
+
+    if search:
+        trends = trends.filter(title__icontains=search)
+
     if order_by == 'likes':
-        trends = Trend.objects.filter(query).annotate(total_likes=Count('likes')).order_by('-total_likes', '-date')
+        trends = trends.annotate(total_likes=Count('likes')).order_by('-total_likes')
     else:
-        trends = Trend.objects.filter(query).order_by('-date')
+        trends = trends.order_by('-date')
 
-    paginator = Paginator(trends, 12)  # 페이지당 12개의 트렌드
-    page_number = request.GET.get('page')
+    paginator = Paginator(trends, 12)
+    page_obj = paginator.get_page(page_number)
 
-    try:
-        page_obj = paginator.page(page_number)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'trend/partial_trend_list.html', {
+            'page_obj': page_obj,
+            'order_by': order_by,
+            'search': search
+        })
 
-    image_files = ['back.png', 'back1.png', 'back2.png']
-
-    context = {
+    return render(request, 'trend/trend_list.html', {
         'page_obj': page_obj,
-        'search_form': search_form,
         'order_by': order_by,
-        'search': search,
-        'image_files': image_files,
-    }
-    return render(request, 'trend/trend_list.html', context)
+        'search': search
+    })
 
 def trend_create(request):
     if request.method == "POST":

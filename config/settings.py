@@ -139,9 +139,14 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'pirotimeofficial@gmail.com'
 EMAIL_HOST_PASSWORD = 'foci ryhd hxqa mcwb'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/mypage/'
 LOGOUT_REDIRECT_URL = '/'
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 1209600  # 2주일
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 
@@ -150,3 +155,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     import PIL
 # except ImportError:
 #     os.system("pip install Pillow")
+
+# CSRF 설정
+CSRF_COOKIE_SECURE = True
+# CSRF_USE_SESSIONS = False

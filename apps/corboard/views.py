@@ -1,23 +1,50 @@
-from django.template.loader import render_to_string
-from django.utils import timezone
+# Django 모듈
+from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage, send_mail
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import strip_tags
 from django.views.decorators.http import require_POST
+from django.db.models import Count
 
+# 프로젝트 내 모듈
 from apps.corboard.forms import CorboardForm, CorCommentForm
 from apps.corboard.models import Corboard, Comment
-from django.contrib.auth.decorators import login_required
-# Create your views here.
 
 def cor_list(request):
-    cors = Corboard.objects.all()
+    search_content = request.GET.get('searchContent', '')
+    order_by = request.GET.get('order_by', 'date')
+    page_number = request.GET.get('page', 1)
 
-    return render(request, 'corboard/corboard_list.html', {'corboards': cors})
+    corboards = Corboard.objects.all()
 
+    if search_content:
+        corboards = corboards.filter(title__icontains=search_content)
+
+    if order_by == 'likes':
+        corboards = corboards.annotate(total_likes=Count('likes__id')).order_by('-total_likes')
+    else:
+        corboards = corboards.order_by('-date')
+
+    paginator = Paginator(corboards, 6)
+    page_obj = paginator.get_page(page_number)
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'corboard/partial_corboard_list.html', {
+            'page_obj': page_obj,
+            'order_by': order_by,
+            'search_content': search_content
+        })
+
+    return render(request, 'corboard/corboard_list.html', {
+        'page_obj': page_obj,
+        'order_by': order_by,
+        'search_content': search_content
+    })
 
 def cor_create(request):
     if request.method == "POST":

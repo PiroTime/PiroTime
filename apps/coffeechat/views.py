@@ -1,24 +1,20 @@
+# 표준 라이브러리
+import json
+from datetime import timedelta
 
-from django.shortcuts import render, redirect, get_object_or_404
-
-from django.core.mail import send_mail
-from django.shortcuts import render, redirect
-
+# Django 모듈
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db.models import Q
+from django.http import JsonResponse, HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils import timezone
-
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review
-from .forms import CoffeeChatForm, ReviewForm
 from django.utils.html import strip_tags
 
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest
-from .forms import CoffeeChatForm
-from datetime import timedelta
-from django.http import JsonResponse
-import json
-from django.http import HttpResponseForbidden
-from django.db.models import Q
+# 프로젝트 내 모듈
+from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review
+from .forms import CoffeeChatForm, ReviewForm
 
 def home(request):
     reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기

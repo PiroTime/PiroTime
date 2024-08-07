@@ -1,13 +1,16 @@
+# 표준 라이브러리
 from datetime import timedelta
 
+# Django 모듈
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.utils import timezone
 
+# 프로젝트 내 모듈
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
-from ..coffeechat.models import CoffeeChat, CoffeeChatRequest
+from ..coffeechat.models import CoffeeChat
 from ..corboard.models import Corboard
 from ..review.models import Review
 from ..trend.models import Trend
@@ -52,12 +55,13 @@ def start(req):
 
     #인기있는 project review
     reviews = Review.objects.filter(date__gte=three_months_ago)
+    print("reviews count:", reviews.count())
     review_most = find_most_popular(reviews)
 
     corboards = Corboard.objects.filter(date__gte=three_months_ago)
     coboard_most = find_most_popular(corboards)
 
-    coffeechats = CoffeeChat.objects.filter(created_at__gte=three_months_ago)
+    coffeechats = CoffeeChat.objects.filter(created_at=three_months_ago)
     coffeechat_most = find_most_popular_coffeeChat(coffeechats)
 
     trends = Trend.objects.filter(date__gte=three_months_ago)
@@ -85,9 +89,8 @@ def find_most_popular(items):
     # 각 항목에 대해 인기 점수 계산
     for item in items:
         time_diff_hours = (now - item.date).total_seconds() / 3600
-
         score = (item.total_likes() + item.total_bookmark()) / (time_diff_hours + 2) ** G
-
+        print("reviews score:", score)
 
 
     # 현재 항목의 점수가 최고 점수보다 높으면 업데이트
@@ -105,7 +108,6 @@ def find_most_popular_coffeeChat(items):
     most_popular_item = None
     highest_score = 0
     G = 1.8  # 시간 가중치
-    print('coffeechat')
     # 각 항목에 대해 인기 점수 계산
     for item in items:
         time_diff_hours = (now - item.created_at).total_seconds() / 3600

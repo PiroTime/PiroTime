@@ -171,47 +171,52 @@
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'corboard:cor_list' %}" method="get" class="search-form">
-            <input type="text" name="searchContent" placeholder="게시글 검색" value="{{ search_content|default:'' }}">
+            <input type="text" name="searchContent" placeholder="게시글 검색" value="{{ search_content }}">
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
-        
+
         <div class="button-group">
-            <a href="{% url 'corboard:cor_list' %}?order_by=date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</a>
-            <a href="{% url 'corboard:cor_list' %}?order_by=likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</a>
+            <button type="button" data-order-by="date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</button>
+            <button type="button" data-order-by="likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</button>
             <a href="{% url 'corboard:cor_create' %}" class="btn btn-create">새로운 게시글 작성하기</a>
         </div>
     </div>
 
     <div class="list-container">
-        <!-- 리뷰 그리드 -->
-        <div class="review-grid">
-            {% for corboard in corboards %}
+        <!-- 코보드 그리드 -->
+        <div class="review-grid" id="corboard-list">
+            {% load static %}
+            {% for corboard in page_obj %}
+            {% with random_image=image_files|random %}
             <div class="review-card">
                 <a href="{% url 'corboard:cor_detail' pk=corboard.pk %}" style="text-decoration: none; color: inherit;">
-                    <div class="review-card-image" style="background-image: url({% static 'images/back.png' %});"></div>
-                    <div class="scrap-icon{% if request.user in corboard.bookmarks.all %} scrapped{% endif %}">
-                        <i class="fas fa-bookmark"></i>
-                    </div>
+                    <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                    <form class="bookmark-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_bookmark' pk=corboard.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="scrap-icon {% if request.user in corboard.bookmarks.all %} scrapped{% endif %}">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </form>
                     <div class="review-card-content">
                         <h2>{{ corboard.title }}</h2>
-                        <p>작성자: {{ corboard.writer }}</p>
-                        <p>날짜: {{ corboard.date|date:"Y년 m월 d일" }}</p>
+                        <p>작성자: {{ corboard.writer }} / 날짜: {{ corboard.date|date:"Y년 m월 d일" }}</p>
                         <div class="review-likes">
-                            <form action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
+                            <form class="like-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="like-button">
-                                    <i class="fas fa-heart{% if request.user in corboard.likes.all %} liked{% endif %}"></i> {{ corboard.likes.count }}
+                                <button type="button" class="like-button">
+                                    <i class="fas fa-heart{% if request.user in corboard.likes.all %} liked{% endif %}"></i> 
+                                    <span class="like-count">{{ corboard.total_likes }}</span>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </a>
             </div>
+            {% endwith %}
             {% empty %}
             <p>게시글이 없습니다.</p>
             {% endfor %}
         </div>
-        
         <!-- 프로필 정보 -->
         <div class="profile-info">
             <h3>프로필 정보</h3>
@@ -224,24 +229,168 @@
     </div>
 
     <!-- 페이지네이션 -->
-    <!-- <div class="pagination">
+    <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1&order_by={{ order_by }}&search={{ search|urlencode }}">« 처음</a>
+                <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">« 처음</button>
                 <span class="current">
                     {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
                 </span>
-                <a href="?page={{ page_obj.previous_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">이전</a>
+                <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">이전</button>
             {% endif %}
-
+            
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&order_by={{ order_by }}&search={{ search|urlencode }}">다음</a>
+                <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">다음</button>
                 <span class="current">
                     {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
                 </span>
-                <a href="?page={{ page_obj.paginator.num_pages }}&order_by={{ order_by }}&search={{ search|urlencode }}">마지막 »</a>
+                <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search_content|urlencode }}">마지막 »</button>
             {% endif %}
         </span>
-    </div> -->
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// CSRF 토큰을 자동으로 AJAX 요청에 포함하기 위한 설정
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // 상대 경로에 대해 CSRF 토큰 설정
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$(document).ready(function() {
+    function updateContent(data) {
+        var newContent = $('<div>').html(data);
+        $('#corboard-list').html(newContent.find('#corboard-list').html());
+        $('.pagination').html(newContent.find('.pagination').html());
+    }
+
+    // 필터 버튼 클릭 이벤트 핸들러
+    $('.btn-filter').click(function() {
+        var orderBy = $(this).data('order-by');
+        $.ajax({
+            url: '{% url "corboard:cor_list" %}',
+            data: {
+                'order_by': orderBy,
+                'searchContent': $('input[name="searchContent"]').val(),
+            },
+            success: function(data) {
+                updateContent(data);
+                // 필터 버튼 활성화 상태 변경
+                $('.btn-filter').removeClass('active');
+                $(this).addClass('active');
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 검색 버튼 클릭 이벤트 핸들러
+    $('.search-form').submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 페이지네이션 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.page-link', function() {
+        var page = $(this).data('page');
+        var orderBy = $(this).data('order-by');
+        var search = $(this).data('search');
+        $.ajax({
+            url: '{% url "corboard:cor_list" %}',
+            data: {
+                'page': page,
+                'order_by': orderBy,
+                'searchContent': search
+            },
+            success: function(data) {
+                updateContent(data);
+            },
+            error: function(xhr) {
+                alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 좋아요 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.like-button', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var form = button.closest('.like-form');
+        var corboardId = form.data('corboard-id');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.liked) {
+                    button.addClass('liked');
+                } else {
+                    button.removeClass('liked');
+                }
+                button.find('.like-count').text(response.total_likes);
+            },
+            error: function(xhr) {
+                alert('좋아요 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+
+    // 북마크 버튼 클릭 이벤트 핸들러
+    $(document).on('click', '.scrap-icon', function(event) {
+        event.preventDefault();
+        var button = $(this);
+        var form = button.closest('.bookmark-form');
+        var corboardId = form.data('corboard-id');
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.bookmarked) {
+                    button.addClass('scrapped');
+                } else {
+                    button.removeClass('scrapped');
+                }
+            },
+            error: function(xhr) {
+                alert('북마크 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

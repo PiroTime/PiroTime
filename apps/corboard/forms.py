@@ -1,7 +1,5 @@
 from django import forms
-
 from apps.corboard.models import Corboard, Comment
-
 
 class CorboardForm(forms.ModelForm):
     class Meta:

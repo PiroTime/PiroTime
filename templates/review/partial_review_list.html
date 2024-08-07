@@ -1,0 +1,49 @@
+{% load static %}
+
+<div class="review-grid">
+    {% load static %}
+    {% for review in page_obj %}
+    {% with random_image=image_files|random %}
+    <div class="review-card">
+        <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+        <form class="bookmark-form" data-review-id="{{ review.pk }}" action="{% url 'review:bookmark_review' review.pk %}" method="post">
+            {% csrf_token %}
+            <button type="button" class="scrap-icon {% if request.user in review.bookmarks.all %} scrapped{% endif %}">
+                <i class="fas fa-bookmark"></i>
+            </button>
+        </form>
+
+        <div class="review-card-content">
+            <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
+            <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
+            <div class="review-likes">
+                <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="button" class="like-button">
+                        <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ review.likes.count }}</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endwith %}
+    {% empty %}
+    <p>리뷰가 없습니다.</p>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">« 처음</button>
+            <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">이전</button>
+        {% endif %}
+        <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+            <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">다음</button>
+            <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">마지막 »</button>
+        {% endif %}
+    </span>
+</div>
