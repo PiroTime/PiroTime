@@ -53,6 +53,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -159,3 +160,4 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 # CSRF 설정
 CSRF_COOKIE_SECURE = True
 # CSRF_USE_SESSIONS = False
+DEBUG = True
