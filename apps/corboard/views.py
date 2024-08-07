@@ -25,29 +25,6 @@ def cor_list(request):
     page_number = request.GET.get('page', 1)
 
     corboards = Corboard.objects.all()
-    search_form = CorSearchForm(request.GET)
-    query = Q()
-
-    if search_form.is_valid():
-        search = search_form.cleaned_data.get('search', '')
-        if search:
-            query &= Q(title__icontains=search)
-    order_by = request.GET.get('order_by')
-    if  order_by == "likes":
-        cors = Corboard.objects.annotate(num_likes=Count('likes')).order_by('-num_likes')
-    else:
-        cors = Corboard.objects.filter(query).order_by('-date')
-
-
-
-    ctx = {
-        'corboards': cors,
-        'search_form' : search_form,
-        'search': search,
-        'order_by': order_by,
-    }
-
-    return render(request, 'corboard/corboard_list.html', ctx)
 
     if search_content:
         corboards = corboards.filter(title__icontains=search_content)
