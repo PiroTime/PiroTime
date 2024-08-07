@@ -171,7 +171,11 @@
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'corboard:cor_list' %}" method="get" class="search-form">
-            <input type="text" name="searchContent" placeholder="게시글 검색" value="{{ search_content }}">
+{#<<<<<<< HEAD#}
+{#            <input type="text" name="searchContent" placeholder="게시글 검색" value="{{ search_content }}">#}
+{#=======#}
+            <input type="text" name="search" placeholder="게시글 검색" value="{{ search_form.search.value|default:'' }}">
+
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
 

@@ -5,14 +5,23 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Count
+from django.db.models import Count, Q
 
 # 프로젝트 내 모듈
 from .models import Review, Comment
-from .forms import ReviewForm, CommentForm
+from .forms import ReviewForm, CommentForm, ReviewSearchForm
+
 
 def review_list(request):
     search = request.GET.get('search', '')
+    search_form = ReviewSearchForm(request.GET)
+    query = Q()
+
+    if search_form.is_valid():
+        search = search_form.cleaned_data.get('search', '')
+    if search:
+            query &= Q(title__icontains=search)
+
     order_by = request.GET.get('order_by', 'date')
     page_number = request.GET.get('page', 1)
 

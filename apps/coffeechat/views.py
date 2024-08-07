@@ -154,6 +154,9 @@ def detail(request, pk):
                     coffeechat=profile,
                     status='WAITING'
                 )
+                subject = "PiroTime: 커피쳇 신청이 왔습니다!"
+                message = str(profile.receiver) + "님! 작성하신 커피책 게시글에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요"
+                sending_mail(profile.receiver, request.user, subject, message)
             else:
                 profile.status = 'LIMITED'
                 profile.save()
@@ -184,6 +187,17 @@ def detail(request, pk):
     }
     return render(request, 'coffeechat/detail.html', ctx)
 
+def coffeechat_request(request, post_id):
+    coffeechat = CoffeeChat.objects.get(post_id)
+    receiver = coffeechat.receiver
+    chat_request = CoffeeChatRequest()
+
+    chat_request.coffeechat = coffeechat
+    chat_request.user = request.user
+
+
+
+
 @login_required
 def accept_request(request, request_id): #수락 시 
     coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
@@ -197,10 +211,15 @@ def accept_request(request, request_id): #수락 시
         coffeechat.save()
 
         #메일 보내기
-        if not cor_mail(coffeechat.receiver, coffeechat_request.user):
+        subject = "PiroTime: " + request.user + "가 커피챗 요청을 수락했습니다!"
+        message = coffeechat_request.user + "님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
+        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, message):
             return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
 
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+
+# @login_required
+# def reject_request(request, request_id)
 
 @login_required
 def update(req, pk):
@@ -251,20 +270,23 @@ def delete(req, pk):
 
 
 def generate_email_content(sender, receiver):
-    subject = "PiroTime: 협력 제안이 왔습니다!"
+    subject = "PiroTime: 커피쳇 신청이 왔습니다!"
     message = f"{sender.username}님으로 부터 협력 제안이 왔습니다. PiroTime에 접속해서 내용을 확인하세요!"
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
     return subject, message, from_email, recipient_list
 
-def cor_mail(receiver, sender):
+def sending_mail(receiver, sender, subject, message):
 
-    subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
+    subject = subject
+    message = message
+    from_email = 'pirotimeofficial@gmail.com'
+    recipient_list = [receiver.email]
 
     html_message = render_to_string(
         "corboard/message.html",
         {"sender": sender.username, "receiver": receiver.username,
-         "content": "커피챗 신청이 들어왔습니다! 아래 링크로 들어와 확인해 보세요!"},
+         "content": message},
     )
     plain_message = strip_tags(html_message)
     send_mail(

@@ -30,7 +30,8 @@ class CoffeeChatRequest(models.Model):
         ('WAITING','수락대기중'),
         ('ACCEPTED','수락'),
         ('LIMITED','최대요청횟수초과'),
-        ('PRIVATE','비공개')
+        ('PRIVATE','비공개'),
+        ('REJECTED', '거절'),
     ]
     
     coffeechat = models.ForeignKey(CoffeeChat, related_name='requests', on_delete=models.CASCADE) # 커피챗 프로필 정보

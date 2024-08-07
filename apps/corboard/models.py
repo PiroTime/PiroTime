@@ -24,3 +24,4 @@ class Comment(models.Model):
     writer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+
