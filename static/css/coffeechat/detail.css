@@ -1,0 +1,213 @@
+.container {
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.max-width-1200 {
+    width: min(1200px, 100%);
+    padding: 0 40px;
+}
+
+.profile-header {
+    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0px;
+}
+
+.profile-header img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+}
+
+.profile-header .profile-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+.profile-header p {
+    margin: 5px 0;
+}
+
+.profile-details {
+    background: white;
+    padding: 20px 20px 0 20px;
+    border-radius: 10px;
+}
+
+.flex {
+    display: flex;
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-content h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.profile-content div {
+    line-height: 1.6;
+    font-size: 1.2em;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-action,
+.action-buttons a,
+.action-buttons button {
+    color: #333;
+    font-size: 1rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    border:none;
+}
+
+.btn-action {
+    background-color: white;
+}
+
+.btn-action:hover {
+    background-color: black;
+    color: white;
+}
+
+.btn-bookmark.bookmarked {
+    background-color: black;
+    color: #FFC107;
+}
+
+.fa-bookmark:hover {
+    color: #FFC107;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    background-color: lightgray;
+    border-radius: 50%;
+    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.profile-img i {
+    font-size: 4rem;
+    color: #BBBBBB;
+}
+
+.profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hashtag {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+.hashtag:hover {
+    transform: scale(1.1);
+}
+
+.btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 60px;
+}
+
+.btn-back {
+    background: rgba(211, 211, 211, 0.822);
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.btn-back:hover {
+    background-color: rgb(163, 163, 163);
+    color: white;
+}
+
+.action-buttons div {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit:hover {
+    background-color: #2338f5;
+    color: white;
+    border:none;
+}
+
+.btn-delete {
+    background-color: transparent;
+}
+
+.btn-delete:hover {
+    background-color: #FF0000;
+    color: white;
+    border:none;
+}
+
+.btn-private:hover {
+    background-color: black;
+    color: white;
+    border:none;
+}
+
+.btn-coffeechat {
+    border: 1px solid black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: white;
+}
+
+.btn-coffeechat:hover {
+    background-color: black;
+    color: white;
+}
+
+.status-message {
+    background-color: black;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 5px;
+    margin: 0;
+}

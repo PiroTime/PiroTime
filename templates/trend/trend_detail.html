@@ -5,14 +5,7 @@
 <link rel="stylesheet" href="{% static 'css/review/review_detail.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <meta name="csrf-token" content="{{ csrf_token }}">
-<style>
-    .container {
-        min-height: calc(100vh - 14rem);
-        margin-top: 60px;
-        margin-bottom: 0;
-        padding: 40px 0 0 0;
-    }
-</style>
+
 <div class="container max-width-1200">
   <div class="review-container">
     <div class="review-detail">
@@ -21,23 +14,23 @@
           <img src="{% static 'images/logo.svg' %}" alt="Review Image" class="review-image">
         </div>
         <div class="header-details">
-          <h1>{{ review.title }}</h1>
-          <h2>{{ review.subtitle }}</h2>
+          <h1>{{ trend.title }}</h1>
+          <h2>{{ trend.subtitle }}</h2>
           <div class="meta-info">
-            <span><i class="fas fa-user"></i> {{ review.writer }}</span>
-            <span><i class="fas fa-calendar-alt"></i> {{ review.date }}</span>
+            <span><i class="fas fa-user"></i> {{ trend.writer }}</span>
+            <span><i class="fas fa-calendar-alt"></i> {{ trend.date }}</span>
           </div>
         </div>
         <div class="sidebar">
           <div class="about-box">
             <div class="action-buttons">
-              <button class="btn-action btn-like {% if user in review.likes.all %}liked{% endif %}" data-review-id="{{ review.id }}">
-                <i class="fas fa-heart {% if user in review.likes.all %}liked{% endif %}"></i>
+              <button class="btn-action btn-like {% if user in trend.likes.all %}liked{% endif %}" data-review-id="{{ trend.id }}">
+                <i class="fas fa-heart {% if user in trend.likes.all %}liked{% endif %}"></i>
               </button>
-              <button class="btn-action btn-bookmark {% if user in review.bookmarks.all %}bookmarked{% endif %}" data-review-id="{{ review.id }}">
-                <i class="fas fa-bookmark {% if user in review.bookmarks.all %}bookmarked{% endif %}"></i>
+              <button class="btn-action btn-bookmark {% if user in trend.bookmarks.all %}bookmarked{% endif %}" data-review-id="{{ trend.id }}">
+                <i class="fas fa-bookmark {% if user in trend.bookmarks.all %}bookmarked{% endif %}"></i>
               </button>
-              {% if review.giturl %}
+              {% if trend.ref_url %}
               <a href="{{ review.giturl }}" class="btn-action btn-github" target="_blank">
                 <i class="fab fa-github"></i>
               </a>
@@ -48,14 +41,14 @@
       </div>
       <div class="content-section">
         <div class="main-content">
-          {{ review.content|safe }}
+          {{ trend.content|safe }}
         </div>
       </div>
     </div>
   </div>
 
   <hr class="section-divider">
-  <span class="like-count">좋아요 {{ review.likes.count }}개</span>
+  <span class="like-count">좋아요 {{ trend.likes.count }}개</span>
   <div class="comment-section">
     <h3>댓글</h3>
     <div class="comments">
@@ -76,21 +69,21 @@
         <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
       {% endfor %}
     </div>
-    <form class="comment-form" method="post" action="{% url 'review:add_comment' review.id %}">
+    <form class="comment-form" method="post" action="{% url 'trend:add_comment' trend.id %}">
       {% csrf_token %}
       <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
       <button type="submit" class="btn-add-comment">등록</button>
     </form>
   </div>
   <div class="action-buttons-bottom">
-    <a href="{% url 'review:review_list' %}" class="btn-action btn-back">
+    <a href="{% url 'trend:trend_list' %}" class="btn-action btn-back">
       <i class="fas fa-arrow-left"></i> 리뷰 목록으로 돌아가기
     </a>
-    {% if user.username == review.writer.username or user.is_staff %}
-      <a href="{% url 'review:review_update' review.id %}" class="btn-action btn-edit">
+    {% if user.username == trend.writer.username or user.is_staff %}
+      <a href="{% url 'trend:trend_update' trend.id %}" class="btn-action btn-edit">
         <i class="fas fa-edit"></i> 수정
       </a>
-      <form method="post" action="{% url 'review:review_delete' review.id %}" style="display: inline;">
+      <form method="post" action="{% url 'trend:trend_delete' trend.id %}" style="display: inline;">
         {% csrf_token %}
         <button type="submit" class="btn-action btn-delete" onclick="return confirm('정말로 이 리뷰를 삭제하시겠습니까?');">
           <i class="fas fa-trash-alt"></i> 삭제
@@ -121,7 +114,7 @@
     $('.btn-like').click(function() {
       var reviewId = $(this).data('review-id');
       var likeButton = $(this);
-      $.post('/review/' + reviewId + '/like/', {
+      $.post('/trend/' + reviewId + '/like/', {
         csrfmiddlewaretoken: getCSRFToken()
       }, function(data) {
         if (data.liked) {
@@ -146,7 +139,7 @@
     $('.btn-bookmark').click(function() {
       var reviewId = $(this).data('review-id');
       var bookmarkButton = $(this);
-      $.post('/review/' + reviewId + '/bookmark/', {
+      $.post('/trend/' + reviewId + '/bookmark/', {
         csrfmiddlewaretoken: getCSRFToken()
       }, function(data) {
         if (data.bookmarked) {
@@ -169,7 +162,7 @@
       var commentId = $(this).data('comment-id');
       if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
         $.ajax({
-          url: '/review/comment/' + commentId + '/delete/',
+          url: '/trend/comment/' + commentId + '/delete/',
           type: 'POST',
           headers: {
             'X-CSRFToken': getCSRFToken() // CSRF 토큰 추가

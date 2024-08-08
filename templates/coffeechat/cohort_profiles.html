@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cohort Profiles</title>
+    <link rel="stylesheet" href="{% static 'css/coffeechat/profile.css' %}">
+    <style>
+        h2 {
+            margin-top: 60px;
+        }
+
+        img{
+            width: 150px;  
+            height: 150px; 
+            object-fit: cover;
+        }
+
+        .profile {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 100px;
+        }
+
+        .profile-card {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: row;
+            align-items: normal;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            height: 370px;
+        }
+
+        .profile-card a {
+            display: inline-block;
+            margin-top: 10px;
+            color: black;
+            text-decoration: none;
+            bottom: 10px;
+        }
+
+        .profile-card a:hover {
+            text-decoration: none;
+        }
+
+        .text-chat{
+            margin-top: -35px
+        }
+
+        .btn-primary {
+            background-color: rgba(11, 236, 18, 0.6);
+            color: black;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: background-color 0.3s, border 0.3s;
+            text-decoration: none;
+            position: absolute;
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(11, 236, 18, 0.8);
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="container max-width-1325">
+        <h2>🌟{{ cohort }}기 한 눈에 보기🌟</h2>
+        <div class="profile">
+            {% for profile in profiles %}
+            {% with coffeechat=profile.received_coffeechats.first %}
+            {% if coffeechat and coffeechat.receiver.username == profile.username %}
+            <div class="profile-card">
+                <div class="img-container">
+                    {% if profile.profile_image and profile.profile_image.url %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.username }}" class="rounded-full">
+                    {% else %}
+                    <img src="{% static 'images/logo.svg' %}" alt="Default Profile" class="rounded-full">
+                    {% endif %}
+                </div>
+                <div class="text-chat">
+                    <h3>{{ profile.username }}</h3>
+                    <p>{{ coffeechat.job }}</p>
+                    <p>피로그래밍 {{ profile.cohort }}기</p>
+                    {% if coffeechat.content and coffeechat.content|length > 0 and coffeechat.content.strip %}
+                    <p>{{ coffeechat.content|striptags }}</p>
+                    {% else %}
+                    <p>소개없음</p>
+                    {% endif %}
+                </div>
+                <a href="{% url 'coffeechat:coffeechat_detail' coffeechat.pk %}" class="btn btn-primary">선배님께 커피챗 신청하기</a>
+            </div>
+            {% endif %}
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </section>
+</body>
+
+</html>
+{% endblock %}

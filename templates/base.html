@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PiroTime{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <style>
+        .active-nav {
+            color: #0BEC12 !important;
+        }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <div class="header--container max-width-1200">
+
+            <a {% if user.is_authenticated %} href="{% url 'accounts:start' %}" {% else %} href="{% url 'accounts:index' %}" {% endif %} >
+                <h1 class="logo">
+                    <img src="{% static 'images/logo.svg' %}" alt="PiroTime Logo" width="170" height="170">
+                </h1>
+            </a>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'review:review_list' %}" id="nav-review">review</a></li>
+                    <li><a href="{% url 'corboard:cor_list' %}" id="nav-cooperation">cooperation</a></li>
+                    <li><a href="{% url 'coffeechat:coffeechat_home' %}" id="nav-coffeechat">coffeechat</a></li>
+                    <li><a href="{% url 'trend:trend_list' %}" id="nav-ittrend">ITtrend</a></li>
+                    <li><a href="{% url 'accounts:logout' %}">logout</a></li>
+                    <li><a href='{% url "mypage:profile" %}' id="nav-mypage"><i class="fas fa-user"></i></a></li>
+                {% else %}
+                    <li><a href="{% url 'accounts:login' %}">login</a></li>
+                    <li><a href="{% url 'accounts:signup' %}">signup</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    
+    <main>
+        {% block content %}
+        
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="social-links">
+            <ul class="footer--contact">
+                <li>
+                  <a href="http://pf.kakao.com/_xdHxdXK">
+                    <div class="emoji">
+                        <i class="fa-solid fa-comment"></i>
+                    </div>
+                    카카오톡 플러스친구
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.instagram.com/pirogramming_official/">
+                    <div class="emoji">
+                        <i class="fa-brands fa-instagram"></i>
+                    </div>
+                    Instagram @pirogramming_official
+                  </a>
+                </li>
+                <li>
+                  <a target="_blank" href="mailto:pirogramming.official@gmail.com">
+                    <div class="emoji">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    pirogramming.official@gmail.com
+                  </a>
+                </li>
+              </ul>
+        </div>
+        <p>© Pirogramming, 2023 All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUrl = window.location.pathname;
+            const navLinks = {
+                'review': document.getElementById('nav-review'),
+                'corboard': document.getElementById('nav-cooperation'),
+                'coffeechat': document.getElementById('nav-coffeechat'),
+                'trend': document.getElementById('nav-ittrend'),
+                'mypage': document.getElementById('nav-mypage')
+            };
+
+            for (const [key, element] of Object.entries(navLinks)) {
+                if (currentUrl.includes(key) && element) {
+                    element.classList.add('active-nav');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

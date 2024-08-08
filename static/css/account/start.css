@@ -1,0 +1,13 @@
+.start-title {
+    margin: 0px;
+    font-size: 1.35rem;
+    font-weight: bold;
+}
+.start-content {
+    font-size: 1.1rem;
+    height: 60px;
+    overflow: hidden;
+}
+.start-card-title {
+    margin-left: 20px;
+}

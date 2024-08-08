@@ -17,7 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("review/", include("review.urls"))
-]
+    path('admin/', admin.site.urls),
+    path('', include(('apps.accounts.urls', 'accounts'), namespace='accounts')),  
+    path("review/", include(('apps.review.urls', 'review'), namespace='review')),
+    path("trend/", include(('apps.trend.urls', 'trend'), namespace='trend')),
+    path("corboard/", include(('apps.corboard.urls', 'corboard'), namespace='corboard')),
+    path('coffeechat/', include(('apps.coffeechat.urls', 'coffeechat'), namespace='coffeechat')),
+    path('mypage/', include(('apps.mypage.urls', 'mypage'), namespace='mypage')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

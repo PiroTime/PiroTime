@@ -3,17 +3,16 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/review/review_create.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <style>
     .container {
-        min-height: calc(100vh - 10rem);
+        min-height: calc(100vh - 11.8125rem);
         margin-bottom: 0;
     }
 </style>
 <div class="container max-width-1200">
     <div class="review-create-card">
-        <h1 class="main-title">프로젝트 리뷰 작성하기</h1>
-        <form method="post">
+        <h1 class="main-title">프로젝트 리뷰 수정하기</h1>
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="{{ form.title.id_for_label }}">제목</label>
@@ -24,12 +23,12 @@
                 {{ form.content }}
             </div>
             <div class="form-group">
-                <label for="{{ form.giturl.id_for_label }}">Git URL</label>
-                {{ form.giturl }}
+                <label for="{{ form.corboardImg.id_for_label }}">이미지</label>
+                {{ form.corboardImg }}
             </div>
             <div class="btns">
-                <a href="{% url 'review:review_list' %}" class="btn btn-back"><i class="fas fa-arrow-left"></i>리뷰 목록으로 돌아가기</a>
-                <button type="submit" class="btn btn-primary">제출하기</button>
+                <a href="{% url 'corboard:cor_list' %}" class="btn btn-back"><i class="fas fa-arrow-left"></i> 게시글 목록으로 돌아가기</a>
+                <button type="submit" class="btn btn-primary">저장하기</button>
             </div>
         </form>
     </div>

@@ -13,6 +13,7 @@
     .main-container {
         display: flex;
         flex-direction: column;
+        align-items: center;
         min-height: calc(100vh - 19rem);
     }
 
@@ -20,6 +21,7 @@
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
+        width: 100%;
     }
 
     .search-form {
@@ -58,8 +60,6 @@
     }
 
     .list-container {
-        display: grid;
-        grid-template-columns: 4fr 1fr;
         gap: 20px;
         width: 100%;
         max-width: 1200px;
@@ -67,7 +67,7 @@
 
     .review-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(4, 1fr);
         gap: 15px;
     }
 
@@ -75,9 +75,10 @@
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 5px;
+        padding: 15px;
         border: 1px solid #CCCCCC;
         position: relative;
+        cursor: pointer;
     }
 
     .review-card-image {
@@ -133,96 +134,53 @@
         font-size: 1.4rem;
     }
 
-    .profile-img{
-        width: 100px;
-        height: 100px;
-        background-color: lightgray;
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
-
-    .mypage {
-        background-color: #007bff;
-        color: white;
-        border:none;
-        border-radius: 10px;
-        padding: 10px;
-    }
-
-    .mypage:hover {
-        background-color: #0056b3;
-    }
-
-    .profile-img {
-        width: 100px;
-        height: 100px;
-        background-color: lightgray;
-        border-radius: 50%;
-        margin-right: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-
-    .profile-img i {
-        font-size: 4rem;
-        color: #BBBBBB;
-    }
-
-    .profile-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .review-card a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
     }
 
     .button-group button {
-        border:none;
-    }
-
-    .scrap-icon {
-        background:none;
         border:none;
     }
 </style>
 <div class="main-container">
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
-        <form action="{% url 'review:review_list' %}" method="get" class="search-form">
+        <form action="{% url 'trend:trend_list' %}" method="get" class="search-form">
             <input type="text" name="search" placeholder="게시글 검색" value="{{ search }}">
             <button type="submit" class="btn btn-search"><i class="fas fa-search"></i></button>
         </form>
-        
+
         <div class="button-group">
             <button data-order-by="date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</button>
             <button data-order-by="likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</button>
-            <a href="{% url 'review:review_create' %}" class="btn btn-create">새로운 게시글 작성하기</a>
+            <a href="{% url 'trend:trend_create' %}" class="btn btn-create">새로운 게시글 작성하기</a>
         </div>
     </div>
 
     <div class="list-container">
         <!-- 리뷰 그리드 -->
         <div class="review-grid">
-            {% load static %}
-            {% for review in page_obj %}
+            {% for trend in page_obj %}
             {% with random_image=image_files|random %}
             <div class="review-card">
                 <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                <form class="bookmark-form" data-review-id="{{ review.pk }}" action="{% url 'review:bookmark_review' review.pk %}" method="post">
+                <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
                     {% csrf_token %}
-                    <button type="button" class="scrap-icon {% if request.user in review.bookmarks.all %} scrapped{% endif %}">
+                    <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
                         <i class="fas fa-bookmark"></i>
                     </button>
                 </form>
-
                 <div class="review-card-content">
-                    <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
-                    <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
+                    <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
+                    <p>작성자: {{ trend.writer }}</p>
+                    <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
                     <div class="review-likes">
-                        <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
+                        <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
                             {% csrf_token %}
                             <button type="button" class="like-button">
-                                <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ review.likes.count }}</span>
+                                <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
                             </button>
                         </form>
                     </div>
@@ -230,24 +188,8 @@
             </div>
             {% endwith %}
             {% empty %}
-            <p>게시글이 없습니다.</p>
+            <p>리뷰가 없습니다.</p>
             {% endfor %}
-        </div>
-        
-        <!-- 프로필 정보 -->
-        <div class="profile-info">
-            <h3>프로필 정보</h3>
-            <div class="profile-img">
-                {% if user.profile_image %}
-                    <img src="{{ user.profile_image.url }}" alt="Profile Image">
-                {% else %}
-                    <i class="fas fa-user"></i>
-                {% endif %}
-            </div>
-            <p>이름: {{ user.nickname }}</p>
-            <p>이메일: {{ user.email }}</p>
-            <p></p>
-            <a href='{% url "mypage:profile" %}'><button class="mypage">마이페이지</button></a>
         </div>
     </div>
 
@@ -313,7 +255,7 @@ $(document).ready(function() {
     $('.btn-filter').click(function() {
         var orderBy = $(this).data('order-by');
         $.ajax({
-            url: '{% url "review:review_list" %}',
+            url: '{% url "trend:trend_list" %}',
             data: {
                 'order_by': orderBy,
                 'search': $('input[name="search"]').val(),
@@ -348,7 +290,7 @@ $(document).ready(function() {
         var orderBy = $(this).data('order-by');
         var search = $(this).data('search');
         $.ajax({
-            url: '{% url "review:review_list" %}',
+            url: '{% url "trend:trend_list" %}',
             data: {
                 'page': page,
                 'order_by': orderBy,
@@ -363,12 +305,12 @@ $(document).ready(function() {
         });
     });
 
-     // 좋아요 버튼 클릭 이벤트 핸들러
+    // 좋아요 버튼 클릭 이벤트 핸들러
     $(document).on('click', '.like-button', function(event) {
         event.preventDefault();
         var button = $(this);
         var form = button.closest('.like-form');
-        var reviewId = form.data('review-id');
+        var trendId = form.data('trend-id');
 
         $.ajax({
             url: form.attr('action'),
@@ -393,7 +335,7 @@ $(document).ready(function() {
         event.preventDefault();
         var button = $(this);
         var form = button.closest('.bookmark-form');
-        var reviewId = form.data('review-id');
+        var trendId = form.data('trend-id');
 
         $.ajax({
             url: form.attr('action'),
@@ -413,5 +355,4 @@ $(document).ready(function() {
     });
 });
 </script>
-    
 {% endblock %}
