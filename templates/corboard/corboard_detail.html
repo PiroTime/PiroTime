@@ -16,6 +16,14 @@
         margin-bottom: 0;
         padding: 40px 0 0 0;
     }
+
+    .comment-meta-data span{
+        padding-right: 10px;
+    }
+
+    .btn-delete-comment {
+      color: rgb(255, 156, 156);
+    }
 </style>
 <div class="container max-width-1200">
   <div class="review-container">
@@ -28,7 +36,7 @@
           <h1>{{ cor.title }}</h1>
           <div class="meta-info">
             <span><i class="fas fa-user"></i> {{ cor.writer }}</span>
-            <span><i class="fas fa-calendar-alt"></i> {{ cor.date|date:"Y년 m월 d일" }}</span>
+            <span><i class="fas fa-calendar-alt"></i> {{ cor.date }}</span>
           </div>
         </div>
         <div class="sidebar">
@@ -77,15 +85,17 @@
           <p>{{ comment.content }}</p>
           <div class="comment-meta">
             <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
-            <span><i class="fas fa-calendar-alt"></i> {{ comment.date|date:"Y년 m월 d일" }}</span>
-            {% if comment.writer == user or user.is_staff %}
-              <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                  <i class="fas fa-trash-alt"></i> 삭제
-                </button>
-              </form>
-            {% endif %}
+            <div class="comment-meta-data">
+              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+              {% if comment.writer == user or user.is_staff %}
+                <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                    <i class="fas fa-trash-alt"></i> 삭제
+                  </button>
+                </form>
+              {% endif %}
+            </div>
           </div>
         </div>
       {% empty %}
