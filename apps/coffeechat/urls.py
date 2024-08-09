@@ -12,6 +12,7 @@ urlpatterns = [
     path('delete/<int:pk>/', views.delete, name='coffeechat_delete'),
 
     path('accept_request/<int:request_id>/', views.accept_request, name='accept_request'),
+    path('reject_request/<int:request_id>/', views.reject_request, name='reject_request'),
     path('review/<int:coffeechat_request_id>/create/', views.create_review, name='review_create'),
 
     path('howto/', views.howto, name='coffeechat_howto'),

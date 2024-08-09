@@ -25,4 +25,4 @@
 /* 기본 상태에서도 애니메이션을 적용하여 변화가 부드럽게 보이도록 설정 */
 .start-card a .content-card {
     transition: transform 0.3s ease-in-out;
-}ㄷ
+}

@@ -91,6 +91,10 @@
                 {% csrf_token %}
                 <button type="submit">수락하기</button>
             </form>
+            <form method="post" action="{% url 'coffeechat:reject_request' request.id %}">
+                {% csrf_token %}
+                <button type="submit">거절하기</button>
+            </form>
             {% endif %}
             <!-- 리뷰 버튼 추가 -->
             {% if user.is_authenticated and request.status == 'ACCEPTED' %}
