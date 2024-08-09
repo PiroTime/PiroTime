@@ -155,7 +155,7 @@ def detail(request, pk):
                     status='WAITING'
                 )
                 subject = "PiroTime: 커피쳇 신청이 왔습니다!"
-                message = str(profile.receiver) + "님! 작성하신 커피책 게시글에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요"
+                message = f"{profile.receiver}님! 작성하신 커피책 게시글에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요"
                 sending_mail(profile.receiver, request.user, subject, message)
             else:
                 profile.status = 'LIMITED'
@@ -208,8 +208,8 @@ def accept_request(request, request_id): #수락 시
         coffeechat.save()
 
         #메일 보내기
-        subject = "PiroTime: " + request.user + "님이 커피챗 요청을 수락했습니다!"
-        message = coffeechat_request.user + "님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
+        subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
+        message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
         if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, message):
             return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
 
