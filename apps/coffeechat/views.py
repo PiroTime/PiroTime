@@ -225,10 +225,10 @@ def reject_request(request, request_id):
 
         coffeechat = coffeechat_request.coffeechat
 
-        subject = "PiroTime: " + request.user + "님이 커피챗 요청을 거절하셨습니다!"
-        message = coffeechat_request.user + "님! 선배님의 개인사정으로 인해 커피챗 요청이 거절되었습니. 다른 선배님과의 커피챗은 어떠하신가요?"
+        subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
+        message = f"{coffeechat_request.user}님! 선배님의 개인사정으로 인해 커피챗 요청이 거절되었습니. 다른 선배님과의 커피챗은 어떠하신가요?"
 
-        if not sending_mail(coffeechat, coffeechat_request.user, subject, message):
+        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, message):
             return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
 
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
