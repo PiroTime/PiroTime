@@ -15,3 +15,6 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['content']
+
+class CoffeechatRequestForm(forms.Form):
+    requestContent = forms.CharField(max_length=100, required=False, label='RequestContent')

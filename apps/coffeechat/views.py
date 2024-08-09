@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
-from .forms import CoffeeChatForm, ReviewForm
+from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 from django.utils.html import strip_tags
 
 from .models import CoffeeChat, Hashtag, CoffeeChatRequest
@@ -137,9 +137,12 @@ def detail(request, pk):
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
     
     if request.method == "POST" and request.user != profile.receiver:
-        existing_request = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile).exists()
-        
+        print("++++++++++++++++++++=POST+++++++++++++++++++++")
+        # existing_request = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile).exists()
+        existing_request = False
         if not existing_request:
+            print("++++++++++++++++++++=not exist+++++++++++++++++++++")
+
             start_of_day = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
             end_of_day = start_of_day + timedelta(days=1)
             daily_requests = CoffeeChatRequest.objects.filter(
@@ -154,9 +157,16 @@ def detail(request, pk):
                     coffeechat=profile,
                     status='WAITING'
                 )
-                subject = "PiroTime: 커피쳇 신청이 왔습니다!"
-                message = f"{profile.receiver}님! 작성하신 커피책 게시글에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요"
-                sending_mail(profile.receiver, request.user, subject, message)
+
+                form = CoffeechatRequestForm(request.POST)
+                if form.is_valid():
+                    message = form.cleaned_data['requestContent']
+                    print('message: ', message)
+                    subject = "PiroTime: 커피쳇 신청이 왔습니다!"
+                    content = f"{profile.receiver}님! 작성하신 커피책 게시글에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
+                    sending_mail(profile.receiver, request.user, subject, content, message)
+                    print("email sending")
+
             else:
                 profile.status = 'LIMITED'
                 profile.save()
@@ -183,7 +193,8 @@ def detail(request, pk):
         'hashtags': hashtags,
         'requests': requests,
         'show_review_button': show_review_button,
-        'coffeechat_request': coffeechat_request
+        'coffeechat_request': coffeechat_request,
+        'requestContent': CoffeechatRequestForm,
     }
     return render(request, 'coffeechat/detail.html', ctx)
 
@@ -289,17 +300,19 @@ def generate_email_content(sender, receiver):
     recipient_list = [receiver.email]
     return subject, message, from_email, recipient_list
 
-def sending_mail(receiver, sender, subject, message):
+def sending_mail(receiver, sender, subject, content, message):
 
     subject = subject
-    message = message
+    content = content
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
 
     html_message = render_to_string(
         "corboard/message.html",
         {"sender": sender.username, "receiver": receiver.username,
-         "content": message},
+         "content": content,
+         "message": message},
+
     )
     plain_message = strip_tags(html_message)
     send_mail(
