@@ -52,7 +52,7 @@
             </div>
         </div>
         <section class="content-section">
-            <div>
+            <div class="start-card">
                 <h3 class="start-card-title">Project Review 인기글</h3>
                 <a {% if review_most %} href="{% url 'review:review_detail' pk=review_most.pk %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
@@ -61,7 +61,7 @@
                 </div>
                 </a>
             </div>
-            <div>
+            <div class="start-card">
                 <h3 class="start-card-title">Project Cooperation 인기글</h3>
                 <a {% if coboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
@@ -70,16 +70,16 @@
                 </div>
                 </a>
             </div>
-            <div>
+            <div class="start-card">
                 <h3 class="start-card-title">CoffeeChat 인기글</h3>
-                <a {% if coffeechat_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}>
+                <a  {% if coffeechat_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">
                     <p class="start-title">{{ coffeechat_most.receiver }}</p>
                     <p class="start-content">{{ coffeechat_most.content }}</p>
                 </div>
                 </a>
             </div>
-            <div>
+            <div class="start-card">
                 <h3 class="start-card-title">IT Trend 인기글</h3>
                 <a {% if trend_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}" {% else %}href="#"{% endif %}>
                 <div class="content-card">

@@ -160,7 +160,7 @@ def cor_mail(request, pk):
     html_message = render_to_string(
         "corboard/message.html",
         {"sender": sender.username, "receiver": receiver.username,
-         "content": "coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!"},
+         "content": f"{receiver.username}님! coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!"},
     )
     plain_message = strip_tags(html_message)
     send_mail(
