@@ -212,7 +212,7 @@ body{
     margin-right: 5px;
 }
 
-.like-button .fas.fa-heart.liked {
+.like-button.liked .fas.fa-heart {
     color: #FF0000;
 }
 

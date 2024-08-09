@@ -40,8 +40,8 @@
                     <div class="review-likes">
                         <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
                             {% csrf_token %}
-                            <button type="button" class="like-button">
-                                <i class="fas fa-heart{% if request.user in review.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ review.likes.count }}</span>
+                            <button type="button" class="like-button {% if request.user in review.likes.all %} liked{% endif %}">
+                                <i class="fas fa-heart"></i> <span class="like-count">{{ review.likes.count }}</span>
                             </button>
                         </form>
                     </div>
