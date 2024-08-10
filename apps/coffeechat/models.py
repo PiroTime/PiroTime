@@ -24,7 +24,7 @@ class CoffeeChat(models.Model):
     def total_likes(self):
         return self.count
     def total_bookmark(self):
-        return CoffeeChatRequest.objects.filter(coffeechat=self).count()
+        return self.bookmarks.count()
 
 class CoffeeChatRequest(models.Model):
     STATUS_CHOICES = [
