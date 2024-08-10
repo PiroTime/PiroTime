@@ -10,8 +10,8 @@ class Review(models.Model):
     writer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        null=False,
+        blank=False
     )
     giturl = models.URLField(max_length=200, blank=True, null=True)
     likes = models.ManyToManyField(

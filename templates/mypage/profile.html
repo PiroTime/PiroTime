@@ -13,9 +13,8 @@
             {% endif %}
         </div>
         <div class="profile-info">
-            <h1>{{ user.username }}의 프로필</h1>
+            <h1>🍀{{ user.cohort }}기 피로그래머 {{ user.username }}🍀</h1>
             <p>{{ profile.intro|default_if_none:"소개가 없습니다." }}</p>
-            <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
         </div>
     </div>
 
@@ -24,7 +23,7 @@
             <a href="#" class="filter-link active" data-category="all">All</a>
             <a href="#" class="filter-link" data-category="review">review</a>
             <a href="#" class="filter-link" data-category="corboard">cooperation</a>
-            {% comment %} <a href="#" class="filter-link" data-category="coffechat">coffechat</a> {% endcomment %}
+            <a href="#" class="filter-link" data-category="coffechat">coffechat</a>
             <a href="#" class="filter-link" data-category="trend">ITtrend</a>
         </div>
 
@@ -34,6 +33,7 @@
                 <a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a>
                 <a href="#" class="activity-link" data-filter="liked">좋아요한 글</a>
                 <a href="#" class="activity-link" data-filter="commented">댓글 단 글</a>
+                <a href="#" class="activity-link" data-filter="profile_info">내 정보</a>
             </div>
 
             <div id="activity-content" class="activity-content">
@@ -44,63 +44,80 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let currentFilter = 'my_posts';
-    let currentCategory = 'all';
-
-    loadActivities(currentFilter, currentCategory);
-
-    const activityLinks = document.querySelectorAll('.activity-link');
-    activityLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            currentFilter = this.getAttribute('data-filter');
-            activityLinks.forEach(link => link.classList.remove('active'));
-            this.classList.add('active');
-            loadActivities(currentFilter, currentCategory);
+    document.addEventListener('DOMContentLoaded', function() {
+        let currentFilter = 'my_posts';
+        let currentCategory = 'all';
+    
+        loadActivities(currentFilter, currentCategory);
+    
+        const activityLinks = document.querySelectorAll('.activity-link');
+        activityLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentFilter = this.getAttribute('data-filter');
+                activityLinks.forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+                loadActivities(currentFilter, currentCategory);
+            });
         });
-    });
-
-    const filterLinks = document.querySelectorAll('.filter-link');
-    filterLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            currentCategory = this.getAttribute('data-category');
-            filterLinks.forEach(link => link.classList.remove('active'));
-            this.classList.add('active');
-            loadActivities(currentFilter, currentCategory);
+    
+        const filterLinks = document.querySelectorAll('.filter-link');
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                currentCategory = this.getAttribute('data-category');
+                filterLinks.forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+                loadActivities(currentFilter, currentCategory);
+            });
         });
-    });
-
-    function loadActivities(filter, category) {
-        const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                const activityContent = document.getElementById('activity-content');
-                activityContent.innerHTML = '';
-                if (data.posts.length > 0) {
-                    data.posts.forEach(post => {
-                        const postElement = document.createElement('div');
-                        postElement.classList.add('activity-card');
-                        postElement.innerHTML = `
-                            {% with random_image=image_files|random %}
-                            <div class="card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                            <div class="card-content">
-                                <h3><a href="${post.url}">${post.title}</a></h3>
-                                <span>작성자: ${post.writer}</span>
-                                <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
+    
+        function loadActivities(filter, category) {
+            const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const activityContent = document.getElementById('activity-content');
+                    activityContent.innerHTML = '';
+    
+                    if (filter === 'profile_info') {
+                        const profileInfo = `
+                            <div class="profile-info-card">
+                                <p><strong>사용자 이름:</strong> ${data.username}</p>
+                                <p><strong>이메일 주소:</strong> ${data.email}</p>
+                                <p><strong>닉네임:</strong> ${data.nickname}</p>
+                                <p><strong>기수:</strong> ${data.cohort}</p>
+                                <p><strong>소개:</strong> ${data.intro}</p>
+                                ${data.profile_image ? `<img src="${data.profile_image}" alt="프로필 이미지">` : ''}
+                                <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
                             </div>
-                            {% endwith %}
                         `;
-                        activityContent.appendChild(postElement);
-                    });
-                } else {
-                    activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
-                }
-            })
-            .catch(error => console.error('Error loading activities:', error));
-    }
-});
+                        activityContent.innerHTML = profileInfo;
+                    } else {
+                        if (data.posts.length > 0) {
+                            data.posts.forEach(post => {
+                                const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
+                        
+                                const postElement = document.createElement('div');
+                                postElement.classList.add('activity-card');
+                                postElement.innerHTML = `
+                                    <div class="card-image" style="background-image: url('${randomImage}');"></div>
+                                    <div class="card-content">
+                                        <h3><a href="${post.url}">${post.title}</a></h3>
+                                        <span>작성자: ${post.writer}</span>
+                                        <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
+                                    </div>
+                                `;
+                                activityContent.appendChild(postElement);
+                            });
+                        } else {
+                            activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
+                        }
+                    }
+                })
+                .catch(error => console.error('Error loading activities:', error));
+        }
+    });
 </script>
 {% endblock %}

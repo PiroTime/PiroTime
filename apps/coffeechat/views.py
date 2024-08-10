@@ -10,20 +10,13 @@ from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils import timezone
-
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
-from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 from django.utils.html import strip_tags
-
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest
-from .forms import CoffeeChatForm
-from datetime import timedelta
-from django.http import JsonResponse
-import json
-from django.http import HttpResponseForbidden
-from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import get_user_model
+
+# 프로젝트 내 모듈
+from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
+from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 
 User = get_user_model()
 
@@ -173,8 +166,8 @@ def detail(request, pk):
                 if form.is_valid():
                     message = form.cleaned_data['requestContent']
                     print('message: ', message)
-                    subject = "PiroTime: 커피쳇 신청이 왔습니다!"
-                    content = f"{profile.receiver}님! 작성하신 커피책 게시글에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
+                    subject = "PiroTime: 커피챗 신청이 왔습니다!"
+                    content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
                     sending_mail(profile.receiver, request.user, subject, content, message)
                     print("email sending")
 

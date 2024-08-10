@@ -35,7 +35,7 @@
         <div class="header-details">
           <h1>{{ cor.title }}</h1>
           <div class="meta-info">
-            <span><i class="fas fa-user"></i> {{ cor.writer }}</span>
+            <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' cor.writer.id %}">{{ cor.writer }}</a></span>
             <span><i class="fas fa-calendar-alt"></i> {{ cor.date }}</span>
           </div>
         </div>

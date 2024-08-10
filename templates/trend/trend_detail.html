@@ -25,7 +25,7 @@
           <h1>{{ trend.title }}</h1>
           <h2>{{ trend.subtitle }}</h2>
           <div class="meta-info">
-            <span><i class="fas fa-user"></i> {{ trend.writer }}</span>
+            <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' trend.writer.id %}">{{ trend.writer }}</a></span>
             <span><i class="fas fa-calendar-alt"></i> {{ trend.date }}</span>
           </div>
         </div>

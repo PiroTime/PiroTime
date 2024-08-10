@@ -11,7 +11,6 @@ from django.db.models import Count, Q
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm, ReviewSearchForm
 
-
 def review_list(request):
     search = request.GET.get('search', '')
     search_form = ReviewSearchForm(request.GET)
@@ -25,7 +24,7 @@ def review_list(request):
     order_by = request.GET.get('order_by', 'date')
     page_number = request.GET.get('page', 1)
 
-    reviews = Review.objects.all()
+    reviews = Review.objects.all().select_related('writer')
 
     if search:
         reviews = reviews.filter(title__icontains=search)

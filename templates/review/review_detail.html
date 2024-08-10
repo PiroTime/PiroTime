@@ -32,7 +32,7 @@
           <h1>{{ review.title }}</h1>
           <h2>{{ review.subtitle }}</h2>
           <div class="meta-info">
-            <span><i class="fas fa-user"></i> {{ review.writer }}</span>
+            <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a> </span>
             <span><i class="fas fa-calendar-alt"></i> {{ review.date }}</span>
           </div>
         </div>
@@ -71,7 +71,7 @@
         <div class="comment">
           <p>{{ comment.content }}</p>
           <div class="comment-meta">
-            <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
+            <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a></span>
             <div class="comment-meta-data">
               <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
               {% if comment.writer == user or user.is_staff %}
