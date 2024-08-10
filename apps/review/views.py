@@ -38,17 +38,22 @@ def review_list(request):
     paginator = Paginator(reviews, 6)
     page_obj = paginator.get_page(page_number)
 
+    # 랜덤으로 출력할 사진 list
+    image_files = ['back.png', 'back1.png', 'back2.png']
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'review/partial_review_list.html', {
             'page_obj': page_obj,
             'order_by': order_by,
-            'search': search
+            'search': search,
+            'image_files': image_files
         })
 
     return render(request, 'review/review_list.html', {
         'page_obj': page_obj,
         'order_by': order_by,
-        'search': search
+        'search': search,
+        'image_files': image_files
     })
 
 def review_create(request):

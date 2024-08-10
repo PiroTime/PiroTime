@@ -29,17 +29,22 @@ def trend_list(request):
     paginator = Paginator(trends, 12)
     page_obj = paginator.get_page(page_number)
 
+    # 랜덤으로 출력할 사진 list
+    image_files = ['back.png', 'back1.png', 'back2.png']
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'trend/partial_trend_list.html', {
             'page_obj': page_obj,
             'order_by': order_by,
-            'search': search
+            'search': search,
+            'image_files': image_files
         })
 
     return render(request, 'trend/trend_list.html', {
         'page_obj': page_obj,
         'order_by': order_by,
-        'search': search
+        'search': search,
+        'image_files': image_files
     })
 
 def trend_create(request):
