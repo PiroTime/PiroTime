@@ -50,7 +50,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
         category = request.GET.get('category', 'all')
         user_id = request.GET.get('user_id', None)
 
-        # 특정 사용자의 글을 필터링하기 위해 user_id를 사용
+        # 특정 사용자 글 필터링하기 위해 user_id 사용
         if user_id:
             target_user = get_object_or_404(CustomUser, id=user_id)
         else:
@@ -77,13 +77,10 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 posts = Trend.objects.filter(bookmarks=target_user)
             elif category == 'corboard':
                 posts = Corboard.objects.filter(bookmarks=target_user)
-            elif category == 'coffechat':
-                posts = CoffeeChat.objects.filter(bookmarks=target_user)
             else:
                 posts = list(Trend.objects.filter(bookmarks=target_user)) + \
                         list(Review.objects.filter(bookmarks=target_user)) + \
-                        list(Corboard.objects.filter(bookmarks=target_user)) + \
-                        list(CoffeeChat.objects.filter(bookmarks=target_user))
+                        list(Corboard.objects.filter(bookmarks=target_user))
 
         # 내가 좋아요한 글 필터링
         elif filter_type == 'liked':
@@ -109,19 +106,49 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             elif category == 'corboard':
                 post_ids = CorboardComment.objects.filter(writer=target_user).values_list('corboard_id', flat=True)
                 posts = Corboard.objects.filter(id__in=post_ids)
-            elif category == 'coffeechat':
-                post_ids = Review.objects.filter(reviewer=target_user, coffeechat_request__isnull=False).values_list('coffeechat_request__coffeechat_id', flat=True)
-                posts = CoffeeChat.objects.filter(id__in=post_ids)
             else:
                 trend_ids = TrendComment.objects.filter(writer=target_user).values_list('trend_id', flat=True)
                 review_ids = ReviewComment.objects.filter(writer=target_user).values_list('review_id', flat=True)
                 corboard_ids = CorboardComment.objects.filter(writer=target_user).values_list('corboard_id', flat=True)
-                coffeechat_ids = Review.objects.filter(reviewer=target_user, coffeechat_request__isnull=False).values_list('coffeechat_request__coffeechat_id', flat=True)
                 posts = list(Trend.objects.filter(id__in=trend_ids)) + \
                         list(Review.objects.filter(id__in=review_ids)) + \
-                        list(Corboard.objects.filter(id__in=corboard_ids)) + \
-                        list(CoffeeChat.objects.filter(id__in=coffeechat_ids))
-        
+                        list(Corboard.objects.filter(id__in=corboard_ids))
+
+        # 커피챗 필터링
+        elif filter_type == 'coffeechat':
+            if category == 'requests_sent':
+                requests_sent = CoffeeChatRequest.objects.filter(user=target_user, status='WAITING')
+                data = [{
+                    'receiver': request.coffeechat.receiver.username,
+                    'job': request.coffeechat.job,
+                    'created_at': request.created_at.isoformat(),
+                    'status': request.get_status_display(),
+                } for request in requests_sent]
+                return JsonResponse({'requests_sent': data})
+
+            elif category == 'requests_received':
+                requests_received = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='WAITING')
+                data = [{
+                    'sender': request.user.username,
+                    'job': request.coffeechat.job,
+                    'created_at': request.created_at.isoformat(),
+                    'status': request.get_status_display(),
+                    'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
+                    'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
+                } for request in requests_received]
+                return JsonResponse({'requests_received': data})
+            
+            # elif category == 'review_written':
+            #     reviews = Review.objects.filter(reviewer=target_user)
+            #     data = [{
+            #         'coffeechat_receiver': review.coffeechat_request.coffeechat.receiver.username,
+            #         'job': review.coffeechat_request.coffeechat.job,
+            #         'created_at': review.created_at.isoformat(),
+            #         'rating': review.rating,
+            #         'content': review.content,
+            #     } for review in reviews]
+            #     return JsonResponse({'reviews_written': data})
+
         # 내 정보 보기
         elif filter_type == 'profile_info':
             user = target_user
