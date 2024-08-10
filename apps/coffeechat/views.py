@@ -23,13 +23,24 @@ import json
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 def home(request):
     cohort_range = range(1, 22)  # 1기부터 21기까지의 범위
     reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기
+    profile_counts = {i: 0 for i in cohort_range}
+
+    for cohort in cohort_range:
+        users_in_cohort = User.objects.filter(cohort=cohort)
+        profiles_in_cohort = CoffeeChat.objects.filter(receiver__in=users_in_cohort)
+        profile_counts[cohort] = profiles_in_cohort.count()
+        
     context = {
         'reviews': reviews,
         'cohort_range': cohort_range,
+        'profile_counts': profile_counts,
     }
     return render(request, 'coffeechat/home.html', context)
 

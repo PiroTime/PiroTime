@@ -219,7 +219,7 @@
             {% with random_image=image_files|random %}
             <div class="review-card">
                 <a href="{% url 'corboard:cor_detail' pk=corboard.pk %}" style="text-decoration: none; color: inherit;">
-                    <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                    <div class="review-card-image" style="background-image: url('{% static %}{{ random_image }}')"></div>
                     <form class="bookmark-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_bookmark' pk=corboard.pk %}" method="post">
                         {% csrf_token %}
                         <button type="button" class="scrap-icon {% if request.user in corboard.bookmarks.all %} scrapped{% endif %}">
