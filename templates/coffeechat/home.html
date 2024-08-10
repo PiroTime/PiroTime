@@ -41,6 +41,11 @@
         border: 1px solid rgba(94, 103, 235, 0.2);
     }
 
+    .job-box.empty {
+        filter: grayscale(100%);
+        opacity: 0.5;
+    }
+
     .img-container {
         width: 40px;
         height: 120px;
@@ -174,20 +179,27 @@
         color: black;
     }
 </style>
+{% load custom_filters %}
+
 <section class="container max-width-1325">
     <h2>기수별 모아보기</h2>
-        <div class="flex-center">
-            {% for i in cohort_range %}
-            <a href="{% url 'coffeechat:cohort_profiles' cohort=i %}" class="job-box">
-                <div class="img-container">
-                    <img alt="{{ i }}기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1" class="rounded-full"
-                        src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
-                </div>
-                <span class="text-chat">{{ i }}기</span>
-            </a>
-            {% endfor %}
-        </div>
+    <div class="flex-center">
+        {% for i in cohort_range %}
+        <a href="{% url 'coffeechat:cohort_profiles' cohort=i %}"
+            class="job-box {% if profile_counts|get_item:i == 0 %}empty{% endif %}">
+            <div class="img-container">
+                <img alt="{{ i }}기" loading="lazy" width="36" height="36" decoding="async" data-nimg="1"
+                    class="rounded-full" src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
+            </div>
+            <span class="text-chat">{{ i }}기</span>
+            <!-- <span class="profile-count">({{ profile_counts|get_item:i }}명)</span> -->
+        </a>
+        {% endfor %}
+    </div>
 </section>
+
+
+
 <section class="container max-width-1325">
     <h2 class="container">커피챗 하기☕</h2>
     <div class="d-flex justify-content-center">
@@ -239,6 +251,7 @@
                         {% else %}
                         <p class="card-profile">Job information not available</p>
                         {% endif %} -->
+                        <p class="card-profile">직업 {{ review.coffeechat_request.coffeechat.job }}</p>
                         <p class="card-profile">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
                         <p class="card-profile">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
                     </div>
