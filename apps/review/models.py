@@ -52,6 +52,10 @@ class Comment(models.Model):
     )
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='review_replies', on_delete=models.CASCADE)
+
+    def get_replies(self):
+        return self.review_replies.all()
 
     def __str__(self):
         return f'Comment by {self.writer} on {self.review}'

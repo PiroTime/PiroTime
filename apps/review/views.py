@@ -121,8 +121,19 @@ def add_comment(request, pk):
             comment.review = review
             comment.writer = request.user if request.user.is_authenticated else None
             comment.created_at = timezone.now()
+            # 대댓글일 경우 parent 설정
+            parent_id = request.POST.get('parent')
+            if parent_id:
+                parent_comment = get_object_or_404(Comment, id=parent_id)
+                comment.parent = parent_comment
+            else:
+                comment.parent = None
+            
             comment.save()
-            return redirect('review:review_detail', pk=review.pk)
+            if comment.parent:
+                return redirect(f'{comment.review.get_absolute_url()}#comment-{comment.id}')
+            else:
+                return redirect('review:review_detail', pk=review.pk)
     else:
         form = CommentForm()
     return render(request, 'review/review_detail.html', {'review': review, 'comments': review.comments.all(), 'comment_form': form})
