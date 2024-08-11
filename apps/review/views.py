@@ -121,6 +121,7 @@ def add_comment(request, pk):
             comment.review = review
             comment.writer = request.user if request.user.is_authenticated else None
             comment.created_at = timezone.now()
+            
             # 대댓글일 경우 parent 설정
             parent_id = request.POST.get('parent')
             if parent_id:
