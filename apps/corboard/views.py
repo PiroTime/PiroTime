@@ -97,19 +97,34 @@ def cor_update(request, pk):
 
 @login_required
 def cor_add_comment(request, pk):
-    cor  = get_object_or_404(Corboard, pk=pk)
+    cor = get_object_or_404(Corboard, pk=pk)
     if request.method == "POST":
         form = CorCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.created_at = timezone.now()
             comment.corboard = cor
             comment.writer = request.user
+            comment.date = timezone.now()
+            
+            # 대댓글일 경우 parent 설정
+            parent_id = request.POST.get('parent')
+            if parent_id:
+                parent_comment = get_object_or_404(Comment, id=parent_id)
+                comment.parent = parent_comment
+            else:
+                comment.parent = None
+            
             comment.save()
-            return redirect('corboard:cor_detail', pk = cor.id)
-    else:
-        commentForm = CorCommentForm()
-    return render(request, 'corboard/corboard_detail', {'cor': cor, 'comments': cor.cor_comments.all(), 'commentForm':commentForm})
+            if comment.parent:
+                return redirect(f'{comment.corboard.get_absolute_url()}#comment-{comment.id}')
+            else:
+                return redirect('corboard:cor_detail', pk=cor.pk)
+    
+    return render(request, 'corboard/corboard_detail.html', {
+        'cor': cor, 
+        'comments': cor.cor_comments.filter(parent=None),  # parent가 None인 댓글만 표시
+        'commentForm': form
+    })
 
 def cor_delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
