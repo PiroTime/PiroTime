@@ -112,8 +112,20 @@ def add_comment(request, pk):
             comment.trend = trend
             comment.writer = request.user if request.user.is_authenticated else None
             comment.created_at = timezone.now()
+
+            # 대댓글일 경우 parent 설정
+            parent_id = request.POST.get('parent')
+            if parent_id:
+                parent_comment = get_object_or_404(Comment, id=parent_id)
+                comment.parent = parent_comment
+            else:
+                comment.parent = None
+            
             comment.save()
-            return redirect('trend:trend_detail', pk=trend.pk)
+            if comment.parent:
+                return redirect(f'{comment.trend.get_absolute_url()}#comment-{comment.id}')
+            else:
+                return redirect('trend:trend_detail', pk=trend.pk)
     else:
         form = CommentForm()
     return render(request, 'trend/trend_detail.html', {'trend': trend, 'comments': trend.comments.all(), 'comment_form': form})

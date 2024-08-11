@@ -80,30 +80,63 @@
   <div class="comment-section">
     <h3>댓글</h3>
     <div class="comments">
-      {% for comment in cor.cor_comments.all %}
-        <div class="comment">
-          <p>{{ comment.content }}</p>
-          <div class="comment-meta">
-            <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
-            <div class="comment-meta-data">
-              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-              {% if comment.writer == user or user.is_staff %}
-                <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                    <i class="fas fa-trash-alt"></i> 삭제
-                  </button>
-                </form>
-              {% endif %}
+        {% for comment in comments %}
+            {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
+            <div class="comment">
+                <p>{{ comment.content }}</p>
+                <div class="comment-meta">
+                    <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
+                    <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+                    {% if comment.writer == user or user.is_staff %}
+                        <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                                <i class="fas fa-trash-alt"></i> 삭제
+                            </button>
+                        </form>
+                    {% endif %}
+                    <button class="btn-reply" onclick="showReplyForm({{ comment.id }});">Reply</button>
+                </div>
+
+                <!-- 대댓글 표시 -->
+                <div class="replies">
+                    {% for reply in comment.get_replies %}
+                        <div class="comment" style="margin-left: 20px;">
+                            <p>{{ reply.content }}</p>
+                            <div class="comment-meta">
+                                <span><i class="fas fa-user"></i> {{ reply.writer }}</span>
+                                <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
+                                {% if reply.writer == user or user.is_staff %}
+                                    <form action="{% url 'corboard:cor_delete_comment' pk=reply.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-delete-comment" data-comment-id="{{ reply.id }}">
+                                            <i class="fas fa-trash-alt"></i> 삭제
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>아직 대댓글이 없습니다.</p>
+                    {% endfor %}
+                </div>
+
+                <!-- 대댓글 입력 폼 -->
+                <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
+                    <form method="post" action="{% url 'corboard:cor_add_comment' pk=cor.pk %}">
+                        {% csrf_token %}
+                        <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
+                        <input type="hidden" name="parent" value="{{ comment.id }}">
+                        <button type="submit" class="btn-add-comment">답글 등록</button>
+                    </form>
+                </div>
             </div>
-          </div>
-        </div>
-      {% empty %}
-        <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
-      {% endfor %}
+            {% endif %}
+        {% empty %}
+            <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+        {% endfor %}
     </div>
     <form class="comment-form" method="post" action="{% url 'corboard:cor_add_comment' pk=cor.pk %}">
-
         {% csrf_token %}
         <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
         <button type="submit" class="btn-add-comment">등록</button>
@@ -235,6 +268,16 @@
       }
     });
   });
+
+  //대댓글 입력 FORM
+  function showReplyForm(commentId) {
+    var replyForm = document.getElementById('reply-form-' + commentId);
+    if (replyForm.style.display === 'none') {
+        replyForm.style.display = 'block';
+    } else {
+        replyForm.style.display = 'none';
+    }
+  }
 </script>
 
 {% endblock %}
