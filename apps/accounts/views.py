@@ -61,7 +61,7 @@ def start(req):
     corboards = Corboard.objects.filter(date__gte=three_months_ago)
     coboard_most = find_most_popular(corboards)
 
-    coffeechats = CoffeeChat.objects.filter(created_at=three_months_ago)
+    coffeechats = CoffeeChat.objects.filter(created_at__gte=three_months_ago)
     coffeechat_most = find_most_popular_coffeeChat(coffeechats)
 
     trends = Trend.objects.filter(date__gte=three_months_ago)
@@ -107,6 +107,7 @@ def find_most_popular_coffeeChat(items):
     G = 1.8  # 시간 가중치
     # 각 항목에 대해 인기 점수 계산
     for item in items:
+        print(item.content)
         time_diff_hours = (now - item.created_at).total_seconds() / 3600
         score = (item.total_likes() + item.total_bookmark()) / (time_diff_hours + 2) ** G
 
