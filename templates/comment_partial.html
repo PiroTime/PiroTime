@@ -1,0 +1,32 @@
+<div class="comment" id="comment-{{ comment.id }}">
+    <p>{{ comment.content }}</p>
+    <div class="comment-meta">
+        <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
+        <div class="comment-meta-data">
+            <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+            {% if comment.writer == user or user.is_staff %}
+                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                    <i class="fas fa-trash-alt"></i> 삭제
+                </button>
+            {% endif %}
+            <button class="btn-reply" onclick="showReplyForm({{ comment.id }});">Reply</button>
+        </div>
+    </div>
+
+    <!-- 대댓글 입력 폼 -->
+    <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
+        <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
+            {% csrf_token %}
+            <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
+            <input type="hidden" name="parent" value="{{ comment.id }}">
+            <button type="submit" class="btn-add-comment">답글 등록</button>
+        </form>
+    </div>
+
+    <!-- 대댓글 표시 -->
+    <div class="replies" style="margin-left: 20px;">
+        {% for reply in comment.get_replies %}
+            {% include 'comment_partial.html' with comment=reply %}
+        {% endfor %}
+    </div>
+</div>

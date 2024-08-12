@@ -4,8 +4,9 @@ from django.utils import timezone
 from django.http import HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count
+from django.template.loader import render_to_string
 
 # 프로젝트 내 모듈
 from .models import Trend, Comment
@@ -103,8 +104,8 @@ def trend_detail(request, pk):
         'user': request.user,
     })
 
-def add_comment(request, pk):
-    trend = get_object_or_404(Trend, pk=pk)
+def add_comment(request, trend_pk):
+    trend = get_object_or_404(Trend, pk=trend_pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -118,26 +119,25 @@ def add_comment(request, pk):
             if parent_id:
                 parent_comment = get_object_or_404(Comment, id=parent_id)
                 comment.parent = parent_comment
-            else:
-                comment.parent = None
             
             comment.save()
-            if comment.parent:
-                return redirect(f'{comment.trend.get_absolute_url()}#comment-{comment.id}')
-            else:
-                return redirect('trend:trend_detail', pk=trend.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'trend/trend_detail.html', {'trend': trend, 'comments': trend.comments.all(), 'comment_form': form})
 
-@csrf_exempt
+            # 댓글 렌더링 HTML
+            comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
+
+            return JsonResponse({'success': True, 'comment_html': comment_html})
+        else:
+            return JsonResponse({'success': False, 'error': form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+@csrf_protect
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    trend_pk = comment.trend.pk
     if comment.writer != request.user and not request.user.is_staff:
         return HttpResponseForbidden()
+    
     comment.delete()
-    return redirect('trend:trend_detail', pk=trend_pk)
+    return JsonResponse({'success': True})
 
 @login_required
 def like_trend(request, pk):

@@ -10,7 +10,7 @@ urlpatterns = [
     path('update/<int:pk>/', trend_update, name='trend_update'),
     path('detail/<int:pk>/', trend_detail, name='trend_detail'),
     
-    path('comment/<int:pk>/', add_comment, name='add_comment'),
+    path('<int:trend_pk>/comment/', add_comment, name='add_comment'),
     path('comment/<int:pk>/delete/', delete_comment, name='delete_comment'),
     
     path('<int:pk>/like/', like_trend, name='like_trend'),

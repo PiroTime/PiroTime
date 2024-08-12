@@ -69,7 +69,7 @@
     <div class="comments">
       {% for comment in comments %}
         {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
-        <div class="comment">
+        <div class="comment" id="comment-{{ comment.id }}">
           <p>{{ comment.content }}</p>
           <div class="comment-meta">
             <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a></span>
@@ -87,7 +87,7 @@
           <!-- 대댓글 표시 -->
           <div class="replies" style="margin-left: 20px;">
             {% for reply in comment.get_replies %}
-              <div class="comment">
+              <div class="comment" id="comment-{{ reply.id }}">
                 <p>{{ reply.content }}</p>
                 <div class="comment-meta">
                   <span><i class="fas fa-user"></i> {{ reply.writer }}</span>
@@ -106,7 +106,7 @@
 
           <!-- 대댓글 입력 폼 -->
           <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
-            <form method="post" action="{% url 'review:add_comment' review.id %}">
+            <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
               {% csrf_token %}
               <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
               <input type="hidden" name="parent" value="{{ comment.id }}">
@@ -121,7 +121,7 @@
     </div>
     
     <!-- 새로운 댓글 입력 폼 -->
-    <form class="comment-form" method="post" action="{% url 'review:add_comment' review.id %}">
+    <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
       {% csrf_token %}
       <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
       <button type="submit" class="btn-add-comment">등록</button>
@@ -221,7 +221,7 @@
             'X-CSRFToken': getCSRFToken() // CSRF 토큰 추가
           },
           success: function() {
-            location.reload();
+            $('#comment-' + commentId).remove();
           },
           error: function(xhr, status, error) {
             // 로그인 리다이렉션 확인
@@ -235,6 +235,28 @@
       }
     });
   });
+
+  // 댓글 및 대댓글 작성 기능
+  function submitCommentForm(form, parentId = null) {
+    var formData = $(form).serialize();
+    var reviewId = "{{ review.id }}";
+    $.post("/review/" + reviewId + "/comment/", formData, function(data) {
+      if (data.success) {
+        // 새 댓글 또는 대댓글을 해당 위치에 추가
+        if (parentId) {
+          $('#reply-form-' + parentId).before(data.comment_html); // 대댓글일 경우 대댓글 위치에 추가
+          $('#reply-form-' + parentId).hide(); // 대댓글 작성 폼 숨기기
+        } else {
+          $('.comments').append(data.comment_html); // 새 댓글을 댓글 목록에 추가
+        }
+        $(form).find('textarea').val(''); // 폼 리셋
+      } else {
+        alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+      }
+    }).fail(function(xhr, status, error) {
+      alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+    });
+  }
 
   function showReplyForm(commentId) {
     var replyForm = document.getElementById('reply-form-' + commentId);
