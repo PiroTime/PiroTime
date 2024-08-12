@@ -154,25 +154,28 @@ def detail(request, pk):
             ).count()
 
             if daily_requests < 5:
-                CoffeeChatRequest.objects.create(
-                    user=request.user,
-                    coffeechat=profile,
-                    status='WAITING'
-                )
 
                 form = CoffeechatRequestForm(request.POST)
 
                 if form.is_valid():
-
-                    #리쿼스트 생성
-                    coffeechat_request = CoffeeChatRequest
-                    coffeechat_request.coffeechat = profile
-                    coffeechat_request.user = request.user
-                    coffeechat_request.letterToSenior = form.requestContent
-                    coffeechat_request.save()
-
-                    #메일 전송
                     message = form.cleaned_data['requestContent']
+
+                    # #리쿼스트 생성
+                    # coffeechat_request = CoffeeChatRequest
+                    # coffeechat_request.coffeechat = profile
+                    # coffeechat_request.user = request.user
+                    # coffeechat_request.letterToSenior = form.requestContent
+                    # coffeechat_request.save()
+                    # print('Letter to senipai: ', coffeechat_request.letterToSenior)
+
+                    CoffeeChatRequest.objects.create(
+                        user=request.user,
+                        coffeechat=profile,
+                        status='WAITING',
+                        letterToSenior=message
+                    )
+                    #메일 전송
+
                     print('message: ', message)
                     subject = "PiroTime: 커피챗 신청이 왔습니다!"
                     content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
