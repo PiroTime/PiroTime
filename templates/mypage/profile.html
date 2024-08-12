@@ -110,9 +110,11 @@
                                         <p>요청 시간: ${new Date(request.created_at).toLocaleString()}</p>
                                         <p>상태: ${request.status}</p>
                                         <form method="post" action="${request.accept_url}">
+                                            {% csrf_token %}
                                             <button type="submit">수락하기</button>
                                         </form>
                                         <form method="post" action="${request.reject_url}">
+                                            {% csrf_token %}
                                             <button type="submit">거절하기</button>
                                         </form>
                                     </div>

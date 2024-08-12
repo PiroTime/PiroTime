@@ -18,6 +18,7 @@ class CoffeeChat(models.Model):
     content = models.TextField(null=True, blank=True) #자기소개
     count = models.IntegerField(default=0) #요청 수
     bookmarks = models.ManyToManyField(CustomUser, related_name='coffeechat_bookmarks', blank=True) #북마크
+    is_public = models.BooleanField(default=True)  # 기본적으로 공개
 
     # def date(self):
     #     return self.created_at

@@ -27,7 +27,7 @@ def home(request):
 
     for cohort in cohort_range:
         users_in_cohort = User.objects.filter(cohort=cohort)
-        profiles_in_cohort = CoffeeChat.objects.filter(receiver__in=users_in_cohort)
+        profiles_in_cohort = CoffeeChat.objects.filter(receiver__in=users_in_cohort, is_public=True)
         profile_counts[cohort] = profiles_in_cohort.count()
         
     context = {
@@ -41,15 +41,17 @@ def list(req):
     query = req.GET.get('search')
     if query:
         profiles = CoffeeChat.objects.filter(
-            Q(hashtags__name__icontains=query) | Q(receiver__username__icontains=query) | Q(job__icontains=query)
+            (Q(hashtags__name__icontains=query) | Q(receiver__username__icontains=query) | Q(job__icontains=query)),
+            is_public=True  # 공개된 프로필만 필터링
         ).distinct()
     else:
-        profiles = CoffeeChat.objects.all()
+        profiles = CoffeeChat.objects.filter(is_public=True)  # 공개된 프로필만 표시
     
     ctx = {
         "profiles": profiles
     }
     return render(req, 'coffeechat/list.html', ctx)
+
 
 @login_required
 def create(req):
@@ -122,19 +124,6 @@ def create_review(request, coffeechat_request_id):
     else:
         form = ReviewForm()
     return render(request, 'coffeechat/review_form.html', {'form': form})
-
-@login_required
-def accept_request(request, request_id): 
-    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
-    if request.user == coffeechat_request.coffeechat.receiver:
-        coffeechat_request.status = 'ACCEPTED'
-        coffeechat_request.save()
-        
-        coffeechat = coffeechat_request.coffeechat
-        coffeechat.count += 1
-        coffeechat.save()
-
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
 
 def detail(request, pk):
     profile = CoffeeChat.objects.get(pk=pk)
@@ -211,7 +200,7 @@ def coffeechat_request(request, post_id):
     chat_request.user = request.user
 
 @login_required
-def accept_request(request, request_id): #수락 시 
+def accept_request(request, request_id):
     coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
     if request.user == coffeechat_request.coffeechat.receiver:
         coffeechat_request.status = 'ACCEPTED'
@@ -222,17 +211,18 @@ def accept_request(request, request_id): #수락 시
         coffeechat.count += 1
         coffeechat.save()
 
-        #메일 보내기
+        # 메일 보내기
         subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
         message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
-        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
+        content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
+        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
+            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
 
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
 
+
 @login_required
 def reject_request(request, request_id):
-
     coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
     if request.user == coffeechat_request.coffeechat.receiver:
         coffeechat_request.status = "REJECTED"
@@ -241,12 +231,13 @@ def reject_request(request, request_id):
         coffeechat = coffeechat_request.coffeechat
 
         subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
-        message = f"{coffeechat_request.user}님! 선배님의 개인사정으로 인해 커피챗 요청이 거절되었습니. 다른 선배님과의 커피챗은 어떠하신가요?"
-
-        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)        #에러 메세지 보내고 싶음
+        message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
+        content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
+        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
+            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
 
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+
 
 
 @login_required
@@ -310,6 +301,7 @@ def sending_mail(receiver, sender, subject, content, message):
     content = content
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
+    
 
     html_message = render_to_string(
         "corboard/message.html",
@@ -352,3 +344,10 @@ def bookmark_profile(request, pk):
         bookmarked = True
     print(bookmarked)
     return JsonResponse({'bookmarked': bookmarked})
+
+@login_required
+def toggle_visibility(request, profile_id):
+    profile = get_object_or_404(CoffeeChat, pk=profile_id, receiver=request.user)
+    profile.is_public = not profile.is_public  # 현재 상태를 반전시킴
+    profile.save()
+    return redirect('coffeechat:coffeechat_detail', pk=profile_id)

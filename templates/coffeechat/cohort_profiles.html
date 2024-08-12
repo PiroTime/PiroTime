@@ -83,7 +83,7 @@
         <div class="profile">
             {% for profile in profiles %}
             {% with coffeechat=profile.received_coffeechats.first %}
-            {% if coffeechat and coffeechat.receiver.username == profile.username %}
+            {% if coffeechat and coffeechat.receiver.username == profile.username and coffeechat.is_public %}
             <div class="profile-card">
                 <div class="img-container">
                     {% if profile.profile_image and profile.profile_image.url %}
