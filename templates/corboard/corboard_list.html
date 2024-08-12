@@ -20,7 +20,7 @@
         <div class="button-group">
             <button type="button" data-order-by="date" class="btn btn-filter{% if order_by == 'date' %} active{% endif %}">최신순</button>
             <button type="button" data-order-by="likes" class="btn btn-filter{% if order_by == 'likes' %} active{% endif %}">좋아요순</button>
-            <a href="{% url 'corboard:cor_create' %}" class="btn btn-create">새로운 게시글 작성하기</a>
+            <button onclick="window.location.href='{% url 'corboard:cor_create' %}'" class="btn btn-create">새로운 게시글 작성하기</button>
         </div>
     </div>
 
