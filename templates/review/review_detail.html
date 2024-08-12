@@ -32,7 +32,13 @@
           <h1>{{ review.title }}</h1>
           <h2>{{ review.subtitle }}</h2>
           <div class="meta-info">
-            <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a> </span>
+            <span><i class="fas fa-user"></i> 
+              {% if review.writer == user %}
+                <a href="{% url 'mypage:profile' %}">{{ review.writer }}</a>
+              {% else %}
+                <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a>
+              {% endif %}
+            </span>
             <span><i class="fas fa-calendar-alt"></i> {{ review.date }}</span>
           </div>
         </div>
@@ -72,7 +78,13 @@
         <div class="comment" id="comment-{{ comment.id }}">
           <p>{{ comment.content }}</p>
           <div class="comment-meta">
-            <span><i class="fas fa-user"></i> <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a></span>
+            <span><i class="fas fa-user"></i> 
+              {% if comment.writer == user %}
+                <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+              {% else %}
+                <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+              {% endif %}
+            </span>
             <div class="comment-meta-data">
               <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
               {% if comment.writer == user or user.is_staff %}
@@ -90,7 +102,13 @@
               <div class="comment" id="comment-{{ reply.id }}">
                 <p>{{ reply.content }}</p>
                 <div class="comment-meta">
-                  <span><i class="fas fa-user"></i> {{ reply.writer }}</span>
+                  <span><i class="fas fa-user"></i> 
+                    {% if reply.writer == user %}
+                      <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+                    {% else %}
+                      <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                    {% endif %}
+                  </span>                  
                   <div class="comment-meta-data">
                     <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
                     {% if reply.writer == user or user.is_staff %}
@@ -242,14 +260,13 @@
     var reviewId = "{{ review.id }}";
     $.post("/review/" + reviewId + "/comment/", formData, function(data) {
       if (data.success) {
-        // 새 댓글 또는 대댓글을 해당 위치에 추가
         if (parentId) {
-          $('#reply-form-' + parentId).before(data.comment_html); // 대댓글일 경우 대댓글 위치에 추가
-          $('#reply-form-' + parentId).hide(); // 대댓글 작성 폼 숨기기
+          $('#reply-form-' + parentId).before(data.comment_html);
+          $('#reply-form-' + parentId).hide();
         } else {
-          $('.comments').append(data.comment_html); // 새 댓글을 댓글 목록에 추가
+          $('.comments').append(data.comment_html);
         }
-        $(form).find('textarea').val(''); // 폼 리셋
+        $(form).find('textarea').val('');
       } else {
         alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
       }

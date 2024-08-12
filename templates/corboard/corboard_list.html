@@ -41,7 +41,14 @@
                     </form>
                     <div class="review-card-content">
                         <h2>{{ corboard.title }}</h2>
-                        <p>작성자: <a href="{% url 'mypage:profile_read' corboard.writer.id %}">{{ corboard.writer }}</a> / 날짜: {{ corboard.date|date:"Y년 m월 d일" }}</p>
+                        <p>작성자: 
+                            {% if corboard.writer == user %}
+                              <a href="{% url 'mypage:profile' %}">{{ corboard.writer }}</a>
+                            {% else %}
+                              <a href="{% url 'mypage:profile_read' corboard.writer.id %}">{{ corboard.writer }}</a>
+                            {% endif %} 
+                            / 날짜: {{ corboard.date|date:"Y년 m월 d일" }}
+                        </p>
                         <div class="review-likes">
                             <form class="like-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
                                 {% csrf_token %}
