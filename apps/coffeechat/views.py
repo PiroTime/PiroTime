@@ -141,11 +141,9 @@ def detail(request, pk):
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
     
     if request.method == "POST" and request.user != profile.receiver:
-        print("++++++++++++++++++++=POST+++++++++++++++++++++")
         # existing_request = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile).exists()
         existing_request = False
         if not existing_request:
-            print("++++++++++++++++++++=not exist+++++++++++++++++++++")
 
             start_of_day = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
             end_of_day = start_of_day + timedelta(days=1)
@@ -163,7 +161,17 @@ def detail(request, pk):
                 )
 
                 form = CoffeechatRequestForm(request.POST)
+
                 if form.is_valid():
+
+                    #리쿼스트 생성
+                    coffeechat_request = CoffeeChatRequest
+                    coffeechat_request.coffeechat = profile
+                    coffeechat_request.user = request.user
+                    coffeechat_request.letterToSenior = form.requestContent
+                    coffeechat_request.save()
+
+                    #메일 전송
                     message = form.cleaned_data['requestContent']
                     print('message: ', message)
                     subject = "PiroTime: 커피챗 신청이 왔습니다!"
