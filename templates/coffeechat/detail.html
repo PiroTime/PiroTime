@@ -98,7 +98,7 @@
         <div>{{ profile.content|safe }}</div>
     </div>
     <!-- 요청 목록을 표시 -->
-    <div class="requests-list max-width-1200">
+    <!-- <div class="requests-list max-width-1200">
         <h3>요청받은 커피챗:</h3>
         {% for request in requests %}
         <div class="request-item">
@@ -113,16 +113,16 @@
                 {% csrf_token %}
                 <button type="submit">거절하기</button>
             </form>
-            {% endif %}
+            {% endif %} -->
             <!-- 리뷰 버튼 추가 -->
-            {% if user.is_authenticated and request.status == 'ACCEPTED' %}
+            <!-- {% if user.is_authenticated and request.status == 'ACCEPTED' %}
             <a href="{% url 'coffeechat:review_create' request.id %}">
                 <button type="button">리뷰 작성하기</button>
             </a>
             {% endif %}
         </div>
         {% endfor %}
-    </div>
+    </div> -->
     <!-- 리뷰 작성 링크 -->
     {% if request.user == profile.receiver and show_review_button %}
     <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}">Write Review</a>

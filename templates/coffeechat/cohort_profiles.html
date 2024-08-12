@@ -15,9 +15,9 @@
             margin-top: 60px;
         }
 
-        img{
-            width: 150px;  
-            height: 150px; 
+        img {
+            width: 150px;
+            height: 150px;
             object-fit: cover;
         }
 
@@ -39,7 +39,7 @@
             justify-content: center;
             flex-wrap: wrap;
             position: relative;
-            height: 370px;
+            height: 380px;
         }
 
         .profile-card a {
@@ -54,8 +54,9 @@
             text-decoration: none;
         }
 
-        .text-chat{
-            margin-top: -35px
+        .text-chat {
+            margin-top: -35px;
+            text-align: center;
         }
 
         .btn-primary {
@@ -73,6 +74,23 @@
             background-color: rgba(11, 236, 18, 0.8);
             color: black;
             text-decoration: none;
+        }
+
+        .intro-text {
+            max-height: 9%;
+            overflow: hidden;
+            position: relative;
+            line-height: 1.2em;
+            max-height: 2.4em;
+        }
+
+        .intro-text::after {
+            content: '...';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            padding-left: 5px;
         }
     </style>
 </head>
@@ -97,12 +115,13 @@
                     <p>{{ coffeechat.job }}</p>
                     <p>피로그래밍 {{ profile.cohort }}기</p>
                     {% if coffeechat.content and coffeechat.content|length > 0 and coffeechat.content.strip %}
-                    <p>{{ coffeechat.content|striptags }}</p>
+                    <p class="intro-text">{{ coffeechat.content|striptags }}</p>
                     {% else %}
-                    <p>소개없음</p>
+                    <p class="intro-text">소개없음</p>
                     {% endif %}
                 </div>
-                <a href="{% url 'coffeechat:coffeechat_detail' coffeechat.pk %}" class="btn btn-primary">선배님께 커피챗 신청하기</a>
+
+                <a href="{% url 'coffeechat:coffeechat_detail' coffeechat.pk %}" class="btn btn-primary">프로필 자세히 보기</a>
             </div>
             {% endif %}
             {% endwith %}
