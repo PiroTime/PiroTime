@@ -35,11 +35,11 @@
                 </form>
                 <div class="review-card-content">
                     <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
-                    <p>작성자: 
+                    <p style="display: inline;">작성자: 
                         {% if trend.writer == user %}
-                          <a href="{% url 'mypage:profile' %}">{{ trend.writer }}</a>
+                          <a href="{% url 'mypage:profile' %}" style="display: inline;">{{ trend.writer }}</a>
                         {% else %}
-                          <a href="{% url 'mypage:profile_read' trend.writer.id %}">{{ trend.writer }}</a>
+                          <a href="{% url 'mypage:profile_read' trend.writer.id %}" style="display: inline;">{{ trend.writer }}</a>
                         {% endif %}
                     </p>                      
                     <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
