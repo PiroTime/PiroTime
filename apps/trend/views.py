@@ -48,12 +48,13 @@ def trend_list(request):
         'image_files': image_files
     })
 
+@login_required
 def trend_create(request):
     if request.method == "POST":
         form = TrendForm(request.POST)
         if form.is_valid():
             trend = form.save(commit=False)
-            trend.writer = request.user if request.user.is_authenticated else None
+            trend.writer = request.user
             trend.created_at = timezone.now()
             trend.save()
             return redirect('trend:trend_detail', pk=trend.pk)
