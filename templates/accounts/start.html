@@ -84,7 +84,7 @@
         margin-left: auto; /* 오른쪽 끝에 정렬 */
     }
 
-    .fa-user {
+    .writer {
         color: gray;
         font-size: 1.2rem;
         margin-right: 5px;
@@ -255,7 +255,7 @@
                         <p class="start-title">{{ review_most.title }}</p>
                         <p class="start-content">{{ review_most.content|truncatewords:10 }}</p>
                         <div class="content-meta">
-                            <span class="meta-author"><i class="fas fa-user"></i>{{ review_most.writer }}</span>
+                            <span class="meta-author"><i class="fas fa-user writer"></i>{{ review_most.writer }}</span>
                             <span class="meta-time">{{ review_most.date|date:"m/d" }}</span>
                             <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ review_most.likes.count }}</span>
                         </div>
@@ -270,7 +270,7 @@
                         <p class="start-title">{{ coboard_most.title }}</p>
                         <p class="start-content">{{ coboard_most.content|truncatewords:10 }}</p>
                         <div class="content-meta">
-                            <span class="meta-author"><i class="fas fa-user"></i>{{ coboard_most.writer }}</span>
+                            <span class="meta-author"><i class="fas fa-user writer"></i>{{ coboard_most.writer }}</span>
                             <span class="meta-time">{{ coboard_most.date|date:"m/d" }}</span>
                             <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ coboard_most.likes.count }}</span>
                         </div>
@@ -302,7 +302,7 @@
                         <p class="start-title">{{ trend_most.title }}</p>
                         <p class="start-content">{{ trend_most.content|truncatewords:10 }}</p>
                         <div class="content-meta">
-                            <span class="meta-author"><i class="fas fa-user"></i>{{ trend_most.writer }}</span>
+                            <span class="meta-author"><i class="fas fa-user writer"></i>{{ trend_most.writer }}</span>
                             <span class="meta-time">{{ trend_most.date|date:"m/d" }}</span>
                             <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ trend_most.likes.count }}</span>
                         </div>
