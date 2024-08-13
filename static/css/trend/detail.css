@@ -10,18 +10,18 @@ body {
 }
 
 .container {
-    min-height: 100vh;
+    padding: 40px 0 0 0;
     margin-top: 60px;
     margin-bottom: 0;
-    padding: 40px 0 0 0;
+    min-height: 100vh;
 }
 
-.cor-container {
+.trend-container {
     border: 1px solid #CCCCCC;
     border-radius: 10px;
 }
 
-.cor-detail {
+.trend-detail {
     padding: 40px;
     border-radius: 10px;
 }
@@ -52,7 +52,7 @@ body {
     margin-right: 30px;
 }
 
-.cor-image {
+.trend-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -63,6 +63,12 @@ body {
     font-weight: 700;
     margin: 0 0 10px 0;
     color: #333;
+}
+
+.header-details h2 {
+    font-size: 1.5rem;
+    color: #666;
+    margin: 0 0 15px 0;
 }
 
 .meta-info {
@@ -82,6 +88,12 @@ body {
     border-radius: 10px;
     padding: 20px;
     margin-top: 40px;
+}
+
+.about-box h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 .action-buttons {
@@ -114,7 +126,6 @@ body {
     color: #FFC107;
 }
 
-
 .fa-heart:hover {
     color: #FF4C4C;
 } 
@@ -124,11 +135,7 @@ body {
     color: #FFC107;
 }
 
-.fa-envelope:hover {
-    transform: scale(1.1);
-}
-
-/*------ 내용 ---------*/
+/*-------  내용 ---------*/
 .content-section {
     display: flex;
     justify-content: space-between;
@@ -142,7 +149,7 @@ body {
     color: #444;
 }
 
-/*----------- 댓글 ------------------*/
+/*------- 댓글 --------*/
 .section-divider {
     border: none;
     border-top: 1px solid #CCCCCC;

@@ -152,9 +152,9 @@ $(document).ready(function() {
             },
             success: function(data) {
                 updateContent(data);
-            // 필터 버튼 활성화 상태 변경
-            $('.btn-filter').removeClass('active');
-            button.addClass('active');  // 저장한 변수를 사용
+                // 필터 버튼 활성화 상태 변경
+                $('.btn-filter').removeClass('active');
+                button.addClass('active');  // 저장한 변수를 사용
             },
             error: function(xhr) {
                 alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);

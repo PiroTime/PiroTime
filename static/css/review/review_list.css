@@ -217,6 +217,10 @@ body{
     color: #FF0000;
 }
 
+.fas.fa-heart.liked {
+    color: #FF0000;
+}
+
 .scrap-icon {
     position: absolute;
     top: 20px;
