@@ -182,3 +182,7 @@ cython_debug/
 PiroTime.iml
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+
+**/migrations/0001_initial.py
+**/migrations/0002_initial.py
+**/migrations/0003_initial.py
