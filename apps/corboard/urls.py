@@ -6,7 +6,7 @@ app_name = 'corboard'
 urlpatterns = [
     #CRUD
     path('', cor_list, name='cor_list'),
-    path('crate/', cor_create, name='cor_create'),
+    path('create/', cor_create, name='cor_create'),
     path('detail/<int:pk>/', cor_detail, name='cor_detail'),
     path('delete/<int:pk>/', cor_delete, name='cor_delete'),
     path('update/<int:pk>/', cor_update, name='cor_update'),

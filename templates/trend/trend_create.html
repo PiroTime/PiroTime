@@ -20,6 +20,7 @@
         <h1 class="main-title">IT trend 작성하기</h1>
         <form method="post">
             {% csrf_token %}
+            <input type="hidden" name="content">
             <div class="form-group">
                 <label for="{{ form.title.id_for_label }}">제목</label>
                 {{ form.title }}
@@ -27,7 +28,7 @@
             <div class="form-group">
                 <label for="{{ form.content.id_for_label }}">내용</label>
                 <div id="editor-container">
-                    {{ form.content }}
+                    <!-- Quill 에디터가 이 div를 대체합니다. -->
                 </div>
             </div>
             <div class="form-group">
@@ -50,5 +51,11 @@
     var quill = new Quill('#editor-container', {
         theme: 'snow'
     });
+
+    // 폼 제출 시 Quill의 내용을 숨겨진 textarea에 복사
+    document.querySelector('form').onsubmit = function() {
+        var content = document.querySelector('input[name="content"]');
+        content.value = quill.root.innerHTML;
+    };
 </script>
 {% endblock %}
