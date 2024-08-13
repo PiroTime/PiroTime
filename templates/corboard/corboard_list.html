@@ -45,8 +45,8 @@
                         <div class="review-likes">
                             <form class="like-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
                                 {% csrf_token %}
-                                <button type="button" class="like-button">
-                                    <i class="fas fa-heart{% if request.user in corboard.likes.all %} liked{% endif %}"></i> 
+                                <button type="button" class="like-button {% if request.user in corboard.likes.all %} liked{% endif %}">
+                                    <i class="fas fa-heart"></i> 
                                     <span class="like-count">{{ corboard.total_likes }}</span>
                                 </button>
                             </form>

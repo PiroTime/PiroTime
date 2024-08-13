@@ -8,6 +8,84 @@
         font-size: 1.2rem;
     }
 
+    .start-title {
+        font-size: 1.2rem;
+    }
+    
+    .content-card {
+        border: 1.5px solid #ccc;
+        box-sizing: border-box;
+        height: 100px; /* 높이를 고정할 경우 이 값을 조절 */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* 카드의 위아래 끝에 내용이 붙도록 설정 */
+    }
+
+    .description {
+        font-size: 1.2rem;
+    }
+    
+    .content-card {
+        border: 1.5px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 95%;
+    }
+
+    .start-content {
+        height: 20px;
+        margin: 0;
+        font-size: 1rem;
+        color: gray;
+        display: none;
+    }
+
+    .start-job {
+        margin: 0 0 0 10px;
+        font-size: 0.8rem;
+        font-weight: 100;
+        color: gray;
+    }
+
+    .content-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        white-space: nowrap; 
+        text-overflow: ellipsis;
+    }
+
+    .meta-author,
+    .meta-time,
+    .meta-likes {
+        flex-shrink: 0; 
+        margin-right: 10px;
+    }
+
+    .meta-likes {
+        margin-left: auto; /* 오른쪽 끝에 정렬 */
+    }
+
+    .fa-user {
+        color: gray;
+        font-size: 1rem;
+    }
+
+    .content-hashtags-container {
+        display: flex;
+        justify-content: space-between; /* 요소들을 양 끝에 배치 */
+        align-items: center;
+        width: 100%;
+    }
+
+    .hashtag {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-right: 10px;
+        border: 1px solid #CCCCCC;
+    }
 </style>
 <section id="main">
     <div class="main-container">
@@ -54,43 +132,69 @@
         <section class="content-section">
             <div class="start-card">
                 <h3 class="start-card-title">Project Review 인기글</h3>
-                <a {% if review_most %} href="{% url 'review:review_detail' pk=review_most.pk %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ review_most.title }}</p>
-                    <p class="start-content">{{ review_most.content }}</p>
-                </div>
+                <a {% if review_most %} href="{% url 'review:review_detail' pk=review_most.pk %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ review_most.title }}</p>
+                        <p class="start-content">{{ review_most.content|truncatewords:10 }}</p>
+                        <div class="content-meta">
+                            <span class="meta-author"><i class="fas fa-user"></i>{{ review_most.writer }}</span>
+                            <span class="meta-time">{{ review_most.date|date:"m/d" }}</span>
+                            <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ review_most.likes.count }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
+        
             <div class="start-card">
                 <h3 class="start-card-title">Project Cooperation 인기글</h3>
-                <a {% if coboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ coboard_most.title }}</p>
-                    <p class="start-content">{{ coboard_most.content }}</p>
-                </div>
+                <a {% if coboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ coboard_most.title }}</p>
+                        <p class="start-content">{{ coboard_most.content|truncatewords:10 }}</p>
+                        <div class="content-meta">
+                            <span class="meta-author"><i class="fas fa-user"></i>{{ coboard_most.writer }}</span>
+                            <span class="meta-time">{{ coboard_most.date|date:"m/d" }}</span>
+                            <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ coboard_most.likes.count }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
+        
             <div class="start-card">
                 <h3 class="start-card-title">CoffeeChat 인기글</h3>
-                <a  {% if coffeechat_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ coffeechat_most.receiver }}</p>
-                    <p class="start-content">{{ coffeechat_most.content }}</p>
-                </div>
+                <a  {% if coffeechat_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ coffeechat_most.receiver }}<span class="start-job">{{ coffeechat_most.job }}</span></p>
+                        <div class="content-hashtags-container">
+                            <div class="content-hashtags" id="hashtags-container">
+                                {% for tag in coffeechat_most.hashtags.all %}
+                                    <span class="hashtag">#{{ tag.name }}</span>
+                                {% endfor %}
+                            </div>
+                            <span class="coffeechat-count">커피챗 {{ coffeechat_most.count }}회</span>
+                        </div>
+                    </div>
                 </a>
             </div>
+        
             <div class="start-card">
                 <h3 class="start-card-title">IT Trend 인기글</h3>
-                <a {% if trend_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ trend_most.title }}</p>
-                    <p class="start-content">{{ trend_most.content }}</p>
-                </div>
+                <a {% if trend_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ trend_most.title }}</p>
+                        <p class="start-content">{{ trend_most.content|truncatewords:10 }}</p>
+                        <div class="content-meta">
+                            <span class="meta-author"><i class="fas fa-user"></i>{{ trend_most.writer }}</span>
+                            <span class="meta-time">{{ trend_most.date|date:"m/d" }}</span>
+                            <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ trend_most.likes.count }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
         </section>
     </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let currentSlide = 0;
     const slides = document.querySelectorAll('.text');
@@ -118,5 +222,22 @@
     setInterval(nextSlide, 5000); 
 
     showSlide(currentSlide); 
+
+    //해시태그(coffeechat)
+    $(document).ready(function() {
+        const cardWidth = $('.content-card').width();
+        const hashtagsContainer = $('#hashtags-container');
+        const hashtags = hashtagsContainer.find('.hashtag');
+
+        let totalWidth = 0;
+
+        hashtags.each(function() {
+            totalWidth += $(this).outerWidth(true); // .outerWidth(true)로 마진 포함 너비 계산
+
+            if (totalWidth+100 > cardWidth) {
+                $(this).hide();
+            }
+        });
+    });
 </script>
 {% endblock %}
