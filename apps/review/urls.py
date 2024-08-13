@@ -10,7 +10,7 @@ urlpatterns = [
     path('update/<int:pk>/', review_update, name='review_update'),
     path('detail/<int:pk>/', review_detail, name='review_detail'),
     
-    path('comment/<int:pk>/', add_comment, name='add_comment'),
+    path('<int:review_pk>/comment/', add_comment, name='add_comment'),
     path('comment/<int:pk>/delete/', delete_comment, name='delete_comment'),
     
     path('<int:pk>/like/', like_review, name='like_review'),

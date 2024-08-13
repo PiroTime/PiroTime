@@ -5,9 +5,8 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
@@ -75,8 +74,12 @@ def cor_create(request):
 def cor_detail(request, pk):
     print("cor_detail")
     cor = get_object_or_404(Corboard, pk=pk)
-    comments = cor.cor_comments.all()  # 여기서 related_name을 사용
-    return render(request, 'corboard/corboard_detail.html', {'cor': cor, 'comments': comments, 'commentForm': CorCommentForm()})
+    form = CorCommentForm()
+    return render(request, 'corboard/corboard_detail.html', {
+        'cor': cor,
+        'comments': cor.cor_comments.filter(parent=None),
+        'commentForm': form,
+    })
 
 @require_POST
 def cor_delete(request, pk):
@@ -111,20 +114,16 @@ def cor_add_comment(request, pk):
             if parent_id:
                 parent_comment = get_object_or_404(Comment, id=parent_id)
                 comment.parent = parent_comment
-            else:
-                comment.parent = None
             
             comment.save()
-            if comment.parent:
-                return redirect(f'{comment.corboard.get_absolute_url()}#comment-{comment.id}')
-            else:
-                return redirect('corboard:cor_detail', pk=cor.pk)
-    
-    return render(request, 'corboard/corboard_detail.html', {
-        'cor': cor, 
-        'comments': cor.cor_comments.filter(parent=None),  # parent가 None인 댓글만 표시
-        'commentForm': form
-    })
+
+            # 댓글 렌더링 HTML
+            comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
+
+            return JsonResponse({'success': True, 'comment_html': comment_html})
+        else:
+            return JsonResponse({'success': False, 'error': form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 def cor_delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)

@@ -4,8 +4,9 @@ from django.utils import timezone
 from django.http import HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count, Q
+from django.template.loader import render_to_string
 
 # 프로젝트 내 모듈
 from .models import Review, Comment
@@ -111,8 +112,8 @@ def review_detail(request, pk):
         'user': request.user,
     })
 
-def add_comment(request, pk):
-    review = get_object_or_404(Review, pk=pk)
+def add_comment(request, review_pk):
+    review = get_object_or_404(Review, pk=review_pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -120,32 +121,30 @@ def add_comment(request, pk):
             comment.review = review
             comment.writer = request.user if request.user.is_authenticated else None
             comment.created_at = timezone.now()
-            
+
             # 대댓글일 경우 parent 설정
             parent_id = request.POST.get('parent')
             if parent_id:
                 parent_comment = get_object_or_404(Comment, id=parent_id)
                 comment.parent = parent_comment
-            else:
-                comment.parent = None
             
             comment.save()
-            if comment.parent:
-                return redirect(f'{comment.review.get_absolute_url()}#comment-{comment.id}')
-            else:
-                return redirect('review:review_detail', pk=review.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'review/review_detail.html', {'review': review, 'comments': review.comments.all(), 'comment_form': form})
 
-@csrf_exempt
+            # 댓글 렌더링 HTML
+            comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
+
+            return JsonResponse({'success': True, 'comment_html': comment_html})
+        else:
+            return JsonResponse({'success': False, 'error': form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+@csrf_protect
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    review_pk = comment.review.pk
     if comment.writer != request.user and not request.user.is_staff:
         return HttpResponseForbidden()
     comment.delete()
-    return redirect('review:review_detail', pk=review_pk)
+    return JsonResponse({'success': True})
 
 @login_required
 def like_review(request, pk):
