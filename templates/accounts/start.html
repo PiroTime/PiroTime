@@ -4,6 +4,17 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/account/start.css' %}">
 <style>
+    :root {
+        --primary-color: #3498db; /* 주 색상 */
+        --secondary-color: #2ecc71; /* 보조 색상 */
+        --text-color: #333;
+        --background-color: #f4f4f4;
+        --card-bg-color: #fff;
+        --card-border-color: #e0e0e0;
+        --hover-color: #2980b9;
+    }
+
+
     .description {
         font-size: 1.2rem;
     }
@@ -61,6 +72,12 @@
     .meta-likes {
         flex-shrink: 0; 
         margin-right: 10px;
+        align-items: center;
+        line-height: 1.4;
+    }
+
+    .meta-time {
+        margin-left: 10px;
     }
 
     .meta-likes {
@@ -69,12 +86,13 @@
 
     .fa-user {
         color: gray;
-        font-size: 1rem;
+        font-size: 1.2rem;
+        margin-right: 5px;
     }
 
     .content-hashtags-container {
         display: flex;
-        justify-content: space-between; /* 요소들을 양 끝에 배치 */
+        justify-content: space-between;
         align-items: center;
         width: 100%;
     }
@@ -85,7 +103,107 @@
         padding: 5px 10px;
         margin-right: 10px;
         border: 1px solid #CCCCCC;
+        font-size: 0.85rem;
     }
+
+    .banner {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        font-size: 1.4rem;
+        height: 278px;
+        align-items: center;
+        color: white;
+    }
+
+    .icon-container i {
+        font-size: 25px;
+        color: white;
+    }
+
+    .banner-content {
+        flex: 0 0 90%;
+        text-align: center;
+    }
+
+    .text.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .title {
+        font-size: 40px;
+        font-weight: 700;
+    }
+
+    .description {
+        font-size: 20px;
+        font-weight: 400;
+        margin-top: 10px;
+        opacity: 0.9;
+    }
+
+    .content-card {
+        background: var(--card-bg-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: 10px;
+        margin: 10px;
+        padding: 20px;
+        width: 100%;
+        height: auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .start-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+
+    .start-job {
+        margin-left: 10px;
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: gray;
+    }
+
+    .content-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: var(--text-color);
+    }
+
+    .meta-author,
+    .meta-time,
+    .meta-likes {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+
+    .meta-likes {
+        margin-left: auto;
+    }
+
+    .content-hashtags-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
 </style>
 <section id="main">
     <div class="main-container">
