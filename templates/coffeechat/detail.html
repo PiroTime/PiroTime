@@ -35,10 +35,10 @@
             <div class="action-buttons">
                 {% if user.is_authenticated %}
                     {% if user == profile.receiver %}
-                    <div>
-                        <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
-                            <i class="fas fa-edit"></i> 수정
-                        </a>
+                        <div>
+                            <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
+                                <i class="fas fa-edit"></i> 수정
+                            </a>
                         <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
                             {% csrf_token %}
                             <button type="button" onclick="confirmDelete()" class="btn-delete">
@@ -54,21 +54,10 @@
                         {% elif is_waiting %}
                         <p class="status-message">커피챗 수락대기중</p>
                         {% else %}
-                        <form method="post" >
-                            <div id="myModal" class="modal">
-                                <div class="modal-content">
-                                    <span class="close">&times;</span>
-                                    <h2 class="coffeechat-modal-h2">선배님께 커피챗 신청 메세지를 작성해주세요</h2>
-                                    {% csrf_token %}
-                                    <div class="input-container">
-                                        <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="여기에 글을 작성하세요..."></textarea>
-                                        <button type="submit" id="submitBtn">제출</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <button id="openModalBtn">신청하기</button>
-
+{#                        <form>#}
+{#                            {% csrf_token %}#}
+                            <button id="openModalBtn">신청하기</button>
+{#                        </form>#}
                         {% endif %}
                         <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
                             <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
@@ -78,6 +67,19 @@
             </div>
         </div>
     </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="coffeechat-modal-close">&times;</span>
+            <h2 class="coffeechat-modal-h2">선배님께 커피챗 신청 메세지를 작성해주세요</h2>
+            {% csrf_token %}
+            <div class="input-container">
+                <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="여기에 글을 작성하세요..."></textarea>
+                <button type="submit" id="submitBtn">제출</button>
+            </div>
+        </div>
+    </div>
+
     <div class="profile-details max-width-1200">
         <div class="flex" style="margin: 0 100px;">
             {% for hashtag in hashtags %}
@@ -173,6 +175,24 @@
     });
 
     // 모달 열기
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementById("coffeechat-modal-close");
 
+    btn.onclick = function() {
+        modal.style.display = "flex";
+    }
+
+    // 모달 닫기 (X 버튼 클릭 시)
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // 모달 닫기 (모달 외부 클릭 시)
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
   </script>
 {% endblock %}
