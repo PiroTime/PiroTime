@@ -2,8 +2,9 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/detail.css' %}">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/coffeechat/detail.css' %}">
 <meta name="csrf-token" content="{{ csrf_token }}">
 <style>
     .container {
@@ -11,6 +12,46 @@
     }
     .fa-bookmark {
         font-size: 1.4rem;
+    }
+
+    /* 모달 기본 스타일 */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+    }
+
+
+    /* 닫기 버튼 스타일 */
+    #submitBtn {
+        width: 100%;
+        background-color: #0BEC12;
+        border-radius: 20px;
+    }
+
+    #submitBtn:hover {
+        background-color: #08ce0f;
+    }
+
+    .profile-header img {
+        margin-right: 0;
+    }
+
+    #openModalBtn,
+    .btn-bookmark {
+        height: 37.5px;
+        line-height: 1.5; 
+        text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
     }
 </style>
 <div class="container">
@@ -47,25 +88,51 @@
                         <a href="/" class="btn-private">비공개로 전환하기</a>
                     </div>
                     {% else %}
-                        {% csrf_token %}
-                        {% if is_limited %}
+                    {% csrf_token %}
+                    {% if is_limited %}
                         <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
-                        {% elif is_waiting %}
+                    {% elif is_waiting %}
                         <p class="status-message">커피챗 수락대기중</p>
-                        {% else %}
-                        <form method="post" >
-                            {% csrf_token %}
-                            <button type="submit" class="btn-coffeechat">커피챗 제안하기</button>
-                        </form>
-                        {% endif %}
-                        <button class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
-                            <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
-                        </button>
+                    {% else %}
+                        <button id="openModalBtn" type="button">커피챗 신청하기</button>
                     {% endif %}
+                    
+                    <!-- 북마크 버튼 -->
+                    <button type="button" class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
+                        <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
+                    </button>
                 {% endif %}
+            {% endif %}
+            </div>
+        </div>
+        <!-- modal html 폼 -->
+        <form method="post">
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 class="coffeechat-modal-h2">선배님께 커피챗 신청 메세지를 작성해주세요</h2>
+                    {% csrf_token %}
+                    <div class="input-container">
+                        <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="선배님께 궁금한 점이나 자기소개를 작성해주세요..."></textarea>
+                        <button type="submit" id="submitBtn">제출</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="coffeechat-modal-close">&times;</span>
+            <h2 class="coffeechat-modal-h2">선배님께 커피챗 신청 메세지를 작성해주세요</h2>
+            {% csrf_token %}
+            <div class="input-container">
+                <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="여기에 글을 작성하세요..."></textarea>
+                <button type="submit" id="submitBtn">제출</button>
             </div>
         </div>
     </div>
+
     <div class="profile-details max-width-1200">
         <div class="flex" style="margin: 0 100px;">
             {% for hashtag in hashtags %}
@@ -80,7 +147,7 @@
         <div>{{ profile.content|safe }}</div>
     </div>
     <!-- 요청 목록을 표시 -->
-    <div class="requests-list max-width-1200">
+    <!-- <div class="requests-list max-width-1200">
         <h3>요청받은 커피챗:</h3>
         {% for request in requests %}
         <div class="request-item">
@@ -91,16 +158,20 @@
                 {% csrf_token %}
                 <button type="submit">수락하기</button>
             </form>
-            {% endif %}
+            <form method="post" action="{% url 'coffeechat:reject_request' request.id %}">
+                {% csrf_token %}
+                <button type="submit">거절하기</button>
+            </form>
+            {% endif %} -->
             <!-- 리뷰 버튼 추가 -->
-            {% if user.is_authenticated and request.status == 'ACCEPTED' %}
+            <!-- {% if user.is_authenticated and request.status == 'ACCEPTED' %}
             <a href="{% url 'coffeechat:review_create' request.id %}">
                 <button type="button">리뷰 작성하기</button>
             </a>
             {% endif %}
         </div>
         {% endfor %}
-    </div>
+    </div> -->
     <!-- 리뷰 작성 링크 -->
     {% if request.user == profile.receiver and show_review_button %}
     <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}">Write Review</a>
@@ -153,6 +224,47 @@
                 }
             });
         });
+
+        // "신청하기" 버튼 클릭 시 모달 열기 기능
+        $('#openModalBtn').click(function() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "flex";
+        });
+
+        // 모달 닫기 (X 버튼 클릭 시)
+        $('.close').click(function() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        });
+
+        // 모달 닫기 (모달 외부 클릭 시)
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
     });
+
+    // 모달 열기
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementById("coffeechat-modal-close");
+
+    btn.onclick = function() {
+        modal.style.display = "flex";
+    }
+
+    // 모달 닫기 (X 버튼 클릭 시)
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // 모달 닫기 (모달 외부 클릭 시)
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
   </script>
 {% endblock %}

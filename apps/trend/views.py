@@ -4,8 +4,9 @@ from django.utils import timezone
 from django.http import HttpResponseForbidden, JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count
+from django.template.loader import render_to_string
 
 # 프로젝트 내 모듈
 from .models import Trend, Comment
@@ -29,17 +30,22 @@ def trend_list(request):
     paginator = Paginator(trends, 12)
     page_obj = paginator.get_page(page_number)
 
+    # 랜덤으로 출력할 사진 list
+    image_files = ['back.png', 'back1.png', 'back2.png']
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'trend/partial_trend_list.html', {
             'page_obj': page_obj,
             'order_by': order_by,
-            'search': search
+            'search': search,
+            'image_files': image_files
         })
 
     return render(request, 'trend/trend_list.html', {
         'page_obj': page_obj,
         'order_by': order_by,
-        'search': search
+        'search': search,
+        'image_files': image_files
     })
 
 def trend_create(request):
@@ -98,8 +104,8 @@ def trend_detail(request, pk):
         'user': request.user,
     })
 
-def add_comment(request, pk):
-    trend = get_object_or_404(Trend, pk=pk)
+def add_comment(request, trend_pk):
+    trend = get_object_or_404(Trend, pk=trend_pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -107,20 +113,31 @@ def add_comment(request, pk):
             comment.trend = trend
             comment.writer = request.user if request.user.is_authenticated else None
             comment.created_at = timezone.now()
-            comment.save()
-            return redirect('trend:trend_detail', pk=trend.pk)
-    else:
-        form = CommentForm()
-    return render(request, 'trend/trend_detail.html', {'trend': trend, 'comments': trend.comments.all(), 'comment_form': form})
 
-@csrf_exempt
+            # 대댓글일 경우 parent 설정
+            parent_id = request.POST.get('parent')
+            if parent_id:
+                parent_comment = get_object_or_404(Comment, id=parent_id)
+                comment.parent = parent_comment
+            
+            comment.save()
+
+            # 댓글 렌더링 HTML
+            comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
+
+            return JsonResponse({'success': True, 'comment_html': comment_html})
+        else:
+            return JsonResponse({'success': False, 'error': form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+@csrf_protect
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    trend_pk = comment.trend.pk
     if comment.writer != request.user and not request.user.is_staff:
         return HttpResponseForbidden()
+    
     comment.delete()
-    return redirect('trend:trend_detail', pk=trend_pk)
+    return JsonResponse({'success': True})
 
 @login_required
 def like_trend(request, pk):

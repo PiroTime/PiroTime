@@ -10,8 +10,8 @@ class Trend(models.Model):
     writer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        null=False,
+        blank=False
     )
     refer_url = models.URLField(max_length=200, blank=True, null=True)
     likes = models.ManyToManyField(
@@ -53,6 +53,10 @@ class Comment(models.Model):
     )
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='trend_replies', on_delete=models.CASCADE)
+
+    def get_replies(self):
+        return self.trend_replies.all()
 
     def __str__(self):
         return f'Comment by {self.writer} on {self.trend}'

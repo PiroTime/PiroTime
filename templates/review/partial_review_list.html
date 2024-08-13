@@ -15,7 +15,7 @@
 
         <div class="review-card-content">
             <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
-            <p>작성자: {{ review.writer }} / 날짜: {{ review.date }}</p>
+            <p>작성자: <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a> / 날짜: {{ review.date|date:"Y년 m월 d일" }}</p>
             <div class="review-likes">
                 <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
                     {% csrf_token %}

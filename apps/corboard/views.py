@@ -5,9 +5,8 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
@@ -37,17 +36,22 @@ def cor_list(request):
     paginator = Paginator(corboards, 6)
     page_obj = paginator.get_page(page_number)
 
+    # 랜덤으로 출력할 사진 list
+    image_files = ['back.png', 'back1.png', 'back2.png']
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'corboard/partial_corboard_list.html', {
             'page_obj': page_obj,
             'order_by': order_by,
-            'search_content': search_content
+            'search_content': search_content,
+            'image_files': image_files
         })
 
     return render(request, 'corboard/corboard_list.html', {
         'page_obj': page_obj,
         'order_by': order_by,
-        'search_content': search_content
+        'search_content': search_content,
+        'image_files': image_files
     })
 
 def cor_create(request):
@@ -70,8 +74,12 @@ def cor_create(request):
 def cor_detail(request, pk):
     print("cor_detail")
     cor = get_object_or_404(Corboard, pk=pk)
-    comments = cor.cor_comments.all()  # 여기서 related_name을 사용
-    return render(request, 'corboard/corboard_detail.html', {'cor': cor, 'comments': comments, 'commentForm': CorCommentForm()})
+    form = CorCommentForm()
+    return render(request, 'corboard/corboard_detail.html', {
+        'cor': cor,
+        'comments': cor.cor_comments.filter(parent=None),
+        'commentForm': form,
+    })
 
 @require_POST
 def cor_delete(request, pk):
@@ -92,19 +100,30 @@ def cor_update(request, pk):
 
 @login_required
 def cor_add_comment(request, pk):
-    cor  = get_object_or_404(Corboard, pk=pk)
+    cor = get_object_or_404(Corboard, pk=pk)
     if request.method == "POST":
         form = CorCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.created_at = timezone.now()
             comment.corboard = cor
             comment.writer = request.user
+            comment.date = timezone.now()
+            
+            # 대댓글일 경우 parent 설정
+            parent_id = request.POST.get('parent')
+            if parent_id:
+                parent_comment = get_object_or_404(Comment, id=parent_id)
+                comment.parent = parent_comment
+            
             comment.save()
-            return redirect('corboard:cor_detail', pk = cor.id)
-    else:
-        commentForm = CorCommentForm()
-    return render(request, 'corboard/corboard_detail', {'cor': cor, 'comments': cor.cor_comments.all(), 'commentForm':commentForm})
+
+            # 댓글 렌더링 HTML
+            comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
+
+            return JsonResponse({'success': True, 'comment_html': comment_html})
+        else:
+            return JsonResponse({'success': False, 'error': form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 def cor_delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
@@ -160,7 +179,7 @@ def cor_mail(request, pk):
     html_message = render_to_string(
         "corboard/message.html",
         {"sender": sender.username, "receiver": receiver.username,
-         "content": "coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!"},
+         "content": f"{receiver.username}님! coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!"},
     )
     plain_message = strip_tags(html_message)
     send_mail(

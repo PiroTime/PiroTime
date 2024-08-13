@@ -211,3 +211,102 @@
     border-radius: 5px;
     margin: 0;
 }
+
+
+/* 모달 창 스타일 */
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경을 약간 어둡게 */
+    align-items: center;
+    justify-content: center;
+    display: none; /* 기본적으로 보이지 않음 */
+}
+
+#openModalBtn {
+    background-color: white;
+}
+
+#openModalBtn:hover {
+    background-color: black;
+    color: white;
+}
+
+/* 모달 컨텐츠 스타일 */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    /*display: flex;*/
+    flex-direction: column; /* 수직 배열을 위한 설정 */
+}
+
+/* 닫기 버튼 스타일 */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.coffeechat-modal-h2 {
+    padding-left: 5px;
+    font-size: 1.5rem;
+    color: black;
+    margin-bottom: 0px;
+}
+
+/* 텍스트 입력 및 제출 버튼 컨테이너 스타일 */
+.input-container {
+    /*display: flex;*/
+    flex-direction: column;
+    width: 100%;
+}
+
+/* 텍스트 입력 영역 스타일 */
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+/* 제출 버튼 스타일 */
+#submitBtn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#submitBtn:hover {
+    background-color: #45a049;
+}

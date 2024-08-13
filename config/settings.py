@@ -165,7 +165,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 
 # CSRF 설정
 CSRF_COOKIE_SECURE = True
-# CSRF_USE_SESSIONS = False
+CSRF_USE_SESSIONS = False
 DEBUG = True
 
 MEDIA_URL = '/media/'

@@ -15,9 +15,18 @@
             margin-top: 60px;
         }
 
-        img{
-            width: 150px;  
-            height: 150px; 
+        h3 {
+            font-size: 30px;
+            margin: 10px;
+        }
+
+        .container{
+            min-height: 59rem;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
             object-fit: cover;
         }
 
@@ -39,7 +48,7 @@
             justify-content: center;
             flex-wrap: wrap;
             position: relative;
-            height: 370px;
+            height: 330px;
         }
 
         .profile-card a {
@@ -54,8 +63,9 @@
             text-decoration: none;
         }
 
-        .text-chat{
-            margin-top: -35px
+        .text-chat {
+            margin-top: -35px;
+            text-align: center;
         }
 
         .btn-primary {
@@ -74,6 +84,23 @@
             color: black;
             text-decoration: none;
         }
+
+        .intro-text {
+            max-height: 9%;
+            overflow: hidden;
+            position: relative;
+            line-height: 1.2em;
+            max-height: 2.4em;
+        }
+
+        .intro-text::after {
+            content: '...';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            padding-left: 5px;
+        }
     </style>
 </head>
 
@@ -83,7 +110,7 @@
         <div class="profile">
             {% for profile in profiles %}
             {% with coffeechat=profile.received_coffeechats.first %}
-            {% if coffeechat and coffeechat.receiver.username == profile.username %}
+            {% if coffeechat and coffeechat.receiver.username == profile.username and coffeechat.is_public %}
             <div class="profile-card">
                 <div class="img-container">
                     {% if profile.profile_image and profile.profile_image.url %}
@@ -97,12 +124,13 @@
                     <p>{{ coffeechat.job }}</p>
                     <p>피로그래밍 {{ profile.cohort }}기</p>
                     {% if coffeechat.content and coffeechat.content|length > 0 and coffeechat.content.strip %}
-                    <p>{{ coffeechat.content|striptags }}</p>
+                    <p class="intro-text">{{ coffeechat.content|striptags }}</p>
                     {% else %}
-                    <p>소개없음</p>
+                    <p class="intro-text">소개없음</p>
                     {% endif %}
                 </div>
-                <a href="{% url 'coffeechat:coffeechat_detail' coffeechat.pk %}" class="btn btn-primary">선배님께 커피챗 신청하기</a>
+
+                <a href="{% url 'coffeechat:coffeechat_detail' coffeechat.pk %}" class="btn btn-primary">프로필 자세히 보기</a>
             </div>
             {% endif %}
             {% endwith %}

@@ -4,8 +4,204 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/account/start.css' %}">
 <style>
+    :root {
+        --primary-color: #3498db; /* 주 색상 */
+        --secondary-color: #2ecc71; /* 보조 색상 */
+        --text-color: #333;
+        --background-color: #f4f4f4;
+        --card-bg-color: #fff;
+        --card-border-color: #e0e0e0;
+        --hover-color: #2980b9;
+    }
+
+
     .description {
         font-size: 1.2rem;
+    }
+
+    .start-title {
+        font-size: 1.2rem;
+    }
+    
+    .content-card {
+        border: 1.5px solid #ccc;
+        box-sizing: border-box;
+        height: 100px; /* 높이를 고정할 경우 이 값을 조절 */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* 카드의 위아래 끝에 내용이 붙도록 설정 */
+    }
+
+    .description {
+        font-size: 1.2rem;
+    }
+    
+    .content-card {
+        border: 1.5px solid #ccc;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 95%;
+    }
+
+    .start-content {
+        height: 20px;
+        margin: 0;
+        font-size: 1rem;
+        color: gray;
+        display: none;
+    }
+
+    .start-job {
+        margin: 0 0 0 10px;
+        font-size: 0.8rem;
+        font-weight: 100;
+        color: gray;
+    }
+
+    .content-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        white-space: nowrap; 
+        text-overflow: ellipsis;
+    }
+
+    .meta-author,
+    .meta-time,
+    .meta-likes {
+        flex-shrink: 0; 
+        margin-right: 10px;
+        align-items: center;
+        line-height: 1.4;
+    }
+
+    .meta-time {
+        margin-left: 10px;
+    }
+
+    .meta-likes {
+        margin-left: auto; /* 오른쪽 끝에 정렬 */
+    }
+
+    .writer {
+        color: gray;
+        font-size: 1.2rem;
+        margin-right: 5px;
+    }
+
+    .content-hashtags-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .hashtag {
+        display: inline-block;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-right: 10px;
+        border: 1px solid #CCCCCC;
+        font-size: 0.85rem;
+    }
+
+    .banner {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        font-size: 1.4rem;
+        height: 278px;
+        align-items: center;
+        color: white;
+    }
+
+    .icon-container i {
+        font-size: 25px;
+        color: white;
+    }
+
+    .banner-content {
+        flex: 0 0 90%;
+        text-align: center;
+    }
+
+    .text.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .title {
+        font-size: 40px;
+        font-weight: 700;
+    }
+
+    .description {
+        font-size: 20px;
+        font-weight: 400;
+        margin-top: 10px;
+        opacity: 0.9;
+    }
+
+    .content-card {
+        background: var(--card-bg-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: 10px;
+        margin: 10px;
+        padding: 20px;
+        width: 100%;
+        height: auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .start-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+
+    .start-job {
+        margin-left: 10px;
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: gray;
+    }
+
+    .content-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: var(--text-color);
+    }
+
+    .meta-author,
+    .meta-time,
+    .meta-likes {
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+
+    .meta-likes {
+        margin-left: auto;
+    }
+
+    .content-hashtags-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
     }
 
 </style>
@@ -52,45 +248,71 @@
             </div>
         </div>
         <section class="content-section">
-            <div>
+            <div class="start-card">
                 <h3 class="start-card-title">Project Review 인기글</h3>
-                <a {% if review_most %} href="{% url 'review:review_detail' pk=review_most.pk %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ review_most.title }}</p>
-                    <p class="start-content">{{ review_most.content }}</p>
-                </div>
+                <a {% if review_most %} href="{% url 'review:review_detail' pk=review_most.pk %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ review_most.title }}</p>
+                        <p class="start-content">{{ review_most.content|truncatewords:10 }}</p>
+                        <div class="content-meta">
+                            <span class="meta-author"><i class="fas fa-user writer"></i>{{ review_most.writer }}</span>
+                            <span class="meta-time">{{ review_most.date|date:"m/d" }}</span>
+                            <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ review_most.likes.count }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
-            <div>
+        
+            <div class="start-card">
                 <h3 class="start-card-title">Project Cooperation 인기글</h3>
-                <a {% if coboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ coboard_most.title }}</p>
-                    <p class="start-content">{{ coboard_most.content }}</p>
-                </div>
+                <a {% if coboard_most %} href="{% url 'corboard:cor_detail' pk=coboard_most.pk %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ coboard_most.title }}</p>
+                        <p class="start-content">{{ coboard_most.content|truncatewords:10 }}</p>
+                        <div class="content-meta">
+                            <span class="meta-author"><i class="fas fa-user writer"></i>{{ coboard_most.writer }}</span>
+                            <span class="meta-time">{{ coboard_most.date|date:"m/d" }}</span>
+                            <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ coboard_most.likes.count }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
-            <div>
+        
+            <div class="start-card">
                 <h3 class="start-card-title">CoffeeChat 인기글</h3>
-                <a {% if coffeechat_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ coffeechat_most.receiver }}</p>
-                    <p class="start-content">{{ coffeechat_most.content }}</p>
-                </div>
+                <a  {% if coffeechat_most %} href="{% url 'coffeechat:coffeechat_detail' pk=coffeechat_most.id %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ coffeechat_most.receiver }}<span class="start-job">{{ coffeechat_most.job }}</span></p>
+                        <div class="content-hashtags-container">
+                            <div class="content-hashtags" id="hashtags-container">
+                                {% for tag in coffeechat_most.hashtags.all %}
+                                    <span class="hashtag">#{{ tag.name }}</span>
+                                {% endfor %}
+                            </div>
+                            <span class="coffeechat-count">커피챗 {{ coffeechat_most.count }}회</span>
+                        </div>
+                    </div>
                 </a>
             </div>
-            <div>
+        
+            <div class="start-card">
                 <h3 class="start-card-title">IT Trend 인기글</h3>
-                <a {% if trend_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}" {% else %}href="#"{% endif %}>
-                <div class="content-card">
-                    <p class="start-title">{{ trend_most.title }}</p>
-                    <p class="start-content">{{ trend_most.content }}</p>
-                </div>
+                <a {% if trend_most %} href="{% url 'trend:trend_detail' pk=trend_most.id %}" {% else %}href="#"{% endif %}">
+                    <div class="content-card">
+                        <p class="start-title">{{ trend_most.title }}</p>
+                        <p class="start-content">{{ trend_most.content|truncatewords:10 }}</p>
+                        <div class="content-meta">
+                            <span class="meta-author"><i class="fas fa-user writer"></i>{{ trend_most.writer }}</span>
+                            <span class="meta-time">{{ trend_most.date|date:"m/d" }}</span>
+                            <span class="meta-likes" style="color: red;"><i class="fa-regular fa-heart"></i> {{ trend_most.likes.count }}</span>
+                        </div>
+                    </div>
                 </a>
             </div>
         </section>
     </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let currentSlide = 0;
     const slides = document.querySelectorAll('.text');
@@ -118,5 +340,22 @@
     setInterval(nextSlide, 5000); 
 
     showSlide(currentSlide); 
+
+    //해시태그(coffeechat)
+    $(document).ready(function() {
+        const cardWidth = $('.content-card').width();
+        const hashtagsContainer = $('#hashtags-container');
+        const hashtags = hashtagsContainer.find('.hashtag');
+
+        let totalWidth = 0;
+
+        hashtags.each(function() {
+            totalWidth += $(this).outerWidth(true); // .outerWidth(true)로 마진 포함 너비 계산
+
+            if (totalWidth+100 > cardWidth) {
+                $(this).hide();
+            }
+        });
+    });
 </script>
 {% endblock %}
