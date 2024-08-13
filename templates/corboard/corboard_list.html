@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/review/review_list.css' %}">
 <link rel="stylesheet" href="{% static 'css/corboard/list.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <div class="main-container">
@@ -26,20 +25,20 @@
 
     <div class="list-container">
         <!-- 코보드 그리드 -->
-        <div class="review-grid" id="corboard-list">
+        <div class="cor-grid">
             {% load static %}
             {% for corboard in page_obj %}
             {% with random_image=image_files|random %}
-            <div class="review-card">
+            <div class="cor-card">
                 <a href="{% url 'corboard:cor_detail' pk=corboard.pk %}" style="text-decoration: none; color: inherit;">
-                    <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                    <div class="cor-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
                     <form class="bookmark-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_bookmark' pk=corboard.pk %}" method="post">
                         {% csrf_token %}
                         <button type="button" class="scrap-icon {% if request.user in corboard.bookmarks.all %} scrapped{% endif %}">
                             <i class="fas fa-bookmark"></i>
                         </button>
                     </form>
-                    <div class="review-card-content">
+                    <div class="cor-card-content">
                         <h2>{{ corboard.title }}</h2>
                         <p>작성자: 
                             {% if corboard.writer == user %}
@@ -49,11 +48,11 @@
                             {% endif %} 
                             / 날짜: {{ corboard.date|date:"Y년 m월 d일" }}
                         </p>
-                        <div class="review-likes">
+                        <div class="cor-likes">
                             <form class="like-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
                                 {% csrf_token %}
-                                <button type="button" class="like-button {% if request.user in corboard.likes.all %} liked{% endif %}">
-                                    <i class="fas fa-heart"></i> 
+                                <button type="button" class="like-button">
+                                    <i class="fas fa-heart {% if request.user in corboard.likes.all %} liked{% endif %}"></i> 
                                     <span class="like-count">{{ corboard.total_likes }}</span>
                                 </button>
                             </form>
@@ -137,13 +136,14 @@ $.ajaxSetup({
 $(document).ready(function() {
     function updateContent(data) {
         var newContent = $('<div>').html(data);
-        $('#corboard-list').html(newContent.find('#corboard-list').html());
+        $('.cor-grid').html(newContent.find('.cor-grid').html());
         $('.pagination').html(newContent.find('.pagination').html());
     }
 
     // 필터 버튼 클릭 이벤트 핸들러
     $('.btn-filter').click(function() {
-        var orderBy = $(this).data('order-by');
+        var button = $(this);  // 클릭된 버튼을 변수로 저장
+        var orderBy = button.data('order-by');
         $.ajax({
             url: '{% url "corboard:cor_list" %}',
             data: {
@@ -152,9 +152,9 @@ $(document).ready(function() {
             },
             success: function(data) {
                 updateContent(data);
-                // 필터 버튼 활성화 상태 변경
-                $('.btn-filter').removeClass('active');
-                $(this).addClass('active');
+            // 필터 버튼 활성화 상태 변경
+            $('.btn-filter').removeClass('active');
+            button.addClass('active');  // 저장한 변수를 사용
             },
             error: function(xhr) {
                 alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
@@ -199,9 +199,10 @@ $(document).ready(function() {
     });
 
     // 좋아요 버튼 클릭 이벤트 핸들러
-    $(document).on('click', '.like-button', function(event) {
+    $(document).on('click', '.fas.fa-heart', function(event) {
         event.preventDefault();
-        var button = $(this);
+        var heartIcon = $(this);
+        var button = heartIcon.closest('.like-button');
         var form = button.closest('.like-form');
         var corboardId = form.data('corboard-id');
 
@@ -211,9 +212,9 @@ $(document).ready(function() {
             data: form.serialize(),
             success: function(response) {
                 if (response.liked) {
-                    button.addClass('liked');
+                    heartIcon.addClass('liked');
                 } else {
-                    button.removeClass('liked');
+                    heartIcon.removeClass('liked');
                 }
                 button.find('.like-count').text(response.total_likes);
             },

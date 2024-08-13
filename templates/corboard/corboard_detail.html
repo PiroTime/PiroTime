@@ -2,120 +2,15 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/review/review_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/corboard/detail.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <meta name="csrf-token" content="{{ csrf_token }}">
-<style>
-    .fa-envelope:hover {
-        transform: scale(1.1);
-    }
-
-    .container {
-        min-height: calc(100vh - 14rem);
-        margin-top: 60px;
-        margin-bottom: 0;
-        padding: 40px 0 0 0;
-    }
-
-    .comment-meta-data span{
-        padding-right: 10px;
-    }
-
-    .btn-delete-comment {
-      color: rgb(255, 156, 156);
-    }
-
-    .comment {
-        position: relative; 
-        padding-right: 30px; 
-        /* 긴단어 줄바꿈 */
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-        white-space: normal; 
-        width: 100%;
-        background-color: white;
-        box-shadow: none;
-    }
-
-    .comment p {
-      padding-right: 50px;
-    }
-
-    .reply-comment {
-      background-color: #f8f9fa; /* 대댓글의 배경색 설정 */
-      padding: 10px; /* 대댓글의 패딩 설정 */
-      border-radius: 5px; /* 대댓글의 모서리를 둥글게 설정 */
-  }
-
-    .btn-reply {
-        position: absolute;
-        top: 15px;
-        right: 32px; 
-        background: white;
-        border-radius: 5px;
-        border: 1px solid #CCCCCC;
-        cursor: pointer;
-        color: gray;
-        padding: 5px 10px;
-        transition: color 0.3s ease, transform 0.3s ease;
-    }
-
-    .fa-comment {
-        font-size: 1.1rem;
-        color: inherit;
-        vertical-align: middle; 
-    }
-
-    .fa-comment:hover {
-      transform: scale(1.1);
-      color: black;
-    }
-
-    .comment-meta-data {
-        display: flex;
-        align-items: center; 
-    }
-
-    .comment-meta-data span {
-        margin-left: 10px;
-    }
-
-    .rotated-icon {
-        transform: rotate(90deg); 
-        margin-right: 5px; 
-        font-size: 1rem; 
-        color: #555; 
-    }
-
-    .reply-form {
-        width: 100%;
-    }
-
-    .input-container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .comment-input {
-        width: 100%;
-        box-sizing: border-box;
-        margin-bottom: 10px; 
-    }
-
-    .comment-divider {
-        border: none;
-        border-top: 1px solid #ccc;
-        margin: 20px 0;
-        /* 원하는 스타일로 추가 설정 가능 */
-    }
-</style>
 <div class="container max-width-1200">
-  <div class="review-container">
-    <div class="review-detail">
+  <div class="cor-container">
+    <div class="cor-detail">
       <div class="header-container justify-space-between">
         <div class="image-placeholder">
-          <img src="{% static 'images/logo.svg' %}" alt="Corboard Image" class="review-image">
+          <img src="{% static 'images/logo.svg' %}" alt="Corboard Image" class="cor-image">
         </div>
         <div class="header-details">
           <h1>{{ cor.title }}</h1>

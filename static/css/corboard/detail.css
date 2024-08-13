@@ -10,16 +10,18 @@ body {
 }
 
 .container {
-    margin-top: 100px;
-    margin-bottom: 120px;
+    min-height: 100vh;
+    margin-top: 60px;
+    margin-bottom: 0;
+    padding: 40px 0 0 0;
 }
 
-.review-container {
+.cor-container {
     border: 1px solid #CCCCCC;
     border-radius: 10px;
 }
 
-.review-detail {
+.cor-detail {
     padding: 40px;
     border-radius: 10px;
 }
@@ -37,6 +39,10 @@ body {
     justify-content: space-between;
 }
 
+.header-details {
+    flex-grow: 1;
+}
+
 .image-placeholder {
     width: 120px;
     height: 120px;
@@ -46,7 +52,7 @@ body {
     margin-right: 30px;
 }
 
-.review-image {
+.cor-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -63,12 +69,6 @@ body {
     color: #333;
 }
 
-.header-details h2 {
-    font-size: 1.5rem;
-    color: #666;
-    margin: 0 0 15px 0;
-}
-
 .meta-info {
     font-size: 0.9rem;
     color: #888;
@@ -78,36 +78,14 @@ body {
     margin-right: 15px;
 }
 
-.section-divider {
-    border: none;
-    border-top: 1px solid #CCCCCC;
-    margin: 30px 0;
-}
-
-.content-section {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-
 .sidebar {
     flex-basis: 25%;
-}
-
-.main-content {
-    flex-basis: 70%;
 }
 
 .about-box {
     border-radius: 10px;
     padding: 20px;
     margin-top: 40px;
-}
-
-.about-box h3 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: #333;
 }
 
 .action-buttons {
@@ -140,9 +118,6 @@ body {
     color: #FFC107;
 }
 
-.btn-github:hover {
-    color: #333;
-}
 
 .fa-heart:hover {
     color: #FF4C4C;
@@ -153,14 +128,29 @@ body {
     color: #FFC107;
 }
 
-.fa-github:hover {
+.fa-envelope:hover {
     transform: scale(1.1);
 }
 
+/*------ 내용 ---------*/
+.content-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
 .main-content {
+    flex-basis: 70%;
     font-size: 1.1rem;
     line-height: 1.8;
     color: #444;
+}
+
+/*----------- 댓글 ------------------*/
+.section-divider {
+    border: none;
+    border-top: 1px solid #CCCCCC;
+    margin: 30px 0;
 }
 
 .comment-section {
@@ -178,12 +168,34 @@ body {
     margin-bottom: 30px;
 }
 
+.rotated-icon {
+    transform: rotate(90deg); 
+    margin-right: 5px; 
+    font-size: 1rem; 
+    color: #555; 
+}
+
 .comment {
-    background-color: #f8f9fa;
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative; 
+    padding-right: 30px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal; 
+    width: 100%;
+    background-color: white;
+}
+
+.reply-comment {
+    background-color: #f8f9fa; 
+    padding: 10px; 
+    border-radius: 5px;
+}
+
+.comment p {
+    padding-right: 50px;
 }
 
 .comment-meta {
@@ -194,11 +206,44 @@ body {
     color: #888;
 }
 
+.comment-meta-data {
+    display: flex;
+    align-items: center; 
+}
+
+.btn-reply {
+    position: absolute;
+    top: 15px;
+    right: 32px; 
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #CCCCCC;
+    cursor: pointer;
+    color: gray;
+    padding: 5px 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.fa-comment {
+    font-size: 1.1rem;
+    color: inherit;
+    vertical-align: middle; 
+}
+
+.fa-comment:hover {
+  transform: scale(1.1);
+  color: black;
+}
+
+.comment-meta-data span {
+    margin-left: 10px;
+    padding-right: 10px;
+}
 
 .btn-delete-comment {
     background: none;
     border: none;
-    color: #FF4C4C;
+    color: rgb(255, 156, 156);
     cursor: pointer;
     font-size: 0.9rem;
     transition: color 0.3s ease;
@@ -208,9 +253,14 @@ body {
     color: #FF0000;
 }
 
-.comment-form {
-    display: flex;
-    flex-direction: column;
+.reply-form {
+    width: 100%;
+}
+
+.comment-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
 }
 
 .comment-input {
@@ -223,6 +273,8 @@ body {
     resize: vertical;
     min-height: 50px;
     transition: border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .comment-input:focus {
@@ -243,6 +295,11 @@ body {
 
 .btn-add-comment:hover {
     background-color: #09B10F;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
 }
 
 .action-buttons-bottom {

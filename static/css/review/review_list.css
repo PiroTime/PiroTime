@@ -169,13 +169,14 @@ body{
     color: #49BF4D;
 }
 
+/*---페이지네이션----*/
 .step-links {
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
 }
-/*---페이지네이션----*/
+
 .step-links a {
     color: #333;
     text-decoration: none;
@@ -229,6 +230,7 @@ body{
 .scrap-icon.scrapped {
     color: #FFC107;
 }
+
 /*--------- 프로필 정보 ----------*/
 .profile-info {
     border-radius: 10px;
