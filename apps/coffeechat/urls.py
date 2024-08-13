@@ -21,4 +21,6 @@ urlpatterns = [
     path('cohort/<int:cohort>/', views.cohort_profiles, name='cohort_profiles'),
     
     path('<int:pk>/bookmark/', views.bookmark_profile, name='coffeechat_bookmark'),
+    
+    path('coffeechat/<int:profile_id>/toggle_visibility/', views.toggle_visibility, name='toggle_visibility'),
 ]

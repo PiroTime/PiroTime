@@ -122,3 +122,9 @@ form button[type="submit"]:hover {
     display: flex;
     justify-content: space-between;
 }
+
+#editor-container {
+    height: 500px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

@@ -18,6 +18,7 @@ class CoffeeChat(models.Model):
     content = models.TextField(null=True, blank=True) #자기소개
     count = models.IntegerField(default=0) #요청 수
     bookmarks = models.ManyToManyField(CustomUser, related_name='coffeechat_bookmarks', blank=True) #북마크
+    is_public = models.BooleanField(default=True)  # 기본적으로 공개
 
     # def date(self):
     #     return self.created_at
@@ -39,6 +40,7 @@ class CoffeeChatRequest(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE) # 요청한 사용자
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='WAITING') #요청한 사용자에 따른 현재 상태
     created_at = models.DateTimeField(default=timezone.now) # 요청 생성 시간
+    letterToSenior = models.TextField(null=True, blank=True) #선배에게 보내는 편지
 
 class Review(models.Model):
     coffeechat_request = models.OneToOneField(CoffeeChatRequest, related_name='review', on_delete=models.CASCADE)

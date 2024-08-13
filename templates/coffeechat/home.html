@@ -143,8 +143,9 @@
         position: absolute;
         bottom: 0px;
         border-radius: 10px;
-        justify-items: center;
+        justify-content: space-around;
         margin: 15px 0px;
+        width: 91%;
     }
 
     .profile-info .profile-img img {
@@ -200,6 +201,7 @@
 
 
 
+
 <section class="container max-width-1325">
     <h2 class="container">커피챗 하기☕</h2>
     <div class="d-flex justify-content-center">
@@ -208,7 +210,7 @@
                 <h5 class="card-title">자유롭게 커피챗을 제안해 보세요!</h5>
                 <p class="card-text">궁금한 회사에 현재 재직중인 선배님과의 커피챗은 물론, 1:1 매칭이 가능해요.</p>
                 <div class="card-url">
-                    <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn btn-primary">선배님께 커피챗 신청하기</a>
+                    <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn btn-primary">커피챗 신청하기</a>
                     <a href="{% url 'coffeechat:coffeechat_howto' %}" class="btn btn-primary">커피챗 하기 이용방법</a>
                 </div>
             </div>
@@ -218,7 +220,7 @@
                 <h5 class="card-title">먼저 커피챗을 제안받아 보세요!</h5>
                 <p class="card-text">궁금한 피로그래머와 다이렉트로 연결되고, 피로그래밍의 멋쟁이 후배들을 만나보세요</p>
                 <div class="card-url">
-                    <a href="{% url 'coffeechat:coffeechat_create' %}" class="btn btn-primary">후배에게 커피챗 제안받기</a>
+                    <a href="{% url 'coffeechat:coffeechat_create' %}" class="btn btn-primary">커피챗 프로필 등록하기</a>
                     <a href="{% url 'coffeechat:coffeechat_how_received' %}" class="btn btn-primary">커피챗 받기 이용 방법</a>
                 </div>
             </div>

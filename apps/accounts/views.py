@@ -108,6 +108,7 @@ def find_most_popular_coffeeChat(items):
     print("Items",items)
     # 각 항목에 대해 인기 점수 계산
     for item in items:
+        print(item.content)
         time_diff_hours = (now - item.created_at).total_seconds() / 3600
         score = (item.total_likes() + item.total_bookmark()) / (time_diff_hours + 2) ** G
         print("coffeechat:", score)
