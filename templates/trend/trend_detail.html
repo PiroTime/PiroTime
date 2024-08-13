@@ -158,90 +158,80 @@
   <div class="comment-section">
     <h3>댓글</h3>
     <div class="comments">
-      {% for comment in comments %}
-        {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
-        <div class="comment-block">
-        <div class="comment" id="comment-{{ comment.id }}">
-          <p>{{ comment.content }}</p>
-          <div class="comment-meta">
-            <span><i class="fas fa-user"></i> 
-              {% if comment.writer == user %}
-                <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
-              {% else %}
-                <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
-              {% endif %}
-            </span>            
-            <div class="comment-meta-data">
-              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-              {% if comment.writer == user or user.is_staff %}
-                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                  <i class="fas fa-trash-alt"></i> 삭제
-                </button>
-              {% endif %}
-              <button class="btn-reply" onclick="showReplyForm({{ comment.id }});">Reply</button>
-            </div>
-          </div>
         {% for comment in comments %}
-            {% if not comment.parent %} <!-- 부모가 없는 댓글만 상위 댓글로 표시 -->
+            {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
             <div class="comment-block"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
-                <div class="comment">
+                <div class="comment" id="comment-{{ comment.id }}">
                     <p>{{ comment.content }}</p>
                     <div class="comment-meta">
-                        <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
-                        <div class="comment-meta-data">
+                      <span><i class="fas fa-user"></i> 
+                        {% if comment.writer == user %}
+                          <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+                        {% else %}
+                          <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+                        {% endif %}
+                      </span>
+                      <div class="comment-meta-data">
                           <button class="btn-reply" onclick="showReplyForm({{ comment.id }});"><i class="fa-regular fa-comment"></i></button>
-                            <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-                            {% if comment.writer == user or user.is_staff %}
-                                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                                    <i class="fas fa-trash-alt"></i> 삭제
-                                </button>
-                            {% endif %}
+                          <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+                          {% if comment.writer == user or user.is_staff %}
+                              <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                                  <i class="fas fa-trash-alt"></i> 삭제
+                              </button>
+                          {% endif %}
+                      </div>
+                    </div>
+                    <br/>
+
+                    <!-- 대댓글 표시 -->
+                    <div class="replies" style="margin-left: 20px;">
+                        {% for reply in comment.get_replies %}
+                        <div class="comment-block"> <!-- 각 대댓글 블록을 감싸는 div 추가 -->
+                            <div style="display: flex; align-items: center;">
+                                <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
+                                <div class="comment reply-comment" id="comment-{{ reply.id }}" style="margin-left: 10px;">
+                                    <p>{{ reply.content }}</p>
+                                    <div class="comment-meta">
+                                      <span><i class="fas fa-user"></i> 
+                                        {% if reply.writer == user %}
+                                          <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+                                        {% else %}
+                                          <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                                        {% endif %}
+                                      </span> 
+                                      <div class="comment-meta-data">
+                                          <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
+                                          {% if reply.writer == user or user.is_staff %}
+                                              <button class="btn-delete-comment" data-comment-id="{{ reply.id }}">
+                                                  <i class="fas fa-trash-alt"></i> 삭제
+                                              </button>
+                                          {% endif %}
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- 대댓글 입력 폼 -->
+                    <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
+                        <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
+                            {% csrf_token %}
+                            <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
+                            <input type="hidden" name="parent" value="{{ comment.id }}">
+                            <button type="submit" class="btn-add-comment">답글 등록</button>
+                        </form>
                     </div>
                 </div>
-          <!-- 대댓글 표시 -->
-          <div class="replies" style="margin-left: 20px;">
-            {% for reply in comment.get_replies %}
-              <div class="comment" id="comment-{{ reply.id }}">
-                <p>{{ reply.content }}</p>
-                <div class="comment-meta">
-                  <span><i class="fas fa-user"></i> 
-                    {% if reply.writer == user %}
-                      <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
-                    {% else %}
-                      <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
-                    {% endif %}
-                  </span>                  
-                  <div class="comment-meta-data">
-                    <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
-                    {% if reply.writer == user or user.is_staff %}
-                      <button class="btn-delete-comment" data-comment-id="{{ reply.id }}">
-                        <i class="fas fa-trash-alt"></i> 삭제
-                      </button>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
-          </div>
-
-          <!-- 대댓글 입력 폼 -->
-          <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
-            <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
-              {% csrf_token %}
-              <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
-              <input type="hidden" name="parent" value="{{ comment.id }}">
-              <button type="submit" class="btn-add-comment">답글 등록</button>
-            </form>
-          </div>
-        </div>
-        {% endif %}
-      {% empty %}
-        <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
-      {% endfor %}
+                {% if not forloop.last %}
+                    <hr class="comment-divider"/>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% endfor %}
     </div>
   </div>
-
     
     <!-- 새로운 댓글 입력 폼 -->
     <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
@@ -359,7 +349,7 @@
     });
   });
 
-  // 댓글 및 대댓글 작성 기능
+  // 댓글 및 대댓글
   function submitCommentForm(form, parentId = null) {
     var formData = $(form).serialize();
     var trendId = "{{ trend.id }}";

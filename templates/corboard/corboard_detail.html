@@ -185,7 +185,7 @@
                       {% endif %}
                     </span>
                       <div class="comment-meta-data">
-                        <button class="btn-reply" onclick="showReplyForm({{ comment.id }});"><i class="fa-regular fa-comment"></i></button>
+                        <button class="btn-reply" data-comment-id="{{ comment.id }}"><i class="fa-regular fa-comment"></i></button>
                         <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
                         {% if comment.writer == user or user.is_staff %}
                             <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
@@ -285,15 +285,6 @@
       return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     }
 
-    // AJAX 설정
-    $.ajaxSetup({
-      beforeSend: function(xhr, settings) {
-        if (!this.crossDomain) {
-          xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
-        }
-      }
-    });
-
     // 좋아요 기능
     $('.btn-like').click(function(e) {
       e.preventDefault();
@@ -383,15 +374,14 @@
       }
     });
 
-    // 댓글 및 대댓글
+    // 댓글 및 대댓글 작성 기능
     $(document).on('submit', '.comment-form', function(e) {
       e.preventDefault();
       var form = $(this);
       var formData = form.serialize();
-      var corId = "{{ cor.id }}";
       var parentId = form.find('input[name="parent"]').val();
 
-      $.post("/corboard/comment/add/" + corId + "/", formData, function(data) {
+      $.post(form.attr('action'), formData, function(data) {
         if (data.success) {
           var newCommentHtml = $(data.comment_html);
           if (parentId) {
@@ -409,6 +399,7 @@
       });
     });
 
+    // 답글 폼 표시 및 숨기기
     $(document).on('click', '.btn-reply', function() {
       var commentId = $(this).data('comment-id');
       showReplyForm(commentId);
@@ -417,11 +408,11 @@
   });
 
   function showReplyForm(commentId) {
-    var replyForm = document.getElementById('reply-form-' + commentId);
-    if (replyForm.style.display === 'none') {
-      replyForm.style.display = 'block';
+    var replyForm = $('#reply-form-' + commentId);
+    if (replyForm.is(':visible')) {
+      replyForm.hide();
     } else {
-      replyForm.style.display = 'none';
+      replyForm.show();
     }
   }
 </script>
