@@ -41,7 +41,7 @@
       background-color: #f8f9fa; /* 대댓글의 배경색 설정 */
       padding: 10px; /* 대댓글의 패딩 설정 */
       border-radius: 5px; /* 대댓글의 모서리를 둥글게 설정 */
-  }
+    }
 
     .btn-reply {
         position: absolute;
@@ -161,44 +161,28 @@
       {% for comment in comments %}
         {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
         <div class="comment-block">
-        <div class="comment" id="comment-{{ comment.id }}">
-          <p>{{ comment.content }}</p>
-          <div class="comment-meta">
-            <span><i class="fas fa-user"></i> 
-              {% if comment.writer == user %}
-                <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
-              {% else %}
-                <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
-              {% endif %}
-            </span>            
-            <div class="comment-meta-data">
-              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-              {% if comment.writer == user or user.is_staff %}
-                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                  <i class="fas fa-trash-alt"></i> 삭제
-                </button>
-              {% endif %}
-              <button class="btn-reply" onclick="showReplyForm({{ comment.id }});">Reply</button>
+          <div class="comment" id="comment-{{ comment.id }}">
+            <p>{{ comment.content }}</p>
+            <div class="comment-meta">
+              <span><i class="fas fa-user"></i> 
+                {% if comment.writer == user %}
+                  <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+                {% else %}
+                  <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+                {% endif %}
+              </span>            
+              <div class="comment-meta-data">
+                <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+                {% if comment.writer == user or user.is_staff %}
+                  <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                    <i class="fas fa-trash-alt"></i> 삭제
+                  </button>
+                {% endif %}
+                <button class="btn-reply" onclick="showReplyForm({{ comment.id }});">Reply</button>
+              </div>
             </div>
           </div>
-        {% for comment in comments %}
-            {% if not comment.parent %} <!-- 부모가 없는 댓글만 상위 댓글로 표시 -->
-            <div class="comment-block"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
-                <div class="comment">
-                    <p>{{ comment.content }}</p>
-                    <div class="comment-meta">
-                        <span><i class="fas fa-user"></i> {{ comment.writer }}</span>
-                        <div class="comment-meta-data">
-                          <button class="btn-reply" onclick="showReplyForm({{ comment.id }});"><i class="fa-regular fa-comment"></i></button>
-                            <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-                            {% if comment.writer == user or user.is_staff %}
-                                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                                    <i class="fas fa-trash-alt"></i> 삭제
-                                </button>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+
           <!-- 대댓글 표시 -->
           <div class="replies" style="margin-left: 20px;">
             {% for reply in comment.get_replies %}
