@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/coffeechat/list.css' %}">
 
 <div class="profile-container">
     <div class="profile-header">
@@ -91,64 +92,110 @@
                     } else if (filter === 'coffeechat') {
                         if (category === 'requests_sent' && data.requests_sent) {
                             data.requests_sent.forEach(request => {
+                                const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const requestElement = `
-                                    <div class="request-item">
-                                        <p>받는 사람: ${request.receiver}</p>
-                                        <p>직업: ${request.job}</p>
-                                        <p>요청 시간: ${new Date(request.created_at).toLocaleString()}</p>
-                                        <p>상태: ${request.status}</p>
+                                    <div class="coffeechat-card">
+                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
+                                        <div class="card-content">
+                                            <div class="profile-img">
+                                                {% if request.profile_image %}
+                                                    <img src="{{ request.profile_image.url }}" alt="Profile Image">
+                                                {% else %}
+                                                    <i class="fas fa-user"></i>
+                                                {% endif %}
+                                            </div>
+                                            <p>받는 사람: ${request.receiver}</p>
+                                            <span>직업: ${request.job}</span><br>
+                                            <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
+                                            <span>상태: ${request.status}</span>
+                                        </div>
                                     </div>
                                 `;
                                 activityContent.innerHTML += requestElement;
                             });
                         } else if (category === 'requests_received' && data.requests_received) {
                             data.requests_received.forEach(request => {
+                                const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const requestElement = `
-                                    <div class="request-item">
-                                        <p>보낸 사람: ${request.sender}</p>
-                                        <p>직업: ${request.job}</p>
-                                        <p>요청 시간: ${new Date(request.created_at).toLocaleString()}</p>
-                                        <p>상태: ${request.status}</p>
-                                        <form method="post" action="${request.accept_url}">
-                                            {% csrf_token %}
-                                            <button type="submit">수락하기</button>
-                                        </form>
-                                        <form method="post" action="${request.reject_url}">
-                                            {% csrf_token %}
-                                            <button type="submit">거절하기</button>
-                                        </form>
+                                    <div class="coffeechat-card">
+                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
+                                        <div class="card-content">
+                                            <div class="profile-img">
+                                                {% if request.profile_image %}
+                                                    <img src="{{ request.profile_image.url }}" alt="Profile Image">
+                                                {% else %}
+                                                    <i class="fas fa-user"></i>
+                                                {% endif %}
+                                            </div>
+                                            <p>보낸 사람: ${request.sender}</p>
+                                            <span>직업: ${request.job}</span><br>
+                                            <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
+                                            <span>상태: ${request.status}</span>
+                                            <div class="buttons">
+                                                <form method="post" action="${request.accept_url}">
+                                                    {% csrf_token %}
+                                                    <button type="submit">Accept</button>
+                                                </form>
+                                                <form method="post" action="${request.reject_url}">
+                                                    {% csrf_token %}
+                                                    <button class="reject" type="submit">Reject</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 `;
                                 activityContent.innerHTML += requestElement;
                             });
                         } else if (category === 'bookmarked' && data.bookmarked_coffeechats) {
                             data.bookmarked_coffeechats.forEach(coffeechat => {
+                                const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const coffeechatElement = `
-                                    <div class="coffeechat-item">
-                                        <p>받는 사람: ${coffeechat.receiver}</p>
-                                        <p>직업: ${coffeechat.job}</p>
-                                        <p>요청 시간: ${new Date(coffeechat.created_at).toLocaleString()}</p>
-                                        <p>내용: ${coffeechat.content}</p>
+                                    <div class="coffeechat-card">
+                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
+                                        <div class="card-content">
+                                            <div class="profile-img">
+                                                {% if coffeechat.profile_image %}
+                                                    <img src="{{ coffeechat.profile_image.url }}" alt="Profile Image">
+                                                {% else %}
+                                                    <i class="fas fa-user"></i>
+                                                {% endif %}
+                                            </div>
+                                            <p>받는 사람: ${coffeechat.receiver}</p>
+                                            <span>직업: ${coffeechat.job}</span><br>
+                                            <span>요청 시간: ${new Date(coffeechat.created_at).toLocaleString()}</span><br>
+                                            <span>내용: ${coffeechat.content}</span>
+                                        </div>
                                     </div>
                                 `;
                                 activityContent.innerHTML += coffeechatElement;
                             });
                         } else if (category === 'history' && data.accepted_requests) {
                             data.accepted_requests.forEach(request => {
+                                const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const requestElement = `
-                                    <div class="request-item">
-                                        <p>보낸 사람: ${request.sender}</p>
-                                        <p>직업: ${request.job}</p>
-                                        <p>요청 시간: ${new Date(request.created_at).toLocaleString()}</p>
-                                        <p>상태: ${request.status}</p>
-                                        ${request.review ? `
-                                            <div class="review">
-                                                <p><strong>리뷰:</strong></p>
-                                                <p>평점: ${request.review.rating}</p>
-                                                <p>내용: ${request.review.content}</p>
-                                                <p>리뷰 작성 시간: ${new Date(request.review.created_at).toLocaleString()}</p>
+                                    <div class="coffeechat-card">
+                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
+                                        <div class="card-content">
+                                            <div class="profile-img">
+                                                {% if request.profile_image %}
+                                                    <img src="{{ request.profile_image.url }}" alt="Profile Image">
+                                                {% else %}
+                                                    <i class="fas fa-user"></i>
+                                                {% endif %}
                                             </div>
-                                        ` : ''}
+                                            <p>보낸 사람: ${request.sender}</p>
+                                            <span>직업: ${request.job}</span><br>
+                                            <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
+                                            <span>상태: ${request.status}</span>
+                                            ${request.review ? `
+                                                <div class="review">
+                                                    <p><strong>리뷰:</strong></p>
+                                                    <p>평점: ${request.review.rating}</p>
+                                                    <p>내용: ${request.review.content}</p>
+                                                    <p>리뷰 작성 시간: ${new Date(request.review.created_at).toLocaleString()}</p>
+                                                </div>
+                                            ` : ''}
+                                        </div>
                                     </div>
                                 `;
                                 activityContent.innerHTML += requestElement;
@@ -191,10 +238,10 @@
                     // 커피챗 필터를 선택했을 때 필터 변경
                     if (currentFilter === 'coffeechat') {
                         document.querySelector('.activity-filter').innerHTML = `
-                            <a href="#" class="filter-link active" data-category="requests_sent">보낸 요청</a>
-                            <a href="#" class="filter-link" data-category="requests_received">받은 요청</a>
-                            <a href="#" class="filter-link" data-category="bookmarked">관심 있는 선배님</a>
-                            <a href="#" class="filter-link" data-category="history">커피챗 기록</a>
+                            <a href="#" class="filter-link active" data-category="requests_sent">Sent</a>
+                            <a href="#" class="filter-link" data-category="requests_received">Received</a>
+                            <a href="#" class="filter-link" data-category="bookmarked">Interested</a>
+                            <a href="#" class="filter-link" data-category="history">History</a>
                         `;
                         addFilterEventListeners();
                         loadActivities(currentFilter, 'requests_sent');

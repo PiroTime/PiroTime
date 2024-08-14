@@ -44,8 +44,8 @@ body {
 }
 
 .profile-image img, .profile-image i {
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 100%;
+    max-height: 100%;
     color: #555555;
 }
 
@@ -69,7 +69,7 @@ body {
 
 .profile-info p {
     color: black;
-    font-size: 1.0rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
     margin-left: 1rem;
 }
@@ -96,6 +96,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     margin-top: 2rem;
+    min-height: 500px; /* 최소 높이 설정 */
 }
 
 .activity-filter {
@@ -114,6 +115,7 @@ body {
     display: flex;
     overflow: hidden;
     margin-top: 1rem;
+    min-height: 400px; /* 최소 높이 설정 */
 }
 
 .activity-navbar {
@@ -133,6 +135,7 @@ body {
     gap: 15px;
     padding-right: 20px;
     overflow-y: auto;
+    min-height: 400px; /* 콘텐츠 최소 높이 설정 */
 }
 
 .activity-link, .filter-link {
@@ -172,7 +175,6 @@ body {
     transform: translateY(-5px);
 }
 
-/* 카드 상단 이미지 섹션 */
 .card-image {
     height: 100px;
     margin-bottom: 10px;
@@ -184,18 +186,18 @@ body {
 
 /* 카드 제목과 텍스트 섹션 */
 .activity-card h3 {
-    font-size: 1.2rem; /* 글자 크기 줄이기 */
+    font-size: 1.2rem;
     margin: 0 0 5px 0;
     font-weight: 500;
-    text-align: left; /* 왼쪽 정렬 */
+    text-align: left;
 }
 
 .activity-card span {
-    font-size: 0.9rem; /* 글자 크기 줄이기 */
+    font-size: 0.9rem;
     color: #666;
     margin: 0 0 10px 0;
     flex: 1;
-    text-align: left; /* 왼쪽 정렬 */
+    text-align: left;
 }
 
 .activity-card p {
@@ -211,65 +213,74 @@ body {
 }
 
 /* 커피챗 카드 스타일 */
-.coffeechat-item,
 .coffeechat-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    transition: transform 0.3s, box-shadow 0.3s;
     border: 1px solid #CCCCCC;
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    background-color: #fff;
+    margin-bottom: 20px;
 }
 
-.coffeechat-item:hover,
 .coffeechat-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.coffeechat-item p,
-.coffeechat-card h3 {
-    font-size: 1.4rem;
+.coffeechat-card .card-content {
+    padding: 20px;
+    flex: 1;
+}
+
+.coffeechat-card .card-image {
+    height: 150px;
+    border-radius: 8px 8px 0 0;
+    background-size: cover;
+    background-position: center;
+}
+
+.coffeechat-card .profile-img {
+    background-color: lightgray;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
     margin-bottom: 10px;
-    font-weight: 500;
+}
+
+.coffeechat-card .profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.coffeechat-card .profile-info {
+    margin-left: 20px;
     color: #333;
 }
 
-.coffeechat-item .info,
-.coffeechat-card .info {
-    font-size: 1rem;
+.coffeechat-card h3 {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.coffeechat-card p {
+    margin: 5px 0;
     color: #666;
-    margin-bottom: 10px;
 }
 
-.coffeechat-item .profile-img,
-.coffeechat-card .profile-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
-    margin-bottom: 10px;
-}
-
-.coffeechat-item .status,
-.coffeechat-item .request-time {
-    font-size: 1rem;
-    color: #999;
-    margin-bottom: 5px;
-}
-
-.coffeechat-item .buttons,
 .coffeechat-card .buttons {
     display: flex;
     gap: 10px;
     margin-top: 15px;
 }
 
-.coffeechat-item button,
 .coffeechat-card button {
     background-color: #0BEC12;
     color: white;
@@ -282,17 +293,14 @@ body {
     flex: 1;
 }
 
-.coffeechat-item button.reject,
 .coffeechat-card button.reject {
     background-color: #FF5A5F;
 }
 
-.coffeechat-item button:hover,
 .coffeechat-card button:hover {
     background-color: #09D910;
 }
 
-.coffeechat-item button.reject:hover,
 .coffeechat-card button.reject:hover {
     background-color: #FF3B3F;
 }
@@ -319,7 +327,6 @@ body {
 }
 
 /* 내정보 스타일 */
-
 .profile-info-section {
     display: flex;
     flex-direction: column;
