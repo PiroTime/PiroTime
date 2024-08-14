@@ -1,22 +1,22 @@
 {% load static %}
 
-<div class="review-grid" id="corboard-list">
+<div class="cor-grid">
     {% load static %}
     {% for corboard in page_obj %}
     {% with random_image=image_files|random %}
-    <div class="review-card">
+    <div class="cor-card">
         <a href="{% url 'corboard:cor_detail' pk=corboard.pk %}" style="text-decoration: none; color: inherit;">
-            <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+            <div class="cor-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
             <form class="bookmark-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_bookmark' pk=corboard.pk %}" method="post">
                 {% csrf_token %}
                 <button type="button" class="scrap-icon {% if request.user in corboard.bookmarks.all %} scrapped{% endif %}">
                     <i class="fas fa-bookmark"></i>
                 </button>
             </form>
-            <div class="review-card-content">
+            <div class="cor-card-content">
                 <h2>{{ corboard.title }}</h2>
                 <p>작성자: <a href="{% url 'mypage:profile_read' corboard.writer.id %}">{{ corboard.writer }}</a> / 날짜: {{ corboard.date|date:"Y년 m월 d일" }}</p>
-                <div class="review-likes">
+                <div class="cor-likes">
                     <form class="like-form" data-corboard-id="{{ corboard.pk }}" action="{% url 'corboard:cor_like' pk=corboard.pk %}" method="post">
                         {% csrf_token %}
                         <button type="button" class="like-button">

@@ -151,16 +151,20 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 } for coffeechat in bookmarked_coffeechats]
                 return JsonResponse({'bookmarked_coffeechats': data})
             
-            # elif category == 'review_written':
-            #     reviews = Review.objects.filter(reviewer=target_user)
-            #     data = [{
-            #         'coffeechat_receiver': review.coffeechat_request.coffeechat.receiver.username,
-            #         'job': review.coffeechat_request.coffeechat.job,
-            #         'created_at': review.created_at.isoformat(),
-            #         'rating': review.rating,
-            #         'content': review.content,
-            #     } for review in reviews]
-            #     return JsonResponse({'reviews_written': data})
+            elif category == 'history':
+                accepted_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='ACCEPTED')
+                data = [{
+                    'sender': request.user.username,
+                    'job': request.coffeechat.job,
+                    'created_at': request.created_at.isoformat(),
+                    'status': request.get_status_display(),
+                    'review': {
+                        'rating': request.review.rating if hasattr(request, 'review') else None,
+                        'content': request.review.content if hasattr(request, 'review') else None,
+                        'created_at': request.review.created_at.isoformat() if hasattr(request, 'review') else None,
+                    } if hasattr(request, 'review') else None,
+                } for request in accepted_requests]
+                return JsonResponse({'accepted_requests': data})
 
         # 내 정보 보기
         elif filter_type == 'profile_info':

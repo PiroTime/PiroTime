@@ -1,0 +1,131 @@
+.max-width-1200 {
+    width: min(1200px, 100%);
+    padding: 0 40px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom: 0;
+    min-height: 100vh;
+}
+
+.cor-create-card {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 100%;
+    padding: 20px;
+    margin: 0 100px;
+}
+
+.main-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form p {
+    margin-bottom: 15px;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form textarea:focus {
+    border-color: #0BEC12;
+}
+
+form button[type="submit"] {
+    background-color: #0BEC12;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+form button[type="submit"]:hover {
+    background-color: #28a745;
+}
+
+.btn-back {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #ddd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .review-create-card {
+        padding: 20px;
+    }
+
+    .main-title {
+        font-size: 1.5rem;
+    }
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+#editor-container {
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

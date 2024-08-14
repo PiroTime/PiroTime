@@ -1,3 +1,4 @@
+/* 기본 설정 */
 body {
     font-family: 'Hubballi', sans-serif;
     position: relative;
@@ -18,6 +19,7 @@ body {
     flex-direction: column;
 }
 
+/* 프로필 헤더 스타일 */
 .profile-header {
     display: flex;
     align-items: center;
@@ -105,16 +107,15 @@ body {
     gap: 16px;
     margin-right: 2rem;
     font-size: 1.2rem;
-    width: 200px;
+    width: 220px;
 }
 
 .activity-content {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding-right: 20px;
+    overflow-y: auto;
 }
 
 .activity-link, .filter-link {
@@ -140,113 +141,175 @@ body {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 10px;
     border: 1px solid #CCCCCC;
     position: relative;
     cursor: pointer;
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
+    height: 200px;
 }
 
 .activity-card:hover {
     transform: translateY(-5px);
 }
 
+/* 카드 상단 이미지 섹션 */
 .card-image {
     height: 100px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-radius: 10px;
     background-size: cover;
     background-position: center;
+    position: relative;
 }
 
-.card-content {
+/* 카드 제목과 텍스트 섹션 */
+.activity-card h3 {
+    font-size: 1.4rem;
+    margin: 0 0 5px 0;
+    font-weight: 500;
+}
+
+.activity-card p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0 0 10px 0;
     flex: 1;
+}
+
+.activity-card .info {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* 커피챗 카드 스타일 */
+.coffeechat-item,
+.coffeechat-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border: 1px solid #CCCCCC;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.card-content h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
+.coffeechat-item:hover,
+.coffeechat-card:hover {
+    transform: translateY(-5px);
+}
+
+.coffeechat-item p,
+.coffeechat-card h3 {
     font-size: 1.4rem;
+    margin-bottom: 10px;
     font-weight: 500;
+    color: #333;
 }
 
-.card-content p {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+.coffeechat-item .info,
+.coffeechat-card .info {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.coffeechat-item .profile-img,
+.coffeechat-card .profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.coffeechat-item .status,
+.coffeechat-item .request-time {
+    font-size: 1rem;
+    color: #999;
+    margin-bottom: 5px;
+}
+
+.coffeechat-item .buttons,
+.coffeechat-card .buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.coffeechat-item button,
+.coffeechat-card button {
+    background-color: #0BEC12;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
     font-size: 1.2rem;
-    color: #666;
+    transition: background-color 0.3s ease;
+    flex: 1;
 }
 
-.card-footer {
-    margin-top: 10px;
-    font-size: 0.8em;
-    color: #666;
+.coffeechat-item button.reject,
+.coffeechat-card button.reject {
+    background-color: #FF5A5F;
+}
+
+.coffeechat-item button:hover,
+.coffeechat-card button:hover {
+    background-color: #09D910;
+}
+
+.coffeechat-item button.reject:hover,
+.coffeechat-card button.reject:hover {
+    background-color: #FF3B3F;
+}
+
+/* 커피챗 네비게이션 */
+.coffeechat-nav {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-.card-footer .date {
-    font-style: italic;
-}
-
-.card-footer .status {
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    font-weight: 500;
-}
-
-.card-footer .status.active {
-    background-color: #e6f7e6;
-    color: #28a745;
-}
-
-.card-footer .status.inactive {
-    background-color: #f8d7da;
-    color: #dc3545;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* 커피챗 및 내정보 디자인 */
-.activity-navbar {
-    width: 220px;
-}
-
-.activity-link {
-    display: flex;
-    align-items: center;
-    padding: 0.8rem 1rem;
+.coffeechat-nav a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.activity-link:hover,
-.activity-link.active {
-    color: #0BEC12;
+.coffeechat-nav a:hover, .coffeechat-nav a.active {
+    background-color: #0BEC12;
+    color: white;
 }
 
-.activity-link i {
-    margin-right: 10px;
-    font-size: 1.6rem;
+/* 내정보 스타일 */
+.profile-info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
 }
 
-/* 커피챗 아이콘 */
-.activity-link.coffee-chat i::before {
-    content: "\2615"; /* 커피 이모지 유니코드 */
+.profile-info-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-/* 내정보 아이콘 */
-.activity-link.my-info i::before {
-    content: "\1F464"; /* 사용자 이모지 유니코드 */
+.profile-info-item {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #666;
 }
