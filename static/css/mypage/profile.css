@@ -250,3 +250,116 @@ footer {
 .activity-link.my-info i::before {
     content: "\1F464"; /* 사용자 이모지 유니코드 */
 }
+
+/* 프로필 정보 카드 스타일 */
+.profile-info-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border: 1px solid #CCCCCC;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profile-info-card p {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.profile-info-card strong {
+    font-weight: 500;
+    color: #0BEC12;
+}
+
+.profile-info-card img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-info-card .btn-primary {
+    margin-top: 20px;
+    font-size: 1.4rem;
+    padding: 0.5rem 1rem;
+}
+
+/* 커피챗 관련 스타일 */
+.request-item, .coffeechat-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border: 1px solid #CCCCCC;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.request-item:hover, .coffeechat-item:hover {
+    transform: translateY(-5px);
+}
+
+.request-item p, .coffeechat-item p {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.request-item form, .coffeechat-item form {
+    margin-top: 15px;
+}
+
+.request-item button, .coffeechat-item button {
+    background-color: #0BEC12;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.request-item button:hover, .coffeechat-item button:hover {
+    background-color: #09D910;
+}
+
+.review {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+.review p {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.review strong {
+    color: #0BEC12;
+}
+
+/* 커피챗 카테고리 네비게이션 */
+.coffeechat-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.coffeechat-nav a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.coffeechat-nav a:hover, .coffeechat-nav a.active {
+    background-color: #0BEC12;
+    color: white;
+}
