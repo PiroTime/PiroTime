@@ -1,3 +1,4 @@
+/* 기본 설정 */
 body {
     font-family: 'Hubballi', sans-serif;
     position: relative;
@@ -18,6 +19,7 @@ body {
     flex-direction: column;
 }
 
+/* 프로필 헤더 스타일 */
 .profile-header {
     display: flex;
     align-items: center;
@@ -105,14 +107,13 @@ body {
     gap: 16px;
     margin-right: 2rem;
     font-size: 1.2rem;
-    width: 200px;
+    width: 220px;
 }
 
 .activity-content {
-    flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
     padding-right: 20px;
     overflow-y: auto;
 }
@@ -140,36 +141,31 @@ body {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 10px;
     border: 1px solid #CCCCCC;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease;
+    height: 200px;
 }
 
 .activity-card:hover {
     transform: translateY(-5px);
 }
 
-.activity-card .profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    overflow: hidden;
+/* 카드 상단 이미지 섹션 */
+.card-image {
+    height: 100px;
     margin-bottom: 10px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
 }
 
-.activity-card .profile-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.activity-card .profile-image i {
-    font-size: 50px;
-    color: #ccc;
-}
-
+/* 카드 제목과 텍스트 섹션 */
 .activity-card h3 {
     font-size: 1.4rem;
     margin: 0 0 5px 0;
@@ -177,7 +173,7 @@ body {
 }
 
 .activity-card p {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #666;
     margin: 0 0 10px 0;
     flex: 1;
@@ -188,154 +184,94 @@ body {
     color: #999;
 }
 
-.activity-card .buttons {
-    margin-top: auto;
-    display: flex;
-    gap: 10px;
-}
-
-.activity-card .buttons button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.activity-card .buttons .accept {
-    background-color: #0BEC12;
-    color: white;
-}
-
-.activity-card .buttons .reject {
-    background-color: #f44336;
-    color: white;
-}
-
-/* 사람 모양 아이콘을 위한 Font Awesome 스타일 */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css');
-
-/* 커피챗 및 내정보 디자인 */
-.activity-navbar {
-    width: 220px;
-}
-
-.activity-link {
-    display: flex;
-    align-items: center;
-    padding: 0.8rem 1rem;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.activity-link i {
-    margin-right: 10px;
-    font-size: 1.6rem;
-}
-
-/* 커피챗 아이콘 */
-.activity-link.coffee-chat i::before {
-    content: "\2615"; /* 커피 이모지 유니코드 */
-}
-
-/* 내정보 아이콘 */
-.activity-link.my-info i::before {
-    content: "\1F464"; /* 사용자 이모지 유니코드 */
-}
-
-/* 프로필 정보 카드 스타일 */
-.profile-info-card {
+/* 커피챗 카드 스타일 */
+.coffeechat-item,
+.coffeechat-card {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border: 1px solid #CCCCCC;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.profile-info-card p {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.profile-info-card strong {
-    font-weight: 500;
-    color: #0BEC12;
-}
-
-.profile-info-card img {
-    max-width: 200px;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.profile-info-card .btn-primary {
-    margin-top: 20px;
-    font-size: 1.4rem;
-    padding: 0.5rem 1rem;
-}
-
-/* 커피챗 관련 스타일 */
-.request-item, .coffeechat-item {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    border: 1px solid #CCCCCC;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.request-item:hover, .coffeechat-item:hover {
+.coffeechat-item:hover,
+.coffeechat-card:hover {
     transform: translateY(-5px);
 }
 
-.request-item p, .coffeechat-item p {
-    font-size: 1.3rem;
+.coffeechat-item p,
+.coffeechat-card h3 {
+    font-size: 1.4rem;
     margin-bottom: 10px;
+    font-weight: 500;
     color: #333;
 }
 
-.request-item form, .coffeechat-item form {
+.coffeechat-item .info,
+.coffeechat-card .info {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.coffeechat-item .profile-img,
+.coffeechat-card .profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.coffeechat-item .status,
+.coffeechat-item .request-time {
+    font-size: 1rem;
+    color: #999;
+    margin-bottom: 5px;
+}
+
+.coffeechat-item .buttons,
+.coffeechat-card .buttons {
+    display: flex;
+    gap: 10px;
     margin-top: 15px;
 }
 
-.request-item button, .coffeechat-item button {
+.coffeechat-item button,
+.coffeechat-card button {
     background-color: #0BEC12;
     color: white;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1.2rem;
     transition: background-color 0.3s ease;
-    margin-right: 10px;
+    flex: 1;
 }
 
-.request-item button:hover, .coffeechat-item button:hover {
+.coffeechat-item button.reject,
+.coffeechat-card button.reject {
+    background-color: #FF5A5F;
+}
+
+.coffeechat-item button:hover,
+.coffeechat-card button:hover {
     background-color: #09D910;
 }
 
-.review {
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 15px;
+.coffeechat-item button.reject:hover,
+.coffeechat-card button.reject:hover {
+    background-color: #FF3B3F;
 }
 
-.review p {
-    font-size: 1.2rem;
-    margin-bottom: 5px;
-}
-
-.review strong {
-    color: #0BEC12;
-}
-
-/* 커피챗 카테고리 네비게이션 */
+/* 커피챗 네비게이션 */
 .coffeechat-nav {
     display: flex;
     justify-content: center;
@@ -354,4 +290,26 @@ body {
 .coffeechat-nav a:hover, .coffeechat-nav a.active {
     background-color: #0BEC12;
     color: white;
+}
+
+/* 내정보 스타일 */
+.profile-info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.profile-info-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.profile-info-item {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #666;
 }
