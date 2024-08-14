@@ -133,6 +133,26 @@
                                 `;
                                 activityContent.innerHTML += coffeechatElement;
                             });
+                        } else if (category === 'history' && data.accepted_requests) {
+                            data.accepted_requests.forEach(request => {
+                                const requestElement = `
+                                    <div class="request-item">
+                                        <p>보낸 사람: ${request.sender}</p>
+                                        <p>직업: ${request.job}</p>
+                                        <p>요청 시간: ${new Date(request.created_at).toLocaleString()}</p>
+                                        <p>상태: ${request.status}</p>
+                                        ${request.review ? `
+                                            <div class="review">
+                                                <p><strong>리뷰:</strong></p>
+                                                <p>평점: ${request.review.rating}</p>
+                                                <p>내용: ${request.review.content}</p>
+                                                <p>리뷰 작성 시간: ${new Date(request.review.created_at).toLocaleString()}</p>
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `;
+                                activityContent.innerHTML += requestElement;
+                            });
                         }
                     } else {
                         if (data.posts && data.posts.length > 0) {
@@ -174,6 +194,7 @@
                             <a href="#" class="filter-link active" data-category="requests_sent">보낸 요청</a>
                             <a href="#" class="filter-link" data-category="requests_received">받은 요청</a>
                             <a href="#" class="filter-link" data-category="bookmarked">관심 있는 선배님</a>
+                            <a href="#" class="filter-link" data-category="history">커피챗 기록</a>
                         `;
                         addFilterEventListeners();
                         loadActivities(currentFilter, 'requests_sent');

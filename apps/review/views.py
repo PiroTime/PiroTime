@@ -56,12 +56,13 @@ def review_list(request):
         'image_files': image_files
     })
 
+@login_required
 def review_create(request):
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.writer = request.user if request.user.is_authenticated else None
+            review.writer = request.user
             review.created_at = timezone.now()
             review.save()
             return redirect('review:review_detail', pk=review.pk)
