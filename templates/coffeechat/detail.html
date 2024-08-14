@@ -10,6 +10,7 @@
     .container {
         min-height: calc(100vh - 11rem);
     }
+
     .fa-bookmark {
         font-size: 1.4rem;
     }
@@ -46,12 +47,190 @@
     #openModalBtn,
     .btn-bookmark {
         height: 37.5px;
-        line-height: 1.5; 
+        line-height: 1.5;
         text-align: center;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         margin-top: 5px;
+    }
+
+    .review-button {
+        background: linear-gradient(to right, #0BEC12, #8CF781);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background 0.3s ease, transform 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .review-button:hover {
+        background: linear-gradient(to right, #8CF781, #0BEC12);
+        transform: scale(1.05);
+    }
+
+    .review-button:active {
+        transform: scale(0.98);
+    }
+
+    .tab-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        /* 아래쪽 경계선 */
+        padding-bottom: 10px;
+        margin-top: 100px;
+    }
+
+    .tab-item {
+        font-size: 16px;
+        color: #888;
+        padding: 10px 20px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .tab-item.active {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .tab-item.active::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 10%;
+        right: 10%;
+        height: 3px;
+        background-color: #0BEC12;
+        /* 밑줄 색상 */
+        border-radius: 2px;
+    }
+
+    .tab-content {
+        display: none;
+        padding: 20px;
+        margin-top: 10px;
+        border-radius: 8px;
+    }
+
+    .tab-content.active-content {
+        display: block;
+    }
+
+    .review-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .card-review {
+        width: 75rem;
+        margin: 10px 0;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        background-color: #fff;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .card-review:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        /* 더 진한 그림자 */
+        transform: translateY(-5px);
+        /* 요소를 위로 5px 이동 */
+    }
+
+    .card-body h5 {
+        margin-bottom: 15px;
+        font-size: 23px;
+        font-weight: bold;
+    }
+
+    .card-body p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .card-title {
+        margin-top: 20px;
+    }
+
+    .profile-content {
+        margin-left: 370px;
+        /* 원하는 만큼의 여백 설정 */
+    }
+
+    /*  */
+    .flex {
+        flex-direction: column;
+    }
+
+    .hashtag-box {
+        display: flex;
+        justify-content: start;
+        justify-items: stretch;
+        align-items: center;
+    }
+
+    /*  */
+    .review-rule {
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 120px;
+        text-align: start;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .review-rule:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        /* 더 진한 그림자 */
+        transform: translateY(-5px);
+        /* 요소를 위로 5px 이동 */
+    }
+
+    .review-rule h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .review-rule h5 {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .review-rule h5:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .review-check-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .review-alarm {
+        font-size: 23px;
+    }
+
+    .review-check {
+        font-size: 18px;
+    }
+
+    .hashtag-title {
+        font-size: 23px;
     }
 </style>
 <div class="container">
@@ -60,9 +239,9 @@
             <div class="profile-info">
                 <div class="profile-img">
                     {% if profile.receiver.profile_image %}
-                        <img src="{{ profile.receiver.profile_image.url }}" alt="Profile Image">
+                    <img src="{{ profile.receiver.profile_image.url }}" alt="Profile Image">
                     {% else %}
-                        <i class="fas fa-user"></i>
+                    <i class="fas fa-user"></i>
                     {% endif %}
                 </div>
                 <div>
@@ -74,35 +253,38 @@
             </div>
             <div class="action-buttons">
                 {% if user.is_authenticated %}
-                    {% if user == profile.receiver %}
-                    <div>
-                        <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
-                            <i class="fas fa-edit"></i> 수정
-                        </a>
-                        <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="button" onclick="confirmDelete()" class="btn-delete">
-                                <i class="fas fa-trash-alt"></i> 삭제
-                            </button>
-                        </form>
-                        <a href="/" class="btn-private">비공개로 전환하기</a>
-                    </div>
-                    {% else %}
-                    {% csrf_token %}
-                    {% if is_limited %}
-                        <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
-                    {% elif is_waiting %}
-                        <p class="status-message">커피챗 수락대기중</p>
-                    {% else %}
-                        <button id="openModalBtn" type="button">커피챗 신청하기</button>
-                    {% endif %}
-                    
-                    <!-- 북마크 버튼 -->
-                    <button type="button" class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}" data-profile-id="{{ profile.pk }}">
-                        <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
-                    </button>
+                {% if user == profile.receiver %}
+                <div>
+                    <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
+                        <i class="fas fa-edit"></i> 수정
+                    </a>
+                    <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
+                        style="display:inline;">
+                        {% csrf_token %}
+                        <button type="button" onclick="confirmDelete()" class="btn-delete">
+                            <i class="fas fa-trash-alt"></i> 삭제
+                        </button>
+                    </form>
+                    <a href="/" class="btn-private">비공개로 전환하기</a>
+                </div>
+                {% else %}
+                {% csrf_token %}
+                {% if is_limited %}
+                <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
+                {% elif is_waiting %}
+                <p class="status-message">커피챗 수락대기중</p>
+                {% else %}
+                <button id="openModalBtn" type="button">커피챗 신청하기</button>
                 {% endif %}
-            {% endif %}
+
+                <!-- 북마크 버튼 -->
+                <button type="button"
+                    class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
+                    data-profile-id="{{ profile.pk }}">
+                    <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
+                </button>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
         <!-- modal html 폼 -->
@@ -113,7 +295,8 @@
                     <h2 class="coffeechat-modal-h2">선배님께 커피챗 신청 메세지를 작성해주세요</h2>
                     {% csrf_token %}
                     <div class="input-container">
-                        <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="선배님께 궁금한 점이나 자기소개를 작성해주세요..."></textarea>
+                        <textarea id="userInput" name="requestContent" rows="10" cols="50"
+                            placeholder="선배님께 궁금한 점이나 자기소개를 작성해주세요..."></textarea>
                         <button type="submit" id="submitBtn">제출</button>
                     </div>
                 </div>
@@ -127,144 +310,178 @@
             <h2 class="coffeechat-modal-h2">선배님께 커피챗 신청 메세지를 작성해주세요</h2>
             {% csrf_token %}
             <div class="input-container">
-                <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="여기에 글을 작성하세요..."></textarea>
+                <textarea id="userInput" name="requestContent" rows="10" cols="50"
+                    placeholder="여기에 글을 작성하세요..."></textarea>
                 <button type="submit" id="submitBtn">제출</button>
             </div>
         </div>
     </div>
 
-    <div class="profile-details max-width-1200">
-        <div class="flex" style="margin: 0 100px;">
-            {% for hashtag in hashtags %}
-            <p>
-                <a href="{% url 'coffeechat:coffeechat_list' %}?search={{ hashtag.name }}" class="hashtag" style="color: black;">#{{ hashtag.name }}</a>
-            </p>
-            {% endfor %}
+    <div class="tab-container">
+        <div class="tab-item active" data-target="content-1">파트너 소개</div>
+        <div class="tab-item" data-target="content-2">파트너 전체 리뷰</div>
+        <div class="tab-item" data-target="content-3">리뷰 작성 관리</div>
+    </div>
+
+    <div class="tab-content-container">
+        <div id="content-1" class="tab-content active-content">
+            <div class="profile-content max-width-1200">
+                <div>{{ profile.content|safe }}</div>
+            </div>
+
+            <div class="profile-details max-width-1200">
+                <div class="profile-details-box flex" style="margin: 0 50px;">
+                    <h4 class="hashtag-title">파트너의 관심사는</h4>
+                    <div class="hashtag-box">
+                        {% for hashtag in hashtags %}
+                        <p>
+                            <a href="{% url 'coffeechat:coffeechat_list' %}?search={{ hashtag.name }}" class="hashtag"
+                                style="color: black;">#{{ hashtag.name }}</a>
+                        </p>
+                        {% endfor %}
+                    </div>
+                    <h4 class="hashtag-title">입니다</h4>
+                </div>
+            </div>
+        </div>
+        <div id="content-2" class="tab-content">
+            <div class="review-container">
+                {% for review in reviews %}
+                <div class="card-review">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.reviewer.username }} 님의 리뷰</h5>
+                        <p class="card-text">{{ review.content }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="content-3" class="tab-content">
+            <!-- 요청 목록을 표시 -->
+            <div class="requests-list max-width-1200">
+                <div class="review-rule">
+                    <h3>커피챗 리뷰 남기기 유의사항</h3>
+                    <h5>🫰커피챗 진행 후 리뷰를 남겨주세요</h5>
+                    <h5>🫰정성스러운 리뷰는 피로그래머들에게 큰 도움이 돼요</h5>
+                    <h5>🫰한 번 남기면 수정이 어려우니 주의하여 작성해주세요</h5>
+                </div>
+
+                <h3 class="review-alarm">리뷰를 남겨주세요! 커피챗 대상자가 커피챗을 수락하면 리뷰 남기기 버튼이 보여요</h3>
+                {% for request in requests %}
+                <!-- 리뷰 버튼 추가 -->
+                {% if user.is_authenticated and request.status == 'ACCEPTED' and request.user == user %}
+                {% if not request.existing_review %}
+                <div class="review-check-box">
+                    <p class="review-check">피로그래머 {{request.user.cohort}}기 {{ request.user.username }}님이 커피챗을
+                        {{request.get_status_display }}하셨습니다!!</p>
+                    <!-- <p>요청 시간: {{ request.created_at }}</p> -->
+                    <a href="{% url 'coffeechat:review_create' request.id %}">
+                        <button type="button" class="review-button">리뷰 작성하기</button>
+                    </a>
+                    <div>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 리뷰 작성 링크 -->
+        {% if request.user == profile.receiver and show_review_button %}
+        <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}"></a>
+        {% else %}
+        {% endif %}
+        <div class="btn-container">
+            <!-- <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn-back"> <i class="fas fa-arrow-left"></i>목록보기</a> -->
         </div>
     </div>
-    <div class="profile-content max-width-1200">
-        <h2>프로필 소개</h2>
-        <div>{{ profile.content|safe }}</div>
-    </div>
-    <!-- 요청 목록을 표시 -->
-    <!-- <div class="requests-list max-width-1200">
-        <h3>요청받은 커피챗:</h3>
-        {% for request in requests %}
-        <div class="request-item">
-            <p>{{ request.user.username }}: {{ request.get_status_display }}</p>
-            <p>요청 시간: {{ request.created_at }}</p>
-            {% if user.is_authenticated and user == profile.receiver and request.status == 'WAITING' %}
-            <form method="post" action="{% url 'coffeechat:accept_request' request.id %}">
-                {% csrf_token %}
-                <button type="submit">수락하기</button>
-            </form>
-            <form method="post" action="{% url 'coffeechat:reject_request' request.id %}">
-                {% csrf_token %}
-                <button type="submit">거절하기</button>
-            </form>
-            {% endif %} -->
-            <!-- 리뷰 버튼 추가 -->
-            <!-- {% if user.is_authenticated and request.status == 'ACCEPTED' %}
-            <a href="{% url 'coffeechat:review_create' request.id %}">
-                <button type="button">리뷰 작성하기</button>
-            </a>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div> -->
-    <!-- 리뷰 작성 링크 -->
-    {% if request.user == profile.receiver and show_review_button %}
-    <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}">Write Review</a>
-    {% endif %}
-
-    <div class="btn-container">
-        <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn-back"> <i class="fas fa-arrow-left"></i>목록보기</a>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function confirmDelete() {
-        if (confirm("삭제하시겠습니까?")) {
-            document.getElementById('delete-form').submit();
-        }
-    }
-
-    function getCSRFToken() {
-        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    }
-
-    $(document).ready(function() {
-        // AJAX 설정
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
-                }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function confirmDelete() {
+            if (confirm("삭제하시겠습니까?")) {
+                document.getElementById('delete-form').submit();
             }
-        });
+        }
 
-        // 북마크 기능
-        $('.btn-bookmark').click(function() {
-            var profileId = $(this).data('profile-id');
-            var bookmarkButton = $(this);
-            $.post('/coffeechat/' + profileId + '/bookmark/', {
-                csrfmiddlewaretoken: getCSRFToken()
-            }, function(data) {
-                if (data.bookmarked) {
-                    bookmarkButton.addClass('bookmarked');
-                } else {
-                    bookmarkButton.removeClass('bookmarked');
-                }
-            }).fail(function(xhr, status, error) {
-                // 로그인 리다이렉션 확인
-                if (xhr.status == 302) {
-                    window.location.href = xhr.getResponseHeader('Location');
-                } else {
-                    alert('북마크 요청에 실패했습니다. 다시 시도해주세요.');
+        function getCSRFToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
+
+        $(document).ready(function () {
+            // AJAX 설정
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                    }
                 }
             });
-        });
 
-        // "신청하기" 버튼 클릭 시 모달 열기 기능
-        $('#openModalBtn').click(function() {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "flex";
-        });
+            // 북마크 기능
+            $('.btn-bookmark').click(function () {
+                var profileId = $(this).data('profile-id');
+                var bookmarkButton = $(this);
+                $.post('/coffeechat/' + profileId + '/bookmark/', {
+                    csrfmiddlewaretoken: getCSRFToken()
+                }, function (data) {
+                    if (data.bookmarked) {
+                        bookmarkButton.addClass('bookmarked');
+                    } else {
+                        bookmarkButton.removeClass('bookmarked');
+                    }
+                }).fail(function (xhr, status, error) {
+                    // 로그인 리다이렉션 확인
+                    if (xhr.status == 302) {
+                        window.location.href = xhr.getResponseHeader('Location');
+                    } else {
+                        alert('북마크 요청에 실패했습니다. 다시 시도해주세요.');
+                    }
+                });
+            });
 
-        // 모달 닫기 (X 버튼 클릭 시)
-        $('.close').click(function() {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "none";
-        });
+            // "신청하기" 버튼 클릭 시 모달 열기 기능
+            $('#openModalBtn').click(function () {
+                var modal = document.getElementById("myModal");
+                modal.style.display = "flex";
+            });
 
-        // 모달 닫기 (모달 외부 클릭 시)
-        window.onclick = function(event) {
-            var modal = document.getElementById("myModal");
-            if (event.target == modal) {
+            // 모달 닫기 (X 버튼 클릭 시)
+            $('.close').click(function () {
+                var modal = document.getElementById("myModal");
                 modal.style.display = "none";
-            }
-        };
-    });
+            });
 
-    // 모달 열기
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModalBtn");
-    var span = document.getElementById("coffeechat-modal-close");
+            // 모달 닫기 (모달 외부 클릭 시)
+            window.onclick = function (event) {
+                var modal = document.getElementById("myModal");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
 
-    btn.onclick = function() {
-        modal.style.display = "flex";
-    }
+            // 탭 전환 기능
+            const tabItems = document.querySelectorAll(".tab-item");
+            const tabContents = document.querySelectorAll(".tab-content");
 
-    // 모달 닫기 (X 버튼 클릭 시)
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+            tabItems.forEach(item => {
+                item.addEventListener("click", function () {
+                    // 모든 탭 아이템에서 active 클래스 제거
+                    tabItems.forEach(i => i.classList.remove("active"));
+                    // 클릭된 탭에 active 클래스 추가
+                    this.classList.add("active");
 
-    // 모달 닫기 (모달 외부 클릭 시)
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-  </script>
-{% endblock %}
+                    // 모든 탭 콘텐츠 숨기기
+                    tabContents.forEach(content => content.classList.remove("active-content"));
+                    tabContents.forEach(content => content.style.display = "none");
+
+                    // 클릭된 탭과 관련된 콘텐츠 표시
+                    const target = this.getAttribute("data-target");
+                    document.getElementById(target).classList.add("active-content");
+                    document.getElementById(target).style.display = "block";
+                });
+            });
+        });
+    </script>
+
+    {% endblock %}
