@@ -68,11 +68,11 @@
     <div class="comments">
       {% for comment in comments %}
           {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
-          <div class="comment-block"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
+          <div class="comment-block" id="comment-block-{{ comment.id }}"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
               <div class="comment">
                   <p>{{ comment.content }}</p>
                   <div class="comment-meta">
-                    <span><i class="fas fa-user"></i> 
+                    <span><i class="fas fa-user"></i>
                       {% if comment.writer == user %}
                         <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
                       {% else %}
@@ -93,16 +93,17 @@
                       </div>
                   </div>
                   <br/>
-  
+
                   <!-- 대댓글 표시 -->
                   <div class="replies">
                     {% for reply in comment.get_replies %}
+                    <div class="comment-block" id="comment-block-{{ reply.id }}">
                         <div style="display: flex; align-items: center; margin-left: 20px;">
                             <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
                             <div class="comment reply-comment" style="margin-left: 10px;">
                                 <p>{{ reply.content }}</p>
                                 <div class="comment-meta">
-                                    <span><i class="fas fa-user"></i> 
+                                    <span><i class="fas fa-user"></i>
                                       {% if reply.writer == user %}
                                         <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
                                       {% else %}
@@ -123,13 +124,14 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     {% empty %}
                     {% endfor %}
                   </div>
-  
+
                   <!-- 대댓글 입력 폼 -->
                   <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
-                      <form method="post" action="{% url 'corboard:cor_add_comment' pk=cor.pk %}">
+                      <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
                           {% csrf_token %}
                           <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
                           <input type="hidden" name="parent" value="{{ comment.id }}">
@@ -145,13 +147,12 @@
       {% empty %}
           <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
       {% endfor %}
-    </div>  
-
-    <form class="comment-form" method="post" action="{% url 'corboard:cor_add_comment' pk=cor.pk %}">
-        {% csrf_token %}
-        <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
-        <button type="submit" class="btn-add-comment">등록</button>
-    </form>
+    </div>
+      <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
+          {% csrf_token %}
+          <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
+          <button type="submit" class="btn-add-comment">등록</button>
+      </form>
   </div>
     <div class="action-buttons-bottom">
         <a href="{% url 'corboard:cor_list' %}" class="btn-action btn-back">
@@ -174,11 +175,20 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  $(document).ready(function() {
-    // CSRF 토큰 가져오기
-    function getCSRFToken() {
-      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    }
+    $(document).ready(function() {
+        // CSRF 토큰 가져오기
+        function getCSRFToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
+
+        // AJAX 설정
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                }
+            }
+        });
 
     // 좋아요 기능
     $('.btn-like').click(function(e) {
@@ -256,7 +266,7 @@
             'X-CSRFToken': getCSRFToken()
           },
           success: function() {
-            location.reload();
+              $('#comment-block-' + commentId).remove();
           },
           error: function(xhr, status, error) {
             if (xhr.status == 302) {
@@ -269,30 +279,7 @@
       }
     });
 
-    // 댓글 및 대댓글 작성 기능
-    $(document).on('submit', '.comment-form', function(e) {
-      e.preventDefault();
-      var form = $(this);
-      var formData = form.serialize();
-      var parentId = form.find('input[name="parent"]').val();
 
-      $.post(form.attr('action'), formData, function(data) {
-        if (data.success) {
-          var newCommentHtml = $(data.comment_html);
-          if (parentId) {
-            $('#reply-form-' + parentId).before(newCommentHtml);
-            $('#reply-form-' + parentId).hide();
-          } else {
-            $('.comments').append(newCommentHtml);
-          }
-          form.find('textarea').val('');
-        } else {
-          alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
-        }
-      }).fail(function(xhr, status, error) {
-        alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
-      });
-    });
 
     // 답글 폼 표시 및 숨기기
     $(document).on('click', '.btn-reply', function() {
@@ -301,6 +288,38 @@
     });
 
   });
+
+  // 댓글 및 대댓글 작성 기능
+  function submitCommentForm(form, parentId = null) {
+      var formData = $(form).serializeArray();
+      var postId = "{{ cor.id }}";
+      console.log("Form data before submission:", formData);
+
+      // content 필드 확인
+      var contentField = formData.find(field => field.name === 'content');
+
+      // content 필드가 비어 있는지 확인
+      if (!contentField || !contentField.value.trim()) {
+          alert("댓글 내용을 입력하세요.");
+          return;
+      }
+
+      $.post("/corboard/" + postId + "/comment/",formData, function(data) {
+          if (data.success) {
+              if (parentId) {
+                  $('#reply-form-' + parentId).before(data.comment_html);
+                  $('#reply-form-' + parentId).hide();
+              } else {
+                  $('.comments').append(data.comment_html);
+              }
+              $(form).find('textarea').val('');
+          } else {
+              alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+          }
+      }).fail(function(xhr, status, error) {
+          alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+      });
+  }
 
   function showReplyForm(commentId) {
     var replyForm = $('#reply-form-' + commentId);

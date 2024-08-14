@@ -78,7 +78,7 @@ def cor_detail(request, pk):
     return render(request, 'corboard/corboard_detail.html', {
         'cor': cor,
         'comments': cor.cor_comments.filter(parent=None),
-        'commentForm': form,
+        'form': form,
     })
 
 @require_POST
@@ -102,13 +102,17 @@ def cor_update(request, pk):
 def cor_add_comment(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
     if request.method == "POST":
+        print("==+++++++++++=cor_comment")
+
         form = CorCommentForm(request.POST)
+
         if form.is_valid():
+            print("==+++++++++++=cor_comment2222")
             comment = form.save(commit=False)
             comment.corboard = cor
-            comment.writer = request.user
+            comment.writer = request.user if request.user.is_authenticated else None
             comment.date = timezone.now()
-            
+
             # 대댓글일 경우 parent 설정
             parent_id = request.POST.get('parent')
             if parent_id:
@@ -122,6 +126,7 @@ def cor_add_comment(request, pk):
 
             return JsonResponse({'success': True, 'comment_html': comment_html})
         else:
+            print(form.errors)
             return JsonResponse({'success': False, 'error': form.errors})
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 

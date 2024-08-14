@@ -12,7 +12,7 @@ urlpatterns = [
     path('update/<int:pk>/', cor_update, name='cor_update'),
     path('like/<int:pk>/', cor_like, name='cor_like'),
     #comment
-    path('comment/add/<int:pk>/', cor_add_comment, name='cor_add_comment'),
+    path('<int:pk>/comment/', cor_add_comment, name='cor_add_comment'),
     path('comment/delete/<int:pk>/', cor_delete_comment, name='cor_delete_comment'),
     #etc
     path('bookmark/<int:pk>/', cor_bookmark, name='cor_bookmark'),

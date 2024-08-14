@@ -121,7 +121,6 @@ def add_comment(request, trend_pk):
                 comment.parent = parent_comment
             
             comment.save()
-            # comment = get_object_or_404(Comment, id=comment.id)
             # 댓글 렌더링 HTML
             comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
             print(comment_html)
