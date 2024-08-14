@@ -96,7 +96,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     margin-top: 2rem;
-    min-height: 500px; /* 최소 높이 설정 */
+    min-height: 500px;
 }
 
 .activity-filter {
@@ -115,7 +115,7 @@ body {
     display: flex;
     overflow: hidden;
     margin-top: 1rem;
-    min-height: 400px; /* 최소 높이 설정 */
+    min-height: 400px;
 }
 
 .activity-navbar {
@@ -135,7 +135,7 @@ body {
     gap: 15px;
     padding-right: 20px;
     overflow-y: auto;
-    min-height: 400px; /* 콘텐츠 최소 높이 설정 */
+    min-height: 400px;
 }
 
 .activity-link, .filter-link {
@@ -216,7 +216,6 @@ body {
 .coffeechat-card {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 0;
     transition: transform 0.3s, box-shadow 0.3s;
     border: 1px solid #CCCCCC;
     display: flex;
@@ -230,28 +229,24 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.coffeechat-card .card-content {
-    padding: 20px;
-    flex: 1;
-}
-
-.coffeechat-card .card-image {
-    height: 150px;
+.coffeechat-card .card-header {
+    padding: 10px;
     border-radius: 8px 8px 0 0;
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(45deg, #ff6b6b, #f5f7fa);
+    display: flex;
+    align-items: center;
 }
 
 .coffeechat-card .profile-img {
     background-color: lightgray;
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 .coffeechat-card .profile-img img {
@@ -260,19 +255,28 @@ body {
     object-fit: cover;
 }
 
-.coffeechat-card .profile-info {
-    margin-left: 20px;
-    color: #333;
+.coffeechat-card .profile-details {
+    display: flex;
+    flex-direction: column;
 }
 
-.coffeechat-card h3 {
-    font-size: 1.5em;
-    margin: 10px 0;
+.coffeechat-card .profile-details .name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
 }
 
-.coffeechat-card p {
-    margin: 5px 0;
-    color: #666;
+.coffeechat-card .profile-details .job {
+    font-size: 1rem;
+    color: white;
+}
+
+.coffeechat-card .card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
 }
 
 .coffeechat-card .buttons {
@@ -281,7 +285,7 @@ body {
     margin-top: 15px;
 }
 
-.coffeechat-card button {
+.coffeechat-card button.btn-accept {
     background-color: #0BEC12;
     color: white;
     border: none;
@@ -293,15 +297,23 @@ body {
     flex: 1;
 }
 
-.coffeechat-card button.reject {
+.coffeechat-card button.btn-reject {
     background-color: #FF5A5F;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+    flex: 1;
 }
 
-.coffeechat-card button:hover {
+.coffeechat-card button.btn-accept:hover {
     background-color: #09D910;
 }
 
-.coffeechat-card button.reject:hover {
+.coffeechat-card button.btn-reject:hover {
     background-color: #FF3B3F;
 }
 
