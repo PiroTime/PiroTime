@@ -25,32 +25,34 @@
             {% for trend in page_obj %}
             {% with random_image=image_files|random %}
             <div class="trend-card">
-                <div class="trend-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
-                    {% csrf_token %}
-                    <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
-                        <i class="fas fa-bookmark"></i>
-                    </button>
-                </form>
-                <div class="trend-card-content">
-                    <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
-                    <p style="display: inline;">작성자: 
-                        {% if trend.writer == user %}
-                          <a href="{% url 'mypage:profile' %}" style="display: inline;">{{ trend.writer }}</a>
-                        {% else %}
-                          <a href="{% url 'mypage:profile_read' trend.writer.id %}" style="display: inline;">{{ trend.writer }}</a>
-                        {% endif %}
-                    </p>                      
-                    <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
-                    <div class="trend-likes">
-                        <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="button" class="like-button">
-                                <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
-                            </button>
-                        </form>
+                <a href="{% url 'trend:trend_detail' pk=trend.pk %}">
+                    <div class="trend-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                    <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </form>
+                    <div class="trend-card-content">
+                        <h2>{{ trend.title }}</h2>
+                        <p style="display: inline;">작성자:
+                            {% if trend.writer == user %}
+                              <a href="{% url 'mypage:profile' %}" style="display: inline;">{{ trend.writer }}</a>
+                            {% else %}
+                              <a href="{% url 'mypage:profile_read' trend.writer.id %}" style="display: inline;">{{ trend.writer }}</a>
+                            {% endif %}
+                        </p>
+                        <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
+                        <div class="trend-likes">
+                            <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="button" class="like-button">
+                                    <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endwith %}
             {% empty %}

@@ -134,6 +134,8 @@ body{
     cursor: pointer;
     transition: transform 0.3s ease;
     margin-bottom: 30px;
+    width: 100%; /* 카드의 너비를 고정 */
+    max-width: 200px; /* 필요시 최대 너비 설정 */
 }
 
 .trend-card:hover {
@@ -161,6 +163,10 @@ body{
 .trend-card-content h2 {
     margin: 0 0 10px 0;
     font-size: 1.2rem;
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
+    width: 100%; /* 제목의 너비를 카드에 맞게 고정 */
 }
 
 .trend-card-content p {

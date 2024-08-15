@@ -25,35 +25,36 @@
             {% load static %}
             {% for review in page_obj %}
             {% with random_image=image_files|random %}
-            <div class="review-card">
-                <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                <form class="bookmark-form" data-review-id="{{ review.pk }}" action="{% url 'review:bookmark_review' review.pk %}" method="post">
-                    {% csrf_token %}
-                    <button type="button" class="scrap-icon {% if request.user in review.bookmarks.all %} scrapped{% endif %}">
-                        <i class="fas fa-bookmark"></i>
-                    </button>
-                </form>
-
-                <div class="review-card-content">
-                    <h2><a href="{% url 'review:review_detail' pk=review.pk %}">{{ review.title }}</a></h2>
-                    <p>작성자: 
-                        {% if review.writer == user %}
-                          <a href="{% url 'mypage:profile' %}">{{ review.writer }}</a>
-                        {% else %}
-                          <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a>
-                        {% endif %} 
-                        / 날짜: {{ review.date|date:"Y년 m월 d일" }}
-                    </p>
-                    <div class="review-likes">
-                        <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="button" class="like-button">
-                                <i class="fas fa-heart {% if request.user in review.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ review.likes.count }}</span>
-                            </button>
-                        </form>
+            <a href="{% url 'review:review_detail' pk=review.pk %}">
+                <div class="review-card">
+                    <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                    <form class="bookmark-form" data-review-id="{{ review.pk }}" action="{% url 'review:bookmark_review' review.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="scrap-icon {% if request.user in review.bookmarks.all %} scrapped{% endif %}">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </form>
+                    <div class="review-card-content">
+                        <h2>{{ review.title }}</h2>
+                        <p>작성자:
+                            {% if review.writer == user %}
+                              <a href="{% url 'mypage:profile' %}">{{ review.writer }}</a>
+                            {% else %}
+                              <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a>
+                            {% endif %}
+                            / 날짜: {{ review.date|date:"Y년 m월 d일" }}
+                        </p>
+                        <div class="review-likes">
+                            <form class="like-form" data-review-id="{{ review.pk }}" action="{% url 'review:like_review' pk=review.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="button" class="like-button">
+                                    <i class="fas fa-heart {% if request.user in review.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ review.likes.count }}</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endwith %}
             {% empty %}
             <p>게시글이 없습니다.</p>
