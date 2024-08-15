@@ -95,8 +95,7 @@
                                 const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const requestElement = `
                                     <div class="coffeechat-card">
-                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
-                                        <div class="card-content">
+                                        <div class="card-header" style="background-image: url('${randomImage}');">
                                             <div class="profile-img">
                                                 {% if request.profile_image %}
                                                     <img src="{{ request.profile_image.url }}" alt="Profile Image">
@@ -104,8 +103,12 @@
                                                     <i class="fas fa-user"></i>
                                                 {% endif %}
                                             </div>
-                                            <p>받는 사람: ${request.receiver}</p>
-                                            <span>직업: ${request.job}</span><br>
+                                            <div class="profile-details">
+                                                <span class="name">${request.sender || request.receiver}</span>
+                                                <span class="job">${request.job}</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
                                             <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
                                             <span>상태: ${request.status}</span>
                                         </div>
@@ -118,8 +121,7 @@
                                 const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const requestElement = `
                                     <div class="coffeechat-card">
-                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
-                                        <div class="card-content">
+                                        <div class="card-header" style="background-image: url('${randomImage}');">
                                             <div class="profile-img">
                                                 {% if request.profile_image %}
                                                     <img src="{{ request.profile_image.url }}" alt="Profile Image">
@@ -127,8 +129,12 @@
                                                     <i class="fas fa-user"></i>
                                                 {% endif %}
                                             </div>
-                                            <p>보낸 사람: ${request.sender}</p>
-                                            <span>직업: ${request.job}</span><br>
+                                            <div class="profile-details">
+                                                <span class="name">${request.sender}</span>
+                                                <span class="job">${request.job}</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
                                             <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
                                             <span>상태: ${request.status}</span>
                                             <div class="buttons">
@@ -151,8 +157,7 @@
                                 const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const coffeechatElement = `
                                     <div class="coffeechat-card">
-                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
-                                        <div class="card-content">
+                                        <div class="card-header" style="background-image: url('${randomImage}');">
                                             <div class="profile-img">
                                                 {% if coffeechat.profile_image %}
                                                     <img src="{{ coffeechat.profile_image.url }}" alt="Profile Image">
@@ -160,8 +165,12 @@
                                                     <i class="fas fa-user"></i>
                                                 {% endif %}
                                             </div>
-                                            <p>받는 사람: ${coffeechat.receiver}</p>
-                                            <span>직업: ${coffeechat.job}</span><br>
+                                            <div class="profile-details">
+                                                <span class="name">${coffeechat.receiver}</span>
+                                                <span class="job">${coffeechat.job}</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
                                             <span>요청 시간: ${new Date(coffeechat.created_at).toLocaleString()}</span><br>
                                             <span>내용: ${coffeechat.content}</span>
                                         </div>
@@ -174,8 +183,7 @@
                                 const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                                 const requestElement = `
                                     <div class="coffeechat-card">
-                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
-                                        <div class="card-content">
+                                        <div class="card-header" style="background-image: url('${randomImage}');">
                                             <div class="profile-img">
                                                 {% if request.profile_image %}
                                                     <img src="{{ request.profile_image.url }}" alt="Profile Image">
@@ -183,8 +191,12 @@
                                                     <i class="fas fa-user"></i>
                                                 {% endif %}
                                             </div>
-                                            <p>보낸 사람: ${request.sender}</p>
-                                            <span>직업: ${request.job}</span><br>
+                                            <div class="profile-details">
+                                                <span class="name">${request.sender}</span>
+                                                <span class="job">${request.job}</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
                                             <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
                                             <span>상태: ${request.status}</span>
                                             ${request.review ? `
