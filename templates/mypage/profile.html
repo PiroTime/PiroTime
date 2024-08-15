@@ -74,24 +74,34 @@
                 .then(data => {
                     const activityContent = document.getElementById('activity-content');
                     activityContent.innerHTML = '';
-        
+                    
                     if (filter === 'profile_info') {
+                        activityContent.classList.remove('grid-content');
+                        activityContent.classList.add('centered-content');
+                    } else {
+                        activityContent.classList.remove('centered-content');
+                        activityContent.classList.add('grid-content');
+                    } 
+
+                    if (filter === 'profile_info') {
+                        // filter에 따라 display 속성 변경  
+                        
                         const profileInfo = `
                             <div class="myinfo">
                                 <div class="myinfo-item">
-                                    <strong>사용자 이름:</strong> sonny
+                                    <strong>사용자 이름:</strong> {{ user.username }}
                                 </div>
                                 <div class="myinfo-item">
-                                    <strong>이메일 주소:</strong> panwoo@piro.com
+                                    <strong>이메일 주소:</strong> {{ user.email }}
                                 </div>
                                 <div class="myinfo-item">
-                                    <strong>닉네임:</strong> sonny
+                                    <strong>닉네임:</strong> {{ user.nickname}}
                                 </div>
                                 <div class="myinfo-item">
-                                    <strong>기수:</strong> 21
+                                    <strong>기수:</strong> {{ user.cohort}}
                                 </div>
                                 <div class="myinfo-item">
-                                    <strong>소개:</strong> null
+                                    <strong>소개:</strong> {{ user.intro|default_if_none:'자기소개 없음' }}
                                 </div>
                                 ${data.profile_image ? `<div class="myinfo-item"><img src="${data.profile_image}" alt="프로필 이미지" class="profile-image"></div>` : ''}
                                 <a href="{% url 'mypage:profile_edit' %}" class="btn-primary">Edit</a>

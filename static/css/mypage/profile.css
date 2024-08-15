@@ -72,6 +72,7 @@ body {
     font-size: 1rem;
     margin-bottom: 1rem;
     margin-left: 1rem;
+    margin-left: 50px;
 }
 
 /* 버튼 스타일 */
@@ -134,12 +135,7 @@ body {
 
 /* 활동 내용 */
 .activity-content {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
-    padding-right: 20px;
-    overflow-y: auto;
-    min-height: 400px;
+    display: flex;
 }
 
 .activity-link, .filter-link {
@@ -172,7 +168,9 @@ body {
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
-    height: 200px;
+    height: 200px; /* 카드 높이 고정 */
+    width: 150px; /* 카드 너비 고정 */
+
 }
 
 .activity-card:hover {
@@ -192,6 +190,9 @@ body {
     font-size: 1.2rem;
     margin: 0 0 5px 0;
     font-weight: 500;
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트를 ...으로 표시 */
 }
 
 .activity-card span {
@@ -352,6 +353,26 @@ body {
 }
 
 /* 내정보 스타일 */
+/* 기본 상태: 그리드 레이아웃 */
+.grid-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding-right: 20px;
+    overflow-y: auto;
+    min-height: 400px;
+}
+
+/* profile_info일 때만 적용되는 중앙 정렬 스타일 */
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    margin: 0 auto; /* 이 스타일로 인해 중앙에 배치 */
+}
+
 .myinfo {
     display: flex;
     flex-direction: column;
