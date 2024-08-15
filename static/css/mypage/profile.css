@@ -24,14 +24,29 @@ body {
     display: flex;
     align-items: center;
     margin-bottom: 2rem;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
 }
 
 .profile-image {
-    flex: 0 0 150px;
-    margin-right: 2rem;
+    flex: 0 0 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width: 100px;
+    height: 100px;
+    background-color: #cccccc;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-image img, .profile-image i {
+    max-width: 100%;
+    max-height: 100%;
+    color: #555555;
 }
 
 .profile-image img {
@@ -49,14 +64,17 @@ body {
     font-size: 1.6rem;
     font-weight: 500;
     margin: 0 0 0.5rem 0;
+    margin-left: 1rem;
 }
 
 .profile-info p {
     color: black;
-    font-size: 1.6rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
+    margin-left: 1rem;
 }
 
+/* 버튼 스타일 */
 .btn-primary {
     background-color: #0BEC12;
     color: white;
@@ -79,6 +97,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     margin-top: 2rem;
+    min-height: 500px;
 }
 
 .activity-filter {
@@ -92,13 +111,16 @@ body {
     padding-bottom: 1rem;
 }
 
+/* 활동 내용 래퍼 */
 .activity-content-wrapper {
     flex: 1;
     display: flex;
     overflow: hidden;
     margin-top: 1rem;
+    min-height: 400px;
 }
 
+/* 활동 네비게이션 바 */
 .activity-navbar {
     flex-shrink: 0;
     display: flex;
@@ -110,12 +132,14 @@ body {
     width: 220px;
 }
 
+/* 활동 내용 */
 .activity-content {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 15px;
     padding-right: 20px;
     overflow-y: auto;
+    min-height: 400px;
 }
 
 .activity-link, .filter-link {
@@ -155,7 +179,6 @@ body {
     transform: translateY(-5px);
 }
 
-/* 카드 상단 이미지 섹션 */
 .card-image {
     height: 100px;
     margin-bottom: 10px;
@@ -165,15 +188,21 @@ body {
     position: relative;
 }
 
-/* 카드 제목과 텍스트 섹션 */
 .activity-card h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin: 0 0 5px 0;
     font-weight: 500;
 }
 
+.activity-card span {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0 0 10px 0;
+    flex: 1;
+}
+
 .activity-card p {
-    font-size: 1rem;
+    font-size: 1.5rem;
     color: #666;
     margin: 0 0 10px 0;
     flex: 1;
@@ -185,90 +214,120 @@ body {
 }
 
 /* 커피챗 카드 스타일 */
-.coffeechat-item,
 .coffeechat-card {
-    background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
     border: 1px solid #CCCCCC;
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    background-color: #fff;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 250px;
+    padding: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.coffeechat-item:hover,
 .coffeechat-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-.coffeechat-item p,
-.coffeechat-card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-    font-weight: 500;
-    color: #333;
+.coffeechat-card .card-header {
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f4f4f4;
+    height: 50%;
 }
 
-.coffeechat-item .info,
-.coffeechat-card .info {
-    font-size: 1rem;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.coffeechat-item .profile-img,
 .coffeechat-card .profile-img {
+    background-color: lightgray;
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #f0f0f0;
-    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
-.coffeechat-item .status,
-.coffeechat-item .request-time {
-    font-size: 1rem;
-    color: #999;
+.coffeechat-card .profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.coffeechat-card .profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10px;
+}
+
+.coffeechat-card .profile-details .name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.coffeechat-card .profile-details .job {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.coffeechat-card .card-content {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    height: 50%;
+    background-color: #ffffff;
+}
+
+.coffeechat-card .card-content span {
+    font-size: 1.1rem;
+    color: #333;
     margin-bottom: 5px;
 }
 
-.coffeechat-item .buttons,
 .coffeechat-card .buttons {
     display: flex;
     gap: 10px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
-.coffeechat-item button,
-.coffeechat-card button {
+.coffeechat-card button.btn-accept, 
+.coffeechat-card button.btn-reject {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.coffeechat-card button.btn-accept {
     background-color: #0BEC12;
     color: white;
-    border: none;
-    padding: 0.5rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
-    flex: 1;
 }
 
-.coffeechat-item button.reject,
-.coffeechat-card button.reject {
-    background-color: #FF5A5F;
+.coffeechat-card button.btn-reject {
+    background-color: #FF4D4D;
+    color: white;
 }
 
-.coffeechat-item button:hover,
-.coffeechat-card button:hover {
+.coffeechat-card button.btn-accept:hover {
     background-color: #09D910;
+    transform: scale(1.05);
 }
 
-.coffeechat-item button.reject:hover,
-.coffeechat-card button.reject:hover {
-    background-color: #FF3B3F;
+.coffeechat-card button.btn-reject:hover {
+    background-color: #FF3333;
+    transform: scale(1.05);
 }
 
 /* 커피챗 네비게이션 */
@@ -293,23 +352,58 @@ body {
 }
 
 /* 내정보 스타일 */
-.profile-info-section {
+.myinfo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 40px;
-    text-align: center;
+    padding: 20px;
+    max-width: 800px; /* 필터 섹션 너비에 맞춰 조정 */
+    margin: 0 auto;
+    position: relative; /* 중앙 배치를 위해 추가 */
+    left: 50%; /* 왼쪽에서 50% 이동 */
+    transform: translateX(-50%); /* 중앙으로 위치 조정 */
 }
 
-.profile-info-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.profile-info-item {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
+.myinfo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid #0BEC12;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    font-size: 1.2rem;
     color: #666;
+    width: 100%;
+    max-width: 800px;
+}
+
+.myinfo-item strong {
+    min-width: 150px;
+}
+
+.myinfo-item img.profile-image {
+    display: block;
+    max-width: 100px;
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.myinfo .btn-primary {
+    background-color: #0BEC12;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 20px;
+    width: 100px;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.myinfo .btn-primary:hover {
+    background-color: #09D910;
 }
