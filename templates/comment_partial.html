@@ -24,10 +24,10 @@
     </div>
     {% else %}
     <!-- 대댓글 표시 -->
-    <div class="replies" style="margin-left: 20px; display: flex; align-items: center;">
+    <div class="replies" style="margin-left: 20px; display: flex; align-items: center;" id="comment-{{ comment.id }}">
 {#      {% for reply in comment.get_replies %}#}
         <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
-        <div class="comment reply-comment" id="comment-{{ comment.id }}">
+        <div class="comment reply-comment" >
           <p>{{ comment.content }}</p>
           <div class="comment-meta">
             <span><i class="fas fa-user"></i> 

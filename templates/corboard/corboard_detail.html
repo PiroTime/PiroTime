@@ -98,8 +98,8 @@
     <div class="comments">
       {% for comment in comments %}
           {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
-          <div class="comment-block" id="comment-block-{{ comment.id }}"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
-              <div class="comment">
+          <div class="comment-block" > <!-- 각 댓글 블록을 감싸는 div 추가 -->
+              <div class="comment" id="comment-{{ comment.id }}">
                   <p>{{ comment.content }}</p>
                   <div class="comment-meta">
                     <span><i class="fas fa-user"></i>
@@ -127,8 +127,8 @@
                   <!-- 대댓글 표시 -->
                   <div class="replies">
                     {% for reply in comment.get_replies %}
-                    <div class="comment-block" id="comment-block-{{ reply.id }}">
-                        <div style="display: flex; align-items: center; margin-left: 20px;">
+                    <div class="comment-block" >
+                        <div style="display: flex; align-items: center; margin-left: 20px;" id="comment-{{ reply.id }}">
                             <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
                             <div class="comment reply-comment" style="margin-left: 10px;">
                                 <p>{{ reply.content }}</p>
@@ -170,7 +170,7 @@
                   </div>
               </div>
               {% if not forloop.last %}
-                  <hr class="comment-divider"/>
+{#                  <hr class="comment-divider"/>#}
               {% endif %}
           </div> <!-- .comment-block 끝 -->
           {% endif %}
@@ -285,8 +285,7 @@
     });
 
     // 댓글 삭제 기능
-    $('.btn-delete-comment').click(function(e) {
-      e.preventDefault();
+    $(document).on('click', '.btn-delete-comment', function(){
       var commentId = $(this).data('comment-id');
       if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
         $.ajax({
@@ -296,7 +295,7 @@
             'X-CSRFToken': getCSRFToken()
           },
           success: function() {
-              $('#comment-block-' + commentId).remove();
+              $('#comment-' + commentId).remove();
           },
           error: function(xhr, status, error) {
             if (xhr.status == 302) {

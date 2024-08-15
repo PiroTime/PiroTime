@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.mail import EmailMessage, send_mail
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
@@ -138,10 +138,10 @@ def cor_add_comment(request, pk):
 @login_required
 def cor_delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
-    corboard_id = comment.corboard.id
-    if comment.writer == request.user:
-        comment.delete()
-    return redirect('corboard:cor_detail', pk=corboard_id)
+    if comment.writer != request.user and not request.user.is_staff:
+        return HttpResponseForbidden()
+    comment.delete()
+    return JsonResponse({'success': True})
 
 @login_required
 def cor_like(request,  pk):
