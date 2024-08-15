@@ -68,13 +68,13 @@
     
         function loadActivities(filter, category) {
             const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
-    
+        
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     const activityContent = document.getElementById('activity-content');
                     activityContent.innerHTML = '';
-    
+        
                     if (filter === 'profile_info') {
                         const profileInfo = `
                             <div class="myinfo">
@@ -100,7 +100,7 @@
                         activityContent.innerHTML = profileInfo;
                     } else if (filter === 'coffeechat') {
                         let coffeechatCards = '';
-    
+        
                         if (category === 'requests_sent' && data.requests_sent) {
                             data.requests_sent.forEach(request => {
                                 coffeechatCards += createCoffeeChatCard(request, 'sent');
@@ -120,13 +120,13 @@
                         } else {
                             coffeechatCards = '<p>해당하는 요청이 없습니다.</p>';
                         }
-    
+        
                         activityContent.innerHTML = coffeechatCards;
                     } else {
                         if (data.posts && data.posts.length > 0) {
                             data.posts.forEach(post => {
                                 const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
-    
+        
                                 const postElement = document.createElement('div');
                                 postElement.classList.add('activity-card');
                                 postElement.innerHTML = `
@@ -146,7 +146,7 @@
                 })
                 .catch(error => console.error('Error loading activities:', error));
         }
-    
+        
         function createCoffeeChatCard(request, category) {
             const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
             let cardContent = `
@@ -162,10 +162,11 @@
                     </div>
                     <div class="card-content">
                         <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
-                        <span>상태: ${request.status}</span>
             `;
-    
-            if (category === 'received') {
+        
+            if (category === 'sent') {
+                cardContent += `<h3>선배님 기다리는 중</h3>`;
+            } else if (category === 'received') {
                 cardContent += `
                     <div class="buttons">
                         <form method="post" action="${request.accept_url}">
@@ -178,9 +179,7 @@
                         </form>
                     </div>
                 `;
-            }
-    
-            if (category === 'history' && request.review) {
+            } else if (category === 'history' && request.review) {
                 cardContent += `
                     <div class="review">
                         <p><strong>리뷰:</strong></p>
@@ -189,15 +188,14 @@
                         <p>리뷰 작성 시간: ${new Date(request.review.created_at).toLocaleString()}</p>
                     </div>
                 `;
-            }
-    
+            }     
             cardContent += `
                     </div>
                 </div>
             `;
-    
+        
             return cardContent;
-        }
+        }   
     
         function addActivityLinkEventListeners() {
             const activityLinks = document.querySelectorAll('.activity-link');
