@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
-<link rel="stylesheet" href="{% static 'css/coffeechat/list.css' %}">
 
 <div class="profile-container">
     <div class="profile-header">
@@ -78,14 +77,24 @@
     
                     if (filter === 'profile_info') {
                         const profileInfo = `
-                            <div class="profile-info-card">
-                                <p><strong>사용자 이름:</strong> ${data.username}</p>
-                                <p><strong>이메일 주소:</strong> ${data.email}</p>
-                                <p><strong>닉네임:</strong> ${data.nickname}</p>
-                                <p><strong>기수:</strong> ${data.cohort}</p>
-                                <p><strong>소개:</strong> ${data.intro}</p>
-                                ${data.profile_image ? `<img src="${data.profile_image}" alt="프로필 이미지">` : ''}
-                                <a href="{% url 'mypage:profile_edit' %}" class="btn btn-primary">프로필 수정</a>
+                            <div class="myinfo">
+                                <div class="myinfo-item">
+                                    <strong>사용자 이름:</strong> sonny
+                                </div>
+                                <div class="myinfo-item">
+                                    <strong>이메일 주소:</strong> panwoo@piro.com
+                                </div>
+                                <div class="myinfo-item">
+                                    <strong>닉네임:</strong> sonny
+                                </div>
+                                <div class="myinfo-item">
+                                    <strong>기수:</strong> 21
+                                </div>
+                                <div class="myinfo-item">
+                                    <strong>소개:</strong> null
+                                </div>
+                                ${data.profile_image ? `<div class="myinfo-item"><img src="${data.profile_image}" alt="프로필 이미지" class="profile-image"></div>` : ''}
+                                <a href="{% url 'mypage:profile_edit' %}" class="btn-primary">Edit</a>
                             </div>
                         `;
                         activityContent.innerHTML = profileInfo;
