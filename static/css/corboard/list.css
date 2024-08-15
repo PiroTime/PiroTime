@@ -3,14 +3,14 @@ body{
     font-family: 'Hubballi', sans-serif; 
 }
 
-.main-container {
+.main--container {
     max-width: 1000px;
     margin: 3rem auto;
     padding: 20px;
     padding-bottom: 5rem;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 19rem);
+    min-height: 100vh;
 }
 
 /*------- 검색 -------*/
