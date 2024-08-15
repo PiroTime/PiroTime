@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from .models import Review, Comment
 from .forms import ReviewForm, CommentForm, ReviewSearchForm
 
+@login_required
 def review_list(request):
     search = request.GET.get('search', '')
     search_form = ReviewSearchForm(request.GET)
@@ -56,6 +57,7 @@ def review_list(request):
         'image_files': image_files
     })
 
+@login_required
 def review_create(request):
     if request.method == "POST":
         form = ReviewForm(request.POST)
@@ -69,6 +71,7 @@ def review_create(request):
         form = ReviewForm()
     return render(request, 'review/review_create.html', {'form': form})
 
+@login_required
 def review_delete(request, pk):
     review = get_object_or_404(Review, pk=pk)
     if review.writer != request.user and not request.user.is_staff:
@@ -76,6 +79,7 @@ def review_delete(request, pk):
     review.delete()
     return redirect('review:review_list')
 
+@login_required
 def review_update(request, pk):
     review = get_object_or_404(Review, pk=pk)
     
@@ -112,6 +116,7 @@ def review_detail(request, pk):
         'user': request.user,
     })
 
+@login_required
 def add_comment(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     if request.method == "POST":
@@ -139,6 +144,7 @@ def add_comment(request, review_pk):
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 @csrf_protect
+@login_required
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if comment.writer != request.user and not request.user.is_staff:

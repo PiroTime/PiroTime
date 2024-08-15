@@ -18,6 +18,7 @@ from apps.corboard.forms import CorboardForm, CorCommentForm
 from apps.corboard.forms import CorboardForm, CorCommentForm, CorSearchForm
 from apps.corboard.models import Corboard, Comment
 
+@login_required
 def cor_list(request):
     search_content = request.GET.get('searchContent', '')
     order_by = request.GET.get('order_by', 'date')
@@ -54,6 +55,7 @@ def cor_list(request):
         'image_files': image_files
     })
 
+@login_required
 def cor_create(request):
     if request.method == "POST":
         print("createL post")
@@ -71,6 +73,7 @@ def cor_create(request):
         form = CorboardForm()
         return render(request, 'corboard/corboard_create.html', {'form': form})
 
+@login_required
 def cor_detail(request, pk):
     print("cor_detail")
     cor = get_object_or_404(Corboard, pk=pk)
@@ -82,11 +85,13 @@ def cor_detail(request, pk):
     })
 
 @require_POST
+@login_required
 def cor_delete(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
     cor.delete()
     return redirect("corboard:cor_list")
 
+@login_required
 def cor_update(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
     if request.method == "GET":
@@ -130,6 +135,7 @@ def cor_add_comment(request, pk):
             return JsonResponse({'success': False, 'error': form.errors})
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
+@login_required
 def cor_delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     corboard_id = comment.corboard.id
@@ -137,6 +143,7 @@ def cor_delete_comment(request, pk):
         comment.delete()
     return redirect('corboard:cor_detail', pk=corboard_id)
 
+@login_required
 def cor_like(request,  pk):
     cor = get_object_or_404(Corboard, pk=pk)
 
@@ -149,6 +156,7 @@ def cor_like(request,  pk):
 
     return JsonResponse({'liked': liked, 'total_likes': cor.total_likes()})
 
+@login_required
 def cor_bookmark(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
     if cor.bookmarks.filter(id=request.user.id).exists():
@@ -159,6 +167,7 @@ def cor_bookmark(request, pk):
         bookmarked = True
     return JsonResponse({'bookmarked': bookmarked, 'total_likes': cor.total_bookmark()})
 
+@login_required
 def cor_search(request):
     query = request.GET.get('searchContent')
     print(query)
@@ -176,6 +185,7 @@ def generate_email_content(sender, receiver):
     recipient_list = [receiver.email]
     return subject, message, from_email, recipient_list
 
+@login_required
 def cor_mail(request, pk):
     receiver = get_object_or_404(Corboard, pk=pk).writer
     sender = request.user

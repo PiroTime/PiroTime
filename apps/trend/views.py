@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from .models import Trend, Comment
 from .forms import TrendForm, CommentForm
 
+@login_required
 def trend_list(request):
     search = request.GET.get('search', '')
     order_by = request.GET.get('order_by', 'date')
@@ -48,6 +49,7 @@ def trend_list(request):
         'image_files': image_files
     })
 
+@login_required
 def trend_create(request):
     if request.method == "POST":
         form = TrendForm(request.POST)
@@ -61,6 +63,7 @@ def trend_create(request):
         form = TrendForm()
     return render(request, 'trend/trend_create.html', {'form': form})
 
+@login_required
 def trend_delete(request, pk):
     trend = get_object_or_404(Trend, pk=pk)
     if trend.writer != request.user and not request.user.is_staff:
@@ -68,6 +71,7 @@ def trend_delete(request, pk):
     trend.delete()
     return redirect('trend:trend_list')
 
+@login_required
 def trend_update(request, pk):
     trend = get_object_or_404(Trend, pk=pk)
     
