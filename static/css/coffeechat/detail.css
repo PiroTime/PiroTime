@@ -45,9 +45,8 @@
     background: white;
     padding: 10px 20px 0 20px;
     border-radius: 10px;
-}
-.profile-details-box{
-    border-top: 2px solid #cccccc;
+    display: contents;
+    margin: 0px 115px;
 }
 
 .flex {
@@ -70,6 +69,7 @@
 .profile-content div {
     line-height: 1.6;
     font-size: 1.2em;
+    border-bottom: 1px solid #ddd;
 }
 
 .action-buttons {
