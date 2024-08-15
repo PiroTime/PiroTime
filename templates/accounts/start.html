@@ -4,247 +4,111 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/account/start.css' %}">
 <style>
-    :root {
-        --primary-color: #3498db; /* 주 색상 */
-        --secondary-color: #2ecc71; /* 보조 색상 */
-        --text-color: #333;
-        --background-color: #f4f4f4;
-        --card-bg-color: #fff;
-        --card-border-color: #e0e0e0;
-        --hover-color: #2980b9;
-    }
+    /* 반응형 디자인 - 768px 이하일 때 */
+    @media screen and (max-width: 768px) {
+        /* content-section: 1줄로 세로 나열 */
+        .content-section {
+            grid-template-columns: 1fr;
+        }
 
+        /* 배너 크기 및 레이아웃 조정 */
+        .banner {
+            padding: 10px; /* 상하 좌우 여백 조정 */
+            flex-direction: column; /* 배너 내 요소들을 세로로 배치 */
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative; /* 아이콘의 절대 위치를 기준으로 설정 */
+        }
 
-    .description {
-        font-size: 1.2rem;
-    }
+        /* 배너 아이콘 크기 및 위치 조정 */
+        .icon-container {
+            display: flex;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .start-title {
-        font-size: 1.2rem;
+        .icon-container.left {
+            left: 10px;
+        }
+
+        .icon-container.right {
+            right: 10px;
+        }
+
+        /* 배너 내용 중앙 정렬 */
+        .banner-content {
+            flex: 1 1 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%; /* 부모 컨테이너 높이 전체 사용 */
+        }
     }
     
-    .content-card {
-        border: 1.5px solid #ccc;
-        box-sizing: border-box;
-        height: 100px; /* 높이를 고정할 경우 이 값을 조절 */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* 카드의 위아래 끝에 내용이 붙도록 설정 */
-    }
+    /* 반응형 디자인 - 450px 이하일 때 */
+    @media screen and (max-width: 450px) {
+        /* content-card 크기 조정 */
+        .content-card {
+            padding: 15px; /* 여백 조정 */
+        }
 
-    .description {
-        font-size: 1.2rem;
-    }
-    
-    .content-card {
-        border: 1.5px solid #ccc;
-        padding: 10px;
-        box-sizing: border-box;
-        width: 95%;
-    }
+        .banner-title {
+            font-size: 1.5rem; /* 제목 크기 조정 */
+        }
 
-    .start-content {
-        height: 20px;
-        margin: 0;
-        font-size: 1rem;
-        color: gray;
-        display: none;
+        .banner-description {
+            font-size: 1rem; /* 설명 텍스트 크기 조정 */
+        }
     }
-
-    .start-job {
-        margin: 0 0 0 10px;
-        font-size: 0.8rem;
-        font-weight: 100;
-        color: gray;
-    }
-
-    .content-meta {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-        white-space: nowrap; 
-        text-overflow: ellipsis;
-    }
-
-    .meta-author,
-    .meta-time,
-    .meta-likes {
-        flex-shrink: 0; 
-        margin-right: 10px;
-        align-items: center;
-        line-height: 1.4;
-    }
-
-    .meta-time {
-        margin-left: 10px;
-    }
-
-    .meta-likes {
-        margin-left: auto; /* 오른쪽 끝에 정렬 */
-    }
-
-    .writer {
-        color: gray;
-        font-size: 1.2rem;
-        margin-right: 5px;
-    }
-
-    .content-hashtags-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-
-    .hashtag {
-        display: inline-block;
-        border-radius: 5px;
-        padding: 5px 10px;
-        margin-right: 10px;
-        border: 1px solid #CCCCCC;
-        font-size: 0.85rem;
-    }
-
-    .banner {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        padding: 20px;
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: center;
-        font-size: 1.4rem;
-        height: 278px;
-        align-items: center;
-        color: white;
-    }
-
-    .icon-container i {
-        font-size: 25px;
-        color: white;
-    }
-
-    .banner-content {
-        flex: 0 0 90%;
-        text-align: center;
-    }
-
-    .text.active {
-        display: block;
-        opacity: 1;
-    }
-
-    .title {
-        font-size: 40px;
-        font-weight: 700;
-    }
-
-    .description {
-        font-size: 20px;
-        font-weight: 400;
-        margin-top: 10px;
-        opacity: 0.9;
-    }
-
-    .content-card {
-        background: var(--card-bg-color);
-        border: 1px solid var(--card-border-color);
-        border-radius: 10px;
-        margin: 10px;
-        padding: 20px;
-        width: 100%;
-        height: auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .content-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .start-title {
-        font-size: 1.4rem;
-        font-weight: 600;
-        color: var(--text-color);
-        margin-bottom: 10px;
-    }
-
-    .start-job {
-        margin-left: 10px;
-        font-size: 0.9rem;
-        font-weight: 400;
-        color: gray;
-    }
-
-    .content-meta {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        color: var(--text-color);
-    }
-
-    .meta-author,
-    .meta-time,
-    .meta-likes {
-        flex-shrink: 0;
-        margin-right: 10px;
-    }
-
-    .meta-likes {
-        margin-left: auto;
-    }
-
-    .content-hashtags-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
-
 </style>
 <section id="main">
     <div class="main-container">
         <div class="banner">
             <div class="icon-container left" onclick="BannerSlide()">
-                <div class="icon"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="banner-icon"><i class="fa-solid fa-chevron-right"></i></div>
             </div>
             <div class="banner-content">
                 <div class="text active">
-                    <span class="title">PiroTime</span>
-                    <span class="description">피로그래밍 동아리부원들을 위한 휴식공간입니다.
+                    <span class="banner-title">PiroTime</span>
+                    <span class="banner-description">피로그래밍 동아리부원들을 위한 휴식공간입니다.
                         <br/> 프로젝트 리뷰, 프로젝트 협업, 커피챗, IT동향 공유 게시판을 통해서 피로그래머들과 소통해보세요!
                     </span>
                 </div>
                 <div class="text">
-                    <span class="title">Project Review</span>
-                    <span class="description">프로젝트에 대한 피드백과 리뷰를 받을 수 있는 공간입니다.
+                    <span class="banner-title">Project Review</span>
+                    <span class="banner-description">프로젝트에 대한 피드백과 리뷰를 받을 수 있는 공간입니다.
                         <br/> 프로젝트에 대한 아이디어나 진행중인 프로젝트에 대한 의견을 공유해보세요!
                     </span>
                 </div>
                 <div class="text">
-                    <span class="title">Project Cooperation</span>
-                    <span class="description">프로젝트 팀원들을 구할 수 있는 공간입니다.
+                    <span class="banner-title">Project Cooperation</span>
+                    <span class="banner-description">프로젝트 팀원들을 구할 수 있는 공간입니다.
                         <br/>좋은 아이디어가 있는데 팀원이 부족하다면 같이 프로젝트를 진행할 팀원을 구해보세요!
                     </span>
                 </div>
                 <div class="text">
-                    <span class="title">Coffee Chat</span>
-                    <span class="description">피로그래밍 선배들과 커피챗을 할 수 있는 공간입니다. 
+                    <span class="banner-title">Coffee Chat</span>
+                    <span class="banner-description">피로그래밍 선배들과 커피챗을 할 수 있는 공간입니다. 
                         <br/>진로, 프로젝트에 대한 고민이 있다면 커피챗 해보세요!
                     </span>
                 </div>
                 <div class="text">
-                    <span class="title">IT Trend</span>
-                    <span class="description">요즘 IT업계의 소식을 공유할 수 있는 공간입니다.
+                    <span class="banner-title">IT Trend</span>
+                    <span class="banner-description">요즘 IT업계의 소식을 공유할 수 있는 공간입니다.
                         <br/> 공유하고 싶은 따끈따끈한 소식이 있다면 공유해보세요!
                     </span>
                 </div>
             </div>
             <div class="icon-container right" onclick="nextSlide()">
-                <div class="icon"><i class="fa-solid fa-chevron-right"></i></div>
+                <div class="banner-icon"><i class="fa-solid fa-chevron-right"></i></div>
             </div>
         </div>
         <section class="content-section">
