@@ -14,6 +14,7 @@ body {
     background: linear-gradient(to bottom, rgb(255, 255, 255) 40%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0) 100%);
     z-index: 1000;
     padding: 10px 0;
+    box-sizing: border-box;
 }
 
 .header--container {
@@ -76,7 +77,7 @@ ol, ul, li, a {
 }
 
 .hero--left {
-    width: 55%;
+    width: 50%;
     text-align: center;
     gap: 16px;
 }
@@ -121,6 +122,10 @@ ol, ul, li, a {
     justify-content: center;
 }
 
+.hero--contents h1 {
+    color: #3CF041;
+}
+
 .hero--circle__container > div:nth-child(1) .hero--circle , .hero--circle__container > div:nth-child(4) .hero--circle {
     background-color: #49BF4DCC;
 }
@@ -141,12 +146,22 @@ ol, ul, li, a {
     align-items: center;
     justify-content: center;
     text-align: right;
+    width: 100%;
+    margin-bottom: 20px; 
 }
 
 .icon {
     font-size: 5em;
-    margin-right: 20px;
+    margin-right: 50px;
     width: 60%;
+    text-align: center;
+}
+
+.icon img {
+    max-width: 100%; 
+    height: auto; 
+    display: block;
+    margin: 0 auto;
 }
 
 .description h2 {
@@ -174,13 +189,21 @@ ol, ul, li, a {
     flex-wrap: wrap;
 }
 
+.activity-cards > div:hover {
+    background-color: #3CF041;
+    color: white;
+    border: none;
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}
+
 .activity-card {
     flex: 1;
     max-width: 200px;
-    height: 400px;
+    height: 380px;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    border-radius: 120px;
     margin: 10px;
     padding: 20px;
     display: flex;
@@ -194,9 +217,6 @@ ol, ul, li, a {
     font-size: 1.8rem;
 }
 
-.activity-cards > div:nth-child(1) , .activity-cards > div:nth-child(3) {
-    background-color: #fbfbfb;
-}
 
 footer {
     padding: 10px 0;
