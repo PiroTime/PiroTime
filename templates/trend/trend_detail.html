@@ -89,7 +89,7 @@
       <div class="comments">
           {% for comment in comments %}
               {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
-              <div class="comment-block"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
+              <div class="comment-block" id="comment-block-{{ comment.id }}"> <!-- 각 댓글 블록을 감싸는 div 추가 -->
                   <div class="comment" id="comment-{{ comment.id }}">
                       <p>{{ comment.content }}</p>
                       <div class="comment-meta">
@@ -115,10 +115,10 @@
                       <!-- 대댓글 표시 -->
                       <div class="replies" style="margin-left: 20px;">
                           {% for reply in comment.get_replies %}
-                          <div class="comment-block"> <!-- 각 대댓글 블록을 감싸는 div 추가 -->
+                          <div class="comment-block" id="comment-block-{{ reply.id }}"> <!-- 각 대댓글 블록을 감싸는 div 추가 -->
                               <div style="display: flex; align-items: center;">
                                   <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
-                                  <div class="comment reply-comment" id="comment-{{ reply.id }}" style="margin-left: 10px;">
+                                  <div class="comment reply-comment"  style="margin-left: 10px;">
                                       <p>{{ reply.content }}</p>
                                       <div class="comment-meta">
                                           <span><i class="fas fa-user"></i> 
@@ -154,10 +154,12 @@
                       </div>
                   </div>
                   {% if not forloop.last %}
-                      <hr class="comment-divider"/>
+
                   {% endif %}
               </div>
               {% endif %}
+          {% empty %}
+              <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
           {% endfor %}
       </div>
   </div>
@@ -252,8 +254,9 @@
     });
 
     // 댓글 삭제 기능
-    $('.btn-delete-comment').click(function() {
+      $(document).on('click', '.btn-delete-comment', function() {
       var commentId = $(this).data('comment-id');
+      console.log(commentId)
       if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
         $.ajax({
           url: '/trend/comment/' + commentId + '/delete/',
@@ -262,7 +265,9 @@
             'X-CSRFToken': getCSRFToken() // CSRF 토큰 추가
           },
           success: function() {
-            $('#comment-' + commentId).remove();
+            var comment = $('#comment-block-' + commentId);
+            console.log('#comment-block-' + commentId)
+            comment.remove();
           },
           error: function(xhr, status, error) {
             // 로그인 리다이렉션 확인

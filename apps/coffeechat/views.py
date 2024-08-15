@@ -19,7 +19,7 @@ from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
 from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 
 User = get_user_model()
-
+@login_required
 def home(request):
     cohort_range = range(1, 22)  # 1기부터 21기까지의 범위
     reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기
@@ -37,6 +37,7 @@ def home(request):
     }
     return render(request, 'coffeechat/home.html', context)
 
+@login_required
 def list(req):
     query = req.GET.get('search')
     if query:
@@ -125,6 +126,7 @@ def create_review(request, coffeechat_request_id):
         form = ReviewForm()
     return render(request, 'coffeechat/review_form.html', {'form': form})
 
+
 def detail(request, pk):
     profile = CoffeeChat.objects.get(pk=pk)
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
@@ -145,6 +147,15 @@ def detail(request, pk):
                 form = CoffeechatRequestForm(request.POST)
                 if form.is_valid():
                     message = form.cleaned_data['requestContent']
+
+                    #메일 전송
+                    subject = "PiroTime: 커피챗 신청이 왔습니다!"
+                    content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
+                    sending_mail(profile.receiver, request.user, subject, content, message)
+
+                    #리쿼스트 생성
+
+
                     CoffeeChatRequest.objects.create(
                         user=request.user,
                         coffeechat=profile,
@@ -152,9 +163,11 @@ def detail(request, pk):
                         letterToSenior=message
                     )
 
+
                     subject = "PiroTime: 커피챗 신청이 왔습니다!"
                     content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
                     sending_mail(profile.receiver, request.user, subject, content, message)
+
 
             else:
                 profile.status = 'LIMITED'
@@ -181,7 +194,7 @@ def detail(request, pk):
     }
     return render(request, 'coffeechat/detail.html', ctx)
 
-
+@login_required
 
 def coffeechat_request(request, post_id):
     coffeechat = CoffeeChat.objects.get(post_id)
@@ -291,13 +304,15 @@ def sending_mail(receiver, sender, subject, content, message):
 
     subject = subject
     content = content
+
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
     
 
     html_message = render_to_string(
         "corboard/message.html",
-        {"sender": sender.username, "receiver": receiver.username,
+        {"sender": sender.username,
+         "receiver": receiver.username,
          "content": content,
          "message": message},
 
