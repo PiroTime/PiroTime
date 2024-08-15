@@ -24,38 +24,73 @@
         transform: translateY(0);
     }
 
-    .activity-cards > div:nth-child(1) , .activity-cards > div:nth-child(3) {
-        background-color: #FFFFFF;
+    /* 700px 이하에서 hero--right 숨기기 */
+    @media screen and (max-width: 1100px) {
+        .hero--right {
+            display: none;
+        }
+        
+        .hero--left {
+            width: 100%;
+            text-align: center; 
+            margin: 0 auto; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about {
+            height: 70vh;
+        }
+
+        .about-content {
+            flex-direction: column; 
+            text-align: center; 
+            text-align: center;
+        }
+
+        .icon {
+            margin-bottom: 20px; 
+        }
+
+        .icon img {
+            max-width: 400px; 
+        }
+
+        .description {
+            text-align: center; 
+        }
+
+        .activity-cards {
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            justify-content: center;
+        }
     }
 
-    .activity-card {
-        border-radius: 120px;
+    /* 768px 이하일 때 activities 섹션 한 줄로 세로로 나열 */
+    @media screen and (max-width: 768px) {
+        .icon img {
+            max-width: 300px;
+        }
+
+        .description h1 {
+            font-size: 1.8rem;
+        }
+
+        .activity-card {
+            flex: 1 1 48%; 
+        }
     }
 
-    .activity-cards > div:hover {
-        background-color: #3CF041;
-        color: white;
-        border: none;
-        transform: scale(1.1);
-        transition: all 0.3s ease-in-out;
-    }
-
-    .activity-card {
-        height: 380px;
-    }
-
-    .circle-image {
-        position: absolute;
-        right: 1px;
-        top: 8%;
-        z-index: -1;
-    }
-
-    .circle-image2 {
-        position: absolute;
-        right: 0;
-        top: 45%;
-        z-index: -1;
+    @media screen and (max-width: 450px) {
+        .activity-card {
+            flex: 1 1 100%; 
+            max-width: 350px; 
+            height: 200px; 
+            margin: 10px auto; 
+        }
     }
 </style>
 
@@ -99,8 +134,8 @@
                 <img src="{% static 'images/laptop.svg' %}" alt="Laptop Icon">
             </div>
             <div class="description">
-                <h2>About</h2>
-                <h1>PiroTime</h1>
+                <h4 style="margin: 0;">About</h4>
+                <h2>PiroTime</h2>
                 <p>Lorem ipsum dolor sit amet consectetur. Nulla elementum bibendum turpis egestas duis pulvinar. Nulla massa mauris duis.</p>
                 <p>Vivamus. Sed faucibus ultricies tempor sit tempor. In mauris in platea odio diam sollicitudin turpis et nisl.</p>
             </div>
@@ -142,7 +177,7 @@
                 }
             });
         }, {
-            threshold: 0.6 // 섹션의 70%가 보이면 나타나기
+            threshold: 0.4 // 섹션의 70%가 보이면 나타나기
         });
 
         sections.forEach(section => {
