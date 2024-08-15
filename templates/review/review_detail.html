@@ -42,9 +42,6 @@
   <div class="review-container">
       <div class="review-detail">
           <div class="header-container {% if not review.giturl %}justify-flex-start{% else %}justify-space-between{% endif %}">
-              <div class="image-placeholder">
-                  <img src="{% static 'images/logo.svg' %}" alt="Review Image" class="review-image">
-              </div>
               <div class="header-details">
                   <h1>{{ review.title }}</h1>
                   <br/>
