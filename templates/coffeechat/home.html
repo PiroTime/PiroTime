@@ -98,7 +98,10 @@
     }
 
     .card-text {
-        margin-bottom: 62px;
+        margin-bottom: 40px;
+        max-height: 9.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .card-url {
@@ -112,7 +115,7 @@
         margin: 0 5px;
         color: black;
         position: relative;
-        height: 400px;
+        height: 360px;
     }
 
     .review-container {
@@ -144,8 +147,8 @@
         bottom: 0px;
         border-radius: 10px;
         justify-content: space-around;
-        margin: 15px 0px;
-        width: 91%;
+        margin: 15px -1px;
+        width: 81%;
     }
 
     .profile-info .profile-img img {
@@ -178,6 +181,15 @@
 
     .card-profile {
         color: black;
+    }
+
+    .card-profile-text{
+        font-size: 14px;
+        color: black;
+    }
+
+    .profile-img {
+        width: 50%;
     }
 </style>
 {% load custom_filters %}
@@ -240,7 +252,7 @@
                     <div class="profile-img">
                         <img src="{{ review.coffeechat_request.coffeechat.receiver.profile_picture.url }}"
                             alt="Profile Picture" class="rounded-circle"
-                            style="width: 50px; height: 50px; margin-right: 10px;">
+                            style="width: 50px; height: 50px; margin-right: 0px;">
                     </div>
                     <div>
                         <h5 class="card-title">
@@ -253,9 +265,9 @@
                         {% else %}
                         <p class="card-profile">Job information not available</p>
                         {% endif %} -->
-                        <p class="card-profile">직업 {{ review.coffeechat_request.coffeechat.job }}</p>
-                        <p class="card-profile">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
-                        <p class="card-profile">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
+                        <p class="card-profile-text">직업 {{ review.coffeechat_request.coffeechat.job }}</p>
+                        <p class="card-profile-text">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
+                        <p class="card-profile-text">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
                     </div>
                 </div>
             </div>
