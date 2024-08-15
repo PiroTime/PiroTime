@@ -4,7 +4,55 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/trend/list.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<div class="main-container">
+<style>
+    /* 반응형 그리드 설정 */
+     /* 1000px 이하일 때 그리드 설정 */
+     @media screen and (max-width: 1000px) {
+        .trend-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .trend-grid > .trend-card:nth-child(3n+1) {
+            justify-self: end; /* 첫 번째 아이템 우측 정렬 */
+        }
+
+        .trend-grid > .trend-card:nth-child(3n+2) {
+            justify-self: center; /* 두 번째 아이템 중앙 정렬 */
+        }
+
+        .trend-grid > .trend-card:nth-child(3n) {
+            justify-self: start; /* 세 번째 아이템 좌측 정렬 */
+        }
+    }
+  
+    /* 768px 이하일 때 그리드 설정 */
+    @media screen and (max-width: 768px) {
+        /* 더 작은 화면에서 검색창과 필터 버튼의 간격 조정 */
+        .button-group {
+            padding-top: 10px;
+        }
+        
+        .trend-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .trend-grid > .trend-card:nth-child(2n+1) {
+            justify-self: end; /* 첫 번째 아이템 우측 정렬 */
+        }
+
+        .trend-grid > .trend-card:nth-child(2n) {
+            justify-self: start; /* 두 번째 아이템 좌측 정렬 */
+        }
+    }
+
+    /* 450px 이하일 때 그리드 설정 */
+    @media screen and (max-width: 450px) {
+        .trend-card {
+            width: 160px;
+        }
+    }
+  </style>
+<div class="main--container">
     <!-- 검색 및 필터 섹션 -->
     <div class="search-and-filter">
         <form action="{% url 'trend:trend_list' %}" method="get" class="search-form">
@@ -25,32 +73,34 @@
             {% for trend in page_obj %}
             {% with random_image=image_files|random %}
             <div class="trend-card">
-                <div class="trend-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
-                <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
-                    {% csrf_token %}
-                    <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
-                        <i class="fas fa-bookmark"></i>
-                    </button>
-                </form>
-                <div class="trend-card-content">
-                    <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
-                    <p style="display: inline;">작성자: 
-                        {% if trend.writer == user %}
-                          <a href="{% url 'mypage:profile' %}" style="display: inline;">{{ trend.writer }}</a>
-                        {% else %}
-                          <a href="{% url 'mypage:profile_read' trend.writer.id %}" style="display: inline;">{{ trend.writer }}</a>
-                        {% endif %}
-                    </p>                      
-                    <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
-                    <div class="trend-likes">
-                        <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="button" class="like-button">
-                                <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
-                            </button>
-                        </form>
+                <a href="{% url 'trend:trend_detail' pk=trend.pk %}">
+                    <div class="trend-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+                    <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </form>
+                    <div class="trend-card-content">
+                        <h2>{{ trend.title }}</h2>
+                        <p style="display: inline;">작성자:
+                            {% if trend.writer == user %}
+                              <a href="{% url 'mypage:profile' %}" style="display: inline;">{{ trend.writer }}</a>
+                            {% else %}
+                              <a href="{% url 'mypage:profile_read' trend.writer.id %}" style="display: inline;">{{ trend.writer }}</a>
+                            {% endif %}
+                        </p>
+                        <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
+                        <div class="trend-likes">
+                            <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="button" class="like-button">
+                                    <i class="fas fa-heart{% if request.user in trend.likes.all %} liked{% endif %}"></i> <span class="like-count">{{ trend.likes.count }}</span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endwith %}
             {% empty %}

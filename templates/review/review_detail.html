@@ -4,17 +4,47 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/review/review_detail.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  @media screen and (max-width: 768px) {
+        /* 더 작은 화면에서 검색창과 필터 버튼의 간격 조정 */
+        .container, .comment {
+            width: 90%;
+        }
+        
+        .action-buttons-bottom {
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        .header-container {
+            flex-direction: column;
+        }
+
+        .header-details {
+            margin-bottom: 20px; /* 아래에 공간 추가 */
+        }
+
+        .header-sidebar {
+            position: static; /* 절대 위치를 해제하여 문서 흐름 내에 배치 */
+            width: 100%; /* 전체 너비를 차지하도록 설정 */
+            margin-top: 10px; /* 위쪽에 약간의 공간 추가 */
+        }
+
+        .about-box {
+            padding: 20px;
+            margin-top: 0; /* 기본 마진 제거 */
+        }
+      }
+</style>
 <meta name="csrf-token" content="{{ csrf_token }}">
 <div class="container max-width-1200">
   <div class="review-container">
       <div class="review-detail">
           <div class="header-container {% if not review.giturl %}justify-flex-start{% else %}justify-space-between{% endif %}">
-              <div class="image-placeholder">
-                  <img src="{% static 'images/logo.svg' %}" alt="Review Image" class="review-image">
-              </div>
               <div class="header-details">
                   <h1>{{ review.title }}</h1>
-                  <h2>{{ review.subtitle }}</h2>
+                  <br/>
                   <div class="meta-info">
                       <span>
                           <i class="fas fa-user"></i>
@@ -29,7 +59,7 @@
                       </span>
                   </div>
               </div>
-              <div class="sidebar">
+              <div class="header-sidebar">
                   <div class="about-box">
                       <div class="action-buttons">
                           <button class="btn-action btn-like {% if user in review.likes.all %}liked{% endif %}" data-review-id="{{ review.id }}">

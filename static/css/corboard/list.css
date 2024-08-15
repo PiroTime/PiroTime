@@ -3,14 +3,14 @@ body{
     font-family: 'Hubballi', sans-serif; 
 }
 
-.main-container {
+.main--container {
     max-width: 1000px;
     margin: 3rem auto;
     padding: 20px;
     padding-bottom: 5rem;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 19rem);
+    min-height: 100vh;
 }
 
 /*------- 검색 -------*/
@@ -122,7 +122,6 @@ body{
 .cor-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
 }
 
 .cor-card {
@@ -159,6 +158,9 @@ body{
 .cor-card-content h2 {
     margin: 0 0 10px;
     font-size: 1.2rem;
+    white-space: nowrap; /* 텍스트가 한 줄로 유지되도록 설정 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis;
 }
 
 .cor-card-content p {
