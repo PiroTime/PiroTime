@@ -74,6 +74,7 @@ body {
     margin-left: 1rem;
 }
 
+/* 버튼 스타일 */
 .btn-primary {
     background-color: #0BEC12;
     color: white;
@@ -110,6 +111,7 @@ body {
     padding-bottom: 1rem;
 }
 
+/* 활동 내용 래퍼 */
 .activity-content-wrapper {
     flex: 1;
     display: flex;
@@ -118,6 +120,7 @@ body {
     min-height: 400px;
 }
 
+/* 활동 네비게이션 바 */
 .activity-navbar {
     flex-shrink: 0;
     display: flex;
@@ -129,6 +132,7 @@ body {
     width: 220px;
 }
 
+/* 활동 내용 */
 .activity-content {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -184,11 +188,10 @@ body {
     position: relative;
 }
 
-/* 카드 제목과 텍스트 섹션 */
 .activity-card h3 {
     font-size: 1.2rem;
     margin: 0 0 5px 0;
-    font-weight: 500;;
+    font-weight: 500;
 }
 
 .activity-card span {
@@ -219,8 +222,8 @@ body {
     flex-direction: column;
     background-color: #fff;
     margin-bottom: 20px;
-    width: 100%; /* 카드의 너비를 그리드에 맞게 설정 */
-    height: 240px; /* 카드의 높이를 증가시켜 내용이 잘리지 않도록 설정 */
+    width: 100%;
+    height: 250px;
     padding: 0;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
