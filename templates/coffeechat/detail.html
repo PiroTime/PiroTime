@@ -373,7 +373,7 @@
                 {% if user.is_authenticated and request.status == 'ACCEPTED' and request.user == user %}
                 {% if not request.existing_review %}
                 <div class="review-check-box">
-                    <p class="review-check">피로그래머 {{request.user.cohort}}기 {{ request.user.username }}님이 커피챗을
+                    <p class="review-check">피로그래머 {{ profile.receiver.cohort }}기 {{ profile.receiver.username }}님이 커피챗을
                         {{request.get_status_display }}하셨습니다!!</p>
                     <!-- <p>요청 시간: {{ request.created_at }}</p> -->
                     <a href="{% url 'coffeechat:review_create' request.id %}">
