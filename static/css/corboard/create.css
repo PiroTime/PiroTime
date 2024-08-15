@@ -12,6 +12,13 @@
     min-height: 100vh;
 }
 
+
+.review-create-card {
+    width: 100%;
+    max-width: 1000px;
+}
+
+
 .cor-create-card {
     background-color: #fff;
     border-radius: 10px;
