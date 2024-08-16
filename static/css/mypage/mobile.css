@@ -1,0 +1,152 @@
+/* 기본 스타일 */
+.activity-navbar.desktop {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-right: 2rem;
+    font-size: 1.2rem;
+    width: 220px;
+}
+
+.activity-navbar.mobile {
+    display: none;
+}
+
+
+@media screen and (max-width: 768px) {
+    .profile-container {
+        padding: 8px;
+    }
+
+    .profile-header {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .activity-filter {
+        /* 스크롤 가능 */
+        overflow-x: auto; 
+        gap: 10px;
+    }
+
+    .filter-link:not(:last-child)::after {
+        content: none;
+    }
+
+    .filter-link {
+        background-color: antiquewhite;
+        border-radius: 10px;
+    }
+
+    .activity-content-wrapper {
+        flex-direction: column;
+    }
+
+    .activity-navbar {
+        position: relative;
+    }
+
+    .activity-navbar.desktop {
+        display: none;
+    }
+    
+    .activity-navbar.mobile {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .activity-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        display: none; /* 기본적으로 숨김 */
+    }
+
+    .activity-list.active {
+        display: block; /* 활성화되면 표시 */
+    }
+
+    .activity-list li {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .activity-list li:last-child {
+        border-bottom: none;
+    }
+
+    .activity-link {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .activity-link:hover {
+        background-color: #f0f0f0;
+    }
+
+    .grid-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 7px;
+    }
+
+    /* 하단 네비게이션 바 */
+    .bottom-navbar {
+        display: flex;
+        justify-content: space-between;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        border-top: 1px solid #ccc;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+        z-index: 1000;
+    }
+
+    .bottom-link {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        font-size: 0.7rem;
+    }
+
+    .bottom-link:hover {
+        background-color: #f0f0f0;
+    }
+
+    .bottom-link i {
+        font-size: 2rem;
+    }
+}
