@@ -34,18 +34,29 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 1rem;
     width: 100px;
     height: 100px;
     background-color: #cccccc;
     border-radius: 50%;
     overflow: hidden;
+    border: 1px solid #CCCCCC;
 }
 
 .profile-image img {
     width: 80px;
     height: 80px;
     border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-image i {
+    font-size: 4rem;
+    color: #BBBBBB;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 

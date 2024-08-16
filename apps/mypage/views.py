@@ -1,6 +1,7 @@
 # Django 내장 모듈
 from django.views.generic import TemplateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -148,6 +149,10 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'job': coffeechat.job,
                     'created_at': coffeechat.created_at.isoformat(),
                     'content': coffeechat.content,
+                    'hashtags': [hashtag.name for hashtag in coffeechat.hashtags.all()],
+                    'bookmarked': True,
+                    'coffeechat_bookmark_profile': reverse_lazy('mypage:coffeechat_bookmark_profile', args=[coffeechat.id]),
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id])
                 } for coffeechat in bookmarked_coffeechats]
                 return JsonResponse({'bookmarked_coffeechats': data})
             
@@ -155,6 +160,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 accepted_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='ACCEPTED')
                 data = [{
                     'sender': request.user.username,
+                    'receiver': request.coffeechat.receiver.username,
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
@@ -163,6 +169,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'content': request.review.content if hasattr(request, 'review') else None,
                         'created_at': request.review.created_at.isoformat() if hasattr(request, 'review') else None,
                     } if hasattr(request, 'review') else None,
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
+                    'review_exists': True if hasattr(request, 'review') else False,
                 } for request in accepted_requests]
                 return JsonResponse({'accepted_requests': data})
 
@@ -223,3 +231,15 @@ def profile_read(request, user_id):
         'profile_user': user_profile,
         'random_image': random_image,
     })
+
+@login_required
+def coffeechat_bookmark_profile(request, pk):
+    profile = get_object_or_404(CoffeeChat, pk=pk)
+    if request.user in profile.bookmarks.all():
+        profile.bookmarks.remove(request.user)
+        bookmarked = False
+    else:
+        profile.bookmarks.add(request.user)
+        bookmarked = True
+
+    return JsonResponse({'bookmarked': bookmarked})
