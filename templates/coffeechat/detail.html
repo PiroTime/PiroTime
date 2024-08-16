@@ -226,13 +226,148 @@
         font-size: 23px;
     }
 
-    .profile-details-box{
-        padding: 0px 65px;
+    .profile-details-box {
+        padding: 0px 120px;
+    }
+
+    @media (max-width: 450px) {
+        .container {
+            width: 100%;
+        }
+
+        .header-container {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .profile-header .profile-info {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .profile-img img {
+            width: 80px;
+            /* 이미지 크기를 줄여줍니다. 필요에 따라 조정하세요. */
+            height: 80px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .action-buttons a,
+        .action-buttons button {
+            width: 132%;
+            /* 버튼 너비를 100%로 설정하여 화면을 가득 채웁니다. */
+            margin-bottom: 0.5rem;
+        }
+
+        .tab-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: nowrap;
+        }
+
+        .tab-item {
+            width: 92%;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details-box {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin: 0;
+            padding: 0px 15px;
+            width: 93%;
+
+        }
+
+        .hashtag-box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card-review {
+            width: 90% !important;
+            /* 리뷰 카드의 너비를 100%로 설정하여 화면에 맞춥니다. */
+            margin-bottom: 1rem;
+        }
+
+        .requests-list {
+            width: 100%;
+            /* 요청 목록의 너비를 100%로 설정하여 화면에 맞춥니다. */
+            padding: 0 1rem;
+        }
+
+        .review-rule h5 {
+            font-size: 14px;
+            /* 리뷰 유의사항의 글꼴 크기를 조정하여 작은 화면에서도 잘 보이도록 합니다. */
+        }
+
+        .review-check-box {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: grid;
+        }
+
+        .review-button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .btn-container {
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .max-width-1200 {
+            width: min(1123px, 80%);
+            padding: 0 40px;
+        }
+
+        .footer {
+            width: 110%;
+        }
+
+        .max-width-1000 {
+            width: min(1123px, 97%);
+            padding: 0 0px;
+        }
+
+        .tab-content-container {
+            text-align: center;
+        }
+
+        .profile-header {
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+        }
+
+        .action-buttons div {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
     }
 </style>
 <div class="container">
     <div class="profile-header">
-        <div class="header-container max-width-1200">
+        <div class="max-width-1200">
             <div class="profile-info">
                 <div class="profile-img">
                     {% if profile.receiver.profile_image %}
@@ -328,12 +463,12 @@
 
     <div class="tab-content-container">
         <div id="content-1" class="tab-content active-content">
-            <div class="profile-content max-width-1200">
+            <div class="profile-content max-width-1000">
                 <div>{{ profile.content|safe }}</div>
             </div>
 
             <div class="profile-details max-width-1200">
-                <div class="profile-details-box flex" style="margin: 0 50px;">
+                <div class="profile-details-box flex">
                     <h4 class="hashtag-title">파트너의 관심사는</h4>
                     <div class="hashtag-box">
                         {% for hashtag in hashtags %}
