@@ -17,7 +17,7 @@
             {% endif %}
         </div>
         <div class="profile-info">
-            <h1>🍀{{ user.cohort }}기 피로그래머 {{ user.username }}🍀</h1>
+            <h1>{{ user.cohort }}기 피로그래머 {{ user.username }}</h1>
             <p>{{ profile.intro|default_if_none:"소개가 없습니다." }}</p>
         </div>
     </div>
@@ -265,8 +265,8 @@
                 hashtags = coffeechat.hashtags;
             }
 
-            const profileLink = coffeechat.detail_url ? coffeechat.detail_url : coffeechat.mypage_read_url;
-        
+            const profileLink = coffeechat.detail_url ? coffeechat.detail_url : mypage.profile_read_url;
+      
             cardElement.innerHTML = `
                 <div class="card-header">
                     ${category === 'bookmarked' ? `
@@ -318,7 +318,7 @@
             
             } else if (category === 'history') {
                 cardElement.innerHTML += `
-                    <span class="waiting-status">커피챗 고민 중!</span>
+                    <span class="waiting-status">커피챗 완료!</span>
                     <div class="hashtags">
                         ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>

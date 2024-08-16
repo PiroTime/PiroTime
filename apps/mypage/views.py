@@ -125,6 +125,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
+                    'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                 } for request in requests_sent]
                 return JsonResponse({'requests_sent': data})
 
@@ -136,6 +138,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
+                    'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                     'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
                     'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
                 } for request in requests_received]
@@ -151,7 +155,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'hashtags': [hashtag.name for hashtag in coffeechat.hashtags.all()],
                     'bookmarked': True,
                     'coffeechat_bookmark_profile': reverse_lazy('mypage:coffeechat_bookmark_profile', args=[coffeechat.id]),
-                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id])
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id]),
+                'profile_read_url': reverse_lazy('mypage:profile_read', args=[coffeechat.receiver.id]),
                 } for coffeechat in bookmarked_coffeechats]
                 return JsonResponse({'bookmarked_coffeechats': data})
             
@@ -170,6 +175,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'created_at': request.review.created_at.isoformat() if hasattr(request, 'review') else None,
                     } if hasattr(request, 'review') else None,
                     'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
+                    'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                     'review_exists': True if hasattr(request, 'review') else False,
                 } for request in accepted_requests]
                 return JsonResponse({'accepted_requests': data})
