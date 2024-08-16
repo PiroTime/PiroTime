@@ -28,4 +28,5 @@ urlpatterns = [
     path("corboard/", include(('apps.corboard.urls', 'corboard'), namespace='corboard')),
     path('coffeechat/', include(('apps.coffeechat.urls', 'coffeechat'), namespace='coffeechat')),
     path('mypage/', include(('apps.mypage.urls', 'mypage'), namespace='mypage')),
+    # path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
