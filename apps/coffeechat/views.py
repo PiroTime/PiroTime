@@ -165,7 +165,7 @@ def detail(request, pk):
 
 
                     subject = "PiroTime: 커피챗 신청이 왔습니다!"
-                    content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
+                    content = f" 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
                     sending_mail(profile.receiver, request.user, subject, content, message)
 
 
