@@ -241,11 +241,12 @@ body {
     align-items: center;
     background-color: #fff;
     margin-bottom: 20px;
-    padding: 15px;
+    padding: 10px; /* 패딩을 조금 줄였습니다 */
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: auto;
-    width: fit-content;
+    width: 220px; /* 가로 크기 고정 */
+    height: 340px; /* 세로 크기 고정 */
+    box-sizing: border-box;
 }
 
 .activity-content.coffeechat-grid {
@@ -282,6 +283,7 @@ body {
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
+    height: 60px; /* 높이 고정 */
 }
 
 .coffeechat-card .profile-details .name {
@@ -311,6 +313,7 @@ body {
     justify-content: center;
     background-color: #ffffff;
     width: 100%;
+    flex-grow: 1; /* 여백 채우기 */
 }
 
 .coffeechat-card .card-content .request-time {
@@ -329,6 +332,7 @@ body {
     display: flex;
     gap: 10px;
     margin-top: 5px;
+    justify-content: center; /* 가운데 정렬 */
 }
 
 /* 커피챗 버튼 스타일 */
@@ -360,6 +364,41 @@ body {
     background-color: #0BEC12;
     color: white;
     transform: scale(1.05);
+}
+
+.coffeechat-card .card-header {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.scrap-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #FFC107; /* 기본적으로 노란색으로 표시 */
+}
+
+.scrap-icon.scrapped {
+    color: #FFC107; /* 북마크가 활성화된 경우에도 노란색으로 표시 */
+}
+
+.hashtags {
+    margin-bottom: 10px;
+}
+
+.hashtag {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 3px 8px;
+    border-radius: 15px;
+    margin-right: 5px;
+    font-size: 0.85rem;
 }
 
 /* 커피챗 네비게이션 */

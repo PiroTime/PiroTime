@@ -233,40 +233,62 @@
         }
 
         function createCoffeeChatCard(coffeechat, category) {
-            const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
             const options = { month: 'long', day: 'numeric' };
-            const date = new Date(coffeechat.created_at).toLocaleDateString('ko-KR', options);
-            const time = new Date(coffeechat.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-        
-            const cardElement = document.createElement('div');
-            cardElement.className = 'coffeechat-card';
+            let date = '';
+            let time = '';
 
-            // 카테고리별로 표시할 이름 설정
-            let displayName;
-            if (category === 'history') {
-                displayName = coffeechat.sender === '{{ user.username }}' ? coffeechat.receiver : coffeechat.sender;
-            } else if (category === 'sent') {
-                displayName = coffeechat.receiver;
-            } else if (category === 'received') {
-                displayName = coffeechat.sender;
-            } else {
-                displayName = coffeechat.receiver;
+            if (coffeechat.created_at) {
+                date = new Date(coffeechat.created_at).toLocaleDateString('ko-KR', options);
+                time = new Date(coffeechat.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
             }
 
+            const cardElement = document.createElement('div');
+            cardElement.className = 'coffeechat-card';
+        
+            // 카테고리별로 표시할 이름 설정
+            let displayName, job, hashtags;
+            if (category === 'sent') {
+                // 내가 보낸 요청의 경우 receiver 정보 사용
+                displayName = coffeechat.receiver;
+                job = coffeechat.job;  // receiver의 직업
+                hashtags = coffeechat.hashtags;
+            } else if (category === 'received') {
+                // 내가 받은 요청의 경우 sender 정보 사용
+                displayName = coffeechat.sender;
+                job = coffeechat.job;  // sender의 직업
+                hashtags = coffeechat.hashtags;
+            } else {
+                // bookmarked와 history의 경우 무조건 상대방 정보 사용
+                displayName = coffeechat.receiver;
+                job = coffeechat.job;
+                hashtags = coffeechat.hashtags;
+            }
+
+            const profileLink = coffeechat.detail_url ? coffeechat.detail_url : coffeechat.mypage_read_url;
+        
             cardElement.innerHTML = `
+                ${category === 'bookmarked' ? `
+                    <div class="card-header">
+                        <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" 
+                                class="scrap-icon ${coffeechat.bookmarked ? 'scrapped' : ''}">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                ` : ''}
                 <div class="profile-img">
                     ${coffeechat.profile_image ? `<img src="${coffeechat.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
                 </div>
                 <div class="profile-details">
-                    <span class="name">${displayName}</span>
+                    <a href="${profileLink}" class="name">${displayName}</a>
                     ${category !== 'history' ? `<span class="job">${coffeechat.job}</span>` : ''}
                 </div>
                 <div class="card-content">
-                    <span class="request-time">${date} ${time}</span><br>
+                    ${category !== 'bookmarked' && category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
             `;
         
             if (category === 'sent') {
                 cardElement.innerHTML += `<span class="waiting-status">선배님 기다리는 중..</span>`;
+            
             } else if (category === 'received') {
                 cardElement.innerHTML += `
                     <span class="waiting-status">후배가 기다리는 중!</span>
@@ -281,24 +303,27 @@
                         </form>
                     </div>
                 `;
+            
             } else if (category === 'bookmarked') {
                 cardElement.innerHTML += `
-                    <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" class="coffeechat-request bookmark-btn">
-                        ${coffeechat.bookmarked ? '북마크 취소' : '북마크 추가'}
-                    </button>
+                    <div class="hashtags">
+                        ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
+                    </div>
                     <span class="waiting-status">커피챗 고민 중!</span>
                     <div class="buttons">
                         <a href="${coffeechat.detail_url}" class="coffeechat-request">커피챗 요청하기!</a>
                     </div>
                 `;
+            
             } else if (category === 'history') {
                 cardElement.innerHTML += `
-                    <span class="waiting-status">${coffeechat.review_exists ? '리뷰가 작성되었습니다.' : '리뷰를 남겨주세요.'}</span>
+                    <div class="hashtags">
+                        ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
+                    </div>
                     <div class="buttons">
-                        ${coffeechat.review_exists ? 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request coffeechat-review">또 커피챗 요청하기!</a>` : 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request coffeechat-review">리뷰 작성하러 가기!</a>`
-                        }
+                        ${!coffeechat.review_exists ? 
+                            `<a href="${coffeechat.detail_url}" class="coffeechat-request coffeechat-review">리뷰 작성하러 가기!</a>` : 
+                            ''}
                     </div>
                 `;
             }

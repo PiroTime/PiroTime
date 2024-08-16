@@ -78,13 +78,10 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 posts = Trend.objects.filter(bookmarks=target_user)
             elif category == 'corboard':
                 posts = Corboard.objects.filter(bookmarks=target_user)
-            elif category == 'coffeechat':
-                posts = CoffeeChat.objects.filter(bookmarks=target_user)
             else:
                 posts = list(Trend.objects.filter(bookmarks=target_user)) + \
                         list(Review.objects.filter(bookmarks=target_user)) + \
-                        list(Corboard.objects.filter(bookmarks=target_user)) + \
-                        list(CoffeeChat.objects.filter(bookmarks=target_user))
+                        list(Corboard.objects.filter(bookmarks=target_user))
 
         # 내가 좋아요한 글 필터링
         elif filter_type == 'liked':
@@ -164,6 +161,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
+                    'hashtags': [hashtag.name for hashtag in request.coffeechat.hashtags.all()],  # 해시태그 추가
                     'review': {
                         'rating': request.review.rating if hasattr(request, 'review') else None,
                         'content': request.review.content if hasattr(request, 'review') else None,
