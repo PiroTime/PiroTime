@@ -202,6 +202,9 @@
                         }
 
                         activityContent.innerHTML = coffeechatCards;
+
+                        activityContent.classList.add('coffeechat-grid');
+
                     } else {
                         if (data.posts && data.posts.length > 0) {
                             data.posts.forEach(post => {
@@ -222,6 +225,8 @@
                         } else {
                             activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
                         }
+
+                        activityContent.classList.remove('coffeechat-grid');
                     }
                 })
                 .catch(error => console.error('Error loading activities:', error));
@@ -229,25 +234,29 @@
 
         function createCoffeeChatCard(request, category) {
             const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
+
+            const options = { month: 'long', day: 'numeric' };
+            const date = new Date(request.created_at).toLocaleDateString('ko-KR', options);
+            const time = new Date(request.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+
             let cardContent = `
                 <div class="coffeechat-card">
-                    <div class="card-header" style="background-image: url('${randomImage}');">
-                        <div class="profile-img">
-                            ${request.profile_image ? `<img src="${request.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
-                        </div>
-                        <div class="profile-details">
-                            <span class="name">${request.sender || request.receiver}</span>
-                            <span class="job">${request.job}</span>
-                        </div>
+                    <div class="profile-img">
+                        ${request.profile_image ? `<img src="${request.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
+                    </div>
+                    <div class="profile-details">
+                        <span class="name">${request.sender || request.receiver}</span>
+                        <span class="job">${request.job}</span>
                     </div>
                     <div class="card-content">
-                        <span>요청 시간: ${new Date(request.created_at).toLocaleString()}</span><br>
+                        <span class="request-time">${date} ${time} 부터</span><br>
             `;
 
             if (category === 'sent') {
-                cardContent += `<h3>선배님 기다리는 중</h3>`;
+                cardContent += `<span class="waiting-status">선배님 기다리는 중..</span>`;
             } else if (category === 'received') {
                 cardContent += `
+                    <span class="waiting-status">후배가 기다리는 중!</span>
                     <div class="buttons">
                         <form method="post" action="${request.accept_url}">
                             {% csrf_token %}
@@ -259,13 +268,25 @@
                         </form>
                     </div>
                 `;
+            
+            } else if (category === 'bookmarked') {
+                cardContent += `
+                    <span class="waiting-status">커피챗 고민 중!</span>
+                    <div class="buttons">
+                        <form method="post" action="#">
+                            {% csrf_token %}
+                            <button type="submit" class="coffeechat-request">커피챗 요청하기!</button>
+                        </form>
+                    </div>
+                `;
+
             } else if (category === 'history' && request.review) {
                 cardContent += `
                     <div class="review">
                         <p><strong>리뷰:</strong></p>
                         <p>평점: ${request.review.rating}</p>
                         <p>내용: ${request.review.content}</p>
-                        <p>리뷰 작성 시간: ${new Date(request.review.created_at).toLocaleString()}</p>
+                        <p>리뷰 작성 시간: ${new Date(request.review.created_at).toLocaleDateString()}</p>
                     </div>
                 `;
             }     
