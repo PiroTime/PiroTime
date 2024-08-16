@@ -148,14 +148,7 @@
         border-radius: 10px;
         justify-content: space-around;
         margin: 15px -1px;
-        width: 81%;
-    }
-
-    .profile-info .profile-img img {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
+        width: 90%;
     }
 
     .profile-info h5 {
@@ -188,8 +181,28 @@
         color: black;
     }
 
-    .profile-img {
-        width: 50%;
+    .profile-img{
+        width: 70px;
+        height: 70px;
+        background-color: lightgray;
+        margin-right: 0;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        border: 1px solid #CCCCCC;
+    }
+
+    .profile-img i {
+        font-size: 2.8rem;
+        color: #BBBBBB;
+    }
+
+    .profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 </style>
 {% load custom_filters %}
@@ -250,25 +263,28 @@
                 <hr class="card-hr">
                 <div class="profile-info">
                     <div class="profile-img">
-                        <img src="{{ review.coffeechat_request.coffeechat.receiver.profile_picture.url }}"
-                            alt="Profile Picture" class="rounded-circle"
-                            style="width: 50px; height: 50px; margin-right: 0px;">
-                    </div>
-                    <div>
-                        <h5 class="card-title">
-                            <a href="{% url 'coffeechat:coffeechat_detail' review.coffeechat_request.coffeechat.pk %}">
-                                {{ review.coffeechat_request.coffeechat.receiver.username }}
-                            </a>
-                        </h5>
-                        <!-- {% if review.coffeechat_request.coffeechat.receiver.job %}
-                        <p class="card-profile">{{ review.coffeechat_request.coffeechat.receiver.job }}</p>
+                        {% if review.coffeechat_request.coffeechat.receiver.profile_image %}
+                            <img src="{{ review.coffeechat_request.coffeechat.receiver.profile_image.url }}" 
+                                alt="Profile Picture">
                         {% else %}
-                        <p class="card-profile">Job information not available</p>
-                        {% endif %} -->
-                        <p class="card-profile-text">직업 {{ review.coffeechat_request.coffeechat.job }}</p>
-                        <p class="card-profile-text">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
-                        <p class="card-profile-text">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
+                            <i class="fas fa-user"></i>
+                        {% endif %}
                     </div>
+                    <a href="{% url 'coffeechat:coffeechat_detail' review.coffeechat_request.coffeechat.pk %}">
+                        <div>
+                            <h5 class="card-title">
+                                {{ review.coffeechat_request.coffeechat.receiver.username }}
+                            </h5>
+                            <!-- {% if review.coffeechat_request.coffeechat.receiver.job %}
+                            <p class="card-profile">{{ review.coffeechat_request.coffeechat.receiver.job }}</p>
+                            {% else %}
+                            <p class="card-profile">Job information not available</p>
+                            {% endif %} -->
+                            <p class="card-profile-text">직업 {{ review.coffeechat_request.coffeechat.job }}</p>
+                            <p class="card-profile-text">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
+                            <p class="card-profile-text">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
