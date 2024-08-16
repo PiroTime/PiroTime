@@ -148,7 +148,7 @@
         border-radius: 10px;
         justify-content: space-around;
         margin: 15px -1px;
-        width: 90%;
+        width: 82%;
     }
 
     .profile-info h5 {
@@ -176,7 +176,7 @@
         color: black;
     }
 
-    .card-profile-text{
+    .card-profile-text {
         font-size: 14px;
         color: black;
     }
@@ -204,6 +204,47 @@
         height: 100%;
         object-fit: cover;
     }
+
+    @media (max-width: 768px) {
+        .d-flex {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .coffeechat-card {
+            width: 100% !important;
+            margin-bottom: 1rem;
+        }
+
+        .review-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .card-review {
+            width: 90% !important;
+        }
+    }
+
+    @media (max-width: 450px) {
+    .card {
+        width: 90% !important; 
+        margin-bottom: 1rem;
+    }
+    .card-url {
+        display: flex;
+        flex-direction: column; 
+        gap: 0.5rem; 
+    }
+    .card-text{
+        margin-bottom: 20px;
+    }
+    .btn-none{
+        display: none;
+    }
+
+}
 </style>
 {% load custom_filters %}
 
@@ -218,7 +259,6 @@
                     class="rounded-full" src="{% static 'images/coffeechat_logo1.png' %}" style="color: transparent;">
             </div>
             <span class="text-chat">{{ i }}기</span>
-            <!-- <span class="profile-count">({{ profile_counts|get_item:i }}명)</span> -->
         </a>
         {% endfor %}
     </div>
@@ -236,7 +276,7 @@
                 <p class="card-text">궁금한 회사에 현재 재직중인 선배님과의 커피챗은 물론, 1:1 매칭이 가능해요.</p>
                 <div class="card-url">
                     <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn btn-primary">커피챗 신청하기</a>
-                    <a href="{% url 'coffeechat:coffeechat_howto' %}" class="btn btn-primary">커피챗 하기 이용방법</a>
+                    <a href="{% url 'coffeechat:coffeechat_howto' %}" class="btn btn-primary btn-none">커피챗 하기 이용방법</a>
                 </div>
             </div>
         </div>
@@ -246,7 +286,7 @@
                 <p class="card-text">궁금한 피로그래머와 다이렉트로 연결되고, 피로그래밍의 멋쟁이 후배들을 만나보세요</p>
                 <div class="card-url">
                     <a href="{% url 'coffeechat:coffeechat_create' %}" class="btn btn-primary">커피챗 프로필 등록하기</a>
-                    <a href="{% url 'coffeechat:coffeechat_how_received' %}" class="btn btn-primary">커피챗 받기 이용 방법</a>
+                    <a href="{% url 'coffeechat:coffeechat_how_received' %}" class="btn btn-primary btn-none">커피챗 받기 이용 방법</a>
                 </div>
             </div>
         </div>
