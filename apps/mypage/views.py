@@ -120,8 +120,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             if category == 'requests_sent':
                 requests_sent = CoffeeChatRequest.objects.filter(user=target_user, status='WAITING')
                 data = [{
-                    'sender': request.user.username,
-                    'receiver': request.coffeechat.receiver.username,
+                    'sender': request.user.username,  # 요청을 보낸 사용자 (이 부분은 request.user로 유지)
+                    'receiver': request.coffeechat.receiver.username,  # 요청을 받은 사용자
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
@@ -133,8 +133,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             elif category == 'requests_received':
                 requests_received = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='WAITING')
                 data = [{
-                    'sender': request.user.username,
-                    'receiver': request.coffeechat.receiver.username,
+                    'sender': request.user.username,  # 요청을 보낸 사용자 (수정 필요: request.user -> request.user)
+                    'receiver': request.coffeechat.receiver.username,  # 요청을 받은 사용자 (request.user.username이 아닌 요청에서 받은 사용자를 명시적으로 설정해야 함)
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
@@ -147,28 +147,31 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             
             elif category == 'bookmarked':
                 bookmarked_coffeechats = CoffeeChat.objects.filter(bookmarks=target_user)
-                data = [{
-                    'sender': request.user.username,
-                    'receiver': coffeechat.receiver.username,
-                    'job': coffeechat.job,
-                    'created_at': coffeechat.created_at.isoformat(),
-                    'hashtags': [hashtag.name for hashtag in coffeechat.hashtags.all()],
-                    'bookmarked': True,
-                    'coffeechat_bookmark_profile': reverse_lazy('mypage:coffeechat_bookmark_profile', args=[coffeechat.id]),
-                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id]),
-                'profile_read_url': reverse_lazy('mypage:profile_read', args=[coffeechat.receiver.id]),
-                } for coffeechat in bookmarked_coffeechats]
+                data = []
+                for coffeechat in bookmarked_coffeechats:
+                    sender_username = coffeechat.sender.username if coffeechat.sender else 'Unknown'  # sender가 None일 경우 처리
+                    data.append({
+                        'sender': sender_username,
+                        'receiver': coffeechat.receiver.username if coffeechat.receiver else 'Unknown',
+                        'job': coffeechat.job,
+                        'created_at': coffeechat.created_at.isoformat(),
+                        'hashtags': [hashtag.name for hashtag in coffeechat.hashtags.all()],
+                        'bookmarked': True,
+                        'coffeechat_bookmark_profile': reverse_lazy('mypage:coffeechat_bookmark_profile', args=[coffeechat.id]),
+                        'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id]),
+                        'profile_read_url': reverse_lazy('mypage:profile_read', args=[coffeechat.receiver.id if coffeechat.receiver else '']),
+                    })
                 return JsonResponse({'bookmarked_coffeechats': data})
             
             elif category == 'history':
                 accepted_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='ACCEPTED')
                 data = [{
-                    'sender': request.user.username,
-                    'receiver': request.coffeechat.receiver.username,
+                    'sender': request.user.username,  # 변경: 요청을 보낸 사용자를 request에서 가져옴
+                    'receiver': request.coffeechat.receiver.username,  # 요청을 받은 사용자
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
-                    'hashtags': [hashtag.name for hashtag in request.coffeechat.hashtags.all()],  # 해시태그 추가
+                    'hashtags': [hashtag.name for hashtag in request.coffeechat.hashtags.all()],
                     'review': {
                         'rating': request.review.rating if hasattr(request, 'review') else None,
                         'content': request.review.content if hasattr(request, 'review') else None,

@@ -248,20 +248,20 @@
             // 카테고리별로 표시할 이름
             let displayName, job, hashtags;
             if (category === 'sent') {
-                displayName = coffeechat.receiver;
-                job = coffeechat.receiver_job;
+                displayName = coffeechat.receiver;  // 수신자 이름
+                job = coffeechat.receiver_job;  // 수신자의 직업
                 hashtags = coffeechat.hashtags;
             } else if (category === 'received') {
-                displayName = coffeechat.sender;
-                job = coffeechat.sender_job;
+                displayName = coffeechat.sender;  // 발신자 이름
+                job = coffeechat.sender_job;  // 발신자의 직업
                 hashtags = coffeechat.hashtags;
             } else if (category === 'bookmarked') {
-                displayName = coffeechat.receiver;
-                job = coffeechat.receiver_job;
+                displayName = coffeechat.receiver;  // 북마크한 커피챗의 수신자
+                job = coffeechat.receiver_job;  // 북마크한 커피챗의 수신자의 직업
                 hashtags = coffeechat.hashtags;
             } else {
-                displayName = coffeechat.sender;
-                job = coffeechat.sender_job;
+                displayName = coffeechat.sender;  // 기타의 경우 발신자
+                job = coffeechat.sender_job;  // 기타의 경우 발신자의 직업
                 hashtags = coffeechat.hashtags;
             }
 
