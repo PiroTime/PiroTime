@@ -165,15 +165,22 @@
                                     <strong>이메일 주소:</strong> {{ user.email }}
                                 </div>
                                 <div class="myinfo-item">
-                                    <strong>닉네임:</strong> {{ user.nickname}}
+                                    <strong>닉네임:</strong> {{ user.nickname }}
                                 </div>
                                 <div class="myinfo-item">
-                                    <strong>기수:</strong> {{ user.cohort}}
+                                    <strong>기수:</strong> {{ user.cohort }}
                                 </div>
+                                ${data.profile_image ? `
+                                    <div class="myinfo-item">
+                                        <img src="${data.profile_image}" alt="프로필 이미지" class="profile-image">
+                                    </div>` : `
+                                    <div class="myinfo-item">
+                                        <div class="default-profile-icon"><i class="fas fa-user"></i></div>
+                                    </div>`
+                                }
                                 <div class="myinfo-item">
-                                    <strong>소개:</strong> {{ user.intro|default_if_none:'자기소개 없음' }}
+                                    <strong>소개:</strong> {{ user.intro|default_if_none:"자기소개 없음" }}
                                 </div>
-                                ${data.profile_image ? `<div class="myinfo-item"><img src="${data.profile_image}" alt="프로필 이미지" class="profile-image"></div>` : ''}
                                 <a href="{% url 'mypage:profile_edit' %}" class="btn-primary">Edit</a>
                             </div>
                         `;

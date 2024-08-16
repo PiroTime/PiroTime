@@ -401,52 +401,65 @@ body {
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
 }
 
 .myinfo-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 2px solid #0BEC12;
-    border-radius: 10px;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    background-color: transparent;
-    font-size: 1.2rem;
-    color: #666;
     width: 100%;
-    max-width: 800px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff; /* 항목 배경색 */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 작은 그림자 추가 */
+    font-size: 1.1rem;
+    color: #333;
 }
 
 .myinfo-item strong {
     min-width: 150px;
+    color: #0BEC12; /* 텍스트 색상 */
 }
 
 .myinfo-item img.profile-image {
     display: block;
-    max-width: 100px;
-    margin: 0 auto;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0BEC12; /* 이미지 테두리 */
 }
 
 .myinfo .btn-primary {
     background-color: #0BEC12;
     color: white;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 25px; /* 둥근 버튼 */
     border: none;
     font-size: 1.2rem;
     text-align: center;
     margin-top: 20px;
-    width: 100px;
-    align-self: flex-end;
+    width: 150px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .myinfo .btn-primary:hover {
     background-color: #09D910;
+    transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
+}
+
+/* 기본 프로필 아이콘 스타일 */
+.myinfo-item .default-profile-icon {
+    font-size: 4rem;
+    color: #CCCCCC;
+    border: 3px solid #0BEC12;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
