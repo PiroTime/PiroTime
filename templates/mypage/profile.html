@@ -245,36 +245,37 @@
             const cardElement = document.createElement('div');
             cardElement.className = 'coffeechat-card';
         
-            // 카테고리별로 표시할 이름 설정
+            // 카테고리별로 표시할 이름
             let displayName, job, hashtags;
             if (category === 'sent') {
-                // 내가 보낸 요청의 경우 receiver 정보 사용
                 displayName = coffeechat.receiver;
-                job = coffeechat.job;  // receiver의 직업
+                job = coffeechat.receiver_job;
                 hashtags = coffeechat.hashtags;
             } else if (category === 'received') {
-                // 내가 받은 요청의 경우 sender 정보 사용
                 displayName = coffeechat.sender;
-                job = coffeechat.job;  // sender의 직업
+                job = coffeechat.sender_job;
+                hashtags = coffeechat.hashtags;
+            } else if (category === 'bookmarked') {
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
                 hashtags = coffeechat.hashtags;
             } else {
-                // bookmarked와 history의 경우 무조건 상대방 정보 사용
-                displayName = coffeechat.receiver;
-                job = coffeechat.job;
+                displayName = coffeechat.sender;
+                job = coffeechat.sender_job;
                 hashtags = coffeechat.hashtags;
             }
 
             const profileLink = coffeechat.detail_url ? coffeechat.detail_url : coffeechat.mypage_read_url;
         
             cardElement.innerHTML = `
-                ${category === 'bookmarked' ? `
-                    <div class="card-header">
+                <div class="card-header">
+                    ${category === 'bookmarked' ? `
                         <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" 
                                 class="scrap-icon ${coffeechat.bookmarked ? 'scrapped' : ''}">
                             <i class="fas fa-bookmark"></i>
                         </button>
-                    </div>
-                ` : ''}
+                    ` : '<div class="scrap-placeholder"></div>'}
+                </div>
                 <div class="profile-img">
                     ${coffeechat.profile_image ? `<img src="${coffeechat.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
                 </div>
@@ -283,7 +284,7 @@
                     ${category !== 'history' ? `<span class="job">${coffeechat.job}</span>` : ''}
                 </div>
                 <div class="card-content">
-                    ${category !== 'bookmarked' && category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
+                    ${category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
             `;
         
             if (category === 'sent') {
@@ -306,24 +307,20 @@
             
             } else if (category === 'bookmarked') {
                 cardElement.innerHTML += `
+                    <span class="waiting-status">커피챗 고민 중!</span>
                     <div class="hashtags">
                         ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
-                    <span class="waiting-status">커피챗 고민 중!</span>
-                    <div class="buttons">
+                    {% comment %} <div class="buttons">
                         <a href="${coffeechat.detail_url}" class="coffeechat-request">커피챗 요청하기!</a>
-                    </div>
+                    </div> {% endcomment %}
                 `;
             
             } else if (category === 'history') {
                 cardElement.innerHTML += `
+                    <span class="waiting-status">커피챗 고민 중!</span>
                     <div class="hashtags">
                         ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
-                    </div>
-                    <div class="buttons">
-                        ${!coffeechat.review_exists ? 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request coffeechat-review">리뷰 작성하러 가기!</a>` : 
-                            ''}
                     </div>
                 `;
             }

@@ -120,6 +120,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             if category == 'requests_sent':
                 requests_sent = CoffeeChatRequest.objects.filter(user=target_user, status='WAITING')
                 data = [{
+                    'sender': request.user.username,
                     'receiver': request.coffeechat.receiver.username,
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
@@ -131,6 +132,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 requests_received = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='WAITING')
                 data = [{
                     'sender': request.user.username,
+                    'receiver': request.coffeechat.receiver.username,
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
@@ -142,10 +144,10 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             elif category == 'bookmarked':
                 bookmarked_coffeechats = CoffeeChat.objects.filter(bookmarks=target_user)
                 data = [{
+                    'sender': request.user.username,
                     'receiver': coffeechat.receiver.username,
                     'job': coffeechat.job,
                     'created_at': coffeechat.created_at.isoformat(),
-                    'content': coffeechat.content,
                     'hashtags': [hashtag.name for hashtag in coffeechat.hashtags.all()],
                     'bookmarked': True,
                     'coffeechat_bookmark_profile': reverse_lazy('mypage:coffeechat_bookmark_profile', args=[coffeechat.id]),
