@@ -142,8 +142,8 @@
                                 postElement.innerHTML = `
                                     <div class="card-image" style="background-image: url('${randomImage}');"></div>
                                     <div class="card-content">
-                                        <h3><a href="${post.url}">${post.title}</a></h3>
-                                        <span><strong>작성자:</strong> ${post.writer} /</span>
+                                        <h3><a href="${post.url}"><strong>${post.title}</strong></a></h3>
+                                        <span><strong>작성자:</strong> ${post.writer}</span>
                                         <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
                                     </div>
                                 `;
