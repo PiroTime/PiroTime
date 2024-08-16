@@ -264,8 +264,8 @@ body {
 
 .coffeechat-card .profile-img {
     background-color: lightgray;
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -391,6 +391,7 @@ body {
 
 /* 해시태그 스타일 수정 */
 .coffeechat-card .hashtags {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 

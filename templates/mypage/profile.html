@@ -247,24 +247,25 @@
         
             // 카테고리별로 표시할 이름
             let displayName, job, hashtags;
+
             if (category === 'sent') {
-                displayName = coffeechat.receiver;  // 수신자 이름
-                job = coffeechat.receiver_job;  // 수신자의 직업
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
                 hashtags = coffeechat.hashtags;
             } else if (category === 'received') {
-                displayName = coffeechat.sender;  // 발신자 이름
-                job = coffeechat.sender_job;  // 발신자의 직업
+                displayName = coffeechat.receiver;
+                job = coffeechat.sender_job;
                 hashtags = coffeechat.hashtags;
             } else if (category === 'bookmarked') {
-                displayName = coffeechat.receiver;  // 북마크한 커피챗의 수신자
-                job = coffeechat.receiver_job;  // 북마크한 커피챗의 수신자의 직업
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
                 hashtags = coffeechat.hashtags;
             } else {
-                displayName = coffeechat.sender;  // 기타의 경우 발신자
-                job = coffeechat.sender_job;  // 기타의 경우 발신자의 직업
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
                 hashtags = coffeechat.hashtags;
             }
-
+            
             const profileLink = coffeechat.detail_url ? coffeechat.detail_url : mypage.profile_read_url;
       
             cardElement.innerHTML = `
@@ -309,7 +310,7 @@
                 cardElement.innerHTML += `
                     <span class="waiting-status">커피챗 고민 중!</span>
                     <div class="hashtags">
-                        ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
+                        ${hashtags.slice(0, 2).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
                     {% comment %} <div class="buttons">
                         <a href="${coffeechat.detail_url}" class="coffeechat-request">커피챗 요청하기!</a>
@@ -320,7 +321,7 @@
                 cardElement.innerHTML += `
                     <span class="waiting-status">커피챗 완료!</span>
                     <div class="hashtags">
-                        ${hashtags.map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
+                        ${hashtags.slice(0, 4).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
                 `;
             }
