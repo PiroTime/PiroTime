@@ -10,18 +10,18 @@ body {
 }
 
 .container {
-    padding: 40px 0 0 0;
+    min-height: 100vh;
     margin-top: 60px;
     margin-bottom: 0;
-    min-height: 100vh;
+    padding: 40px 0 0 0;
 }
 
-.review-container {
+.cor-container {
     border: 1px solid #CCCCCC;
     border-radius: 10px;
 }
 
-.review-detail {
+.cor-detail {
     padding: 40px;
     border-radius: 10px;
 }
@@ -39,6 +39,10 @@ body {
     justify-content: space-between;
 }
 
+.header-details {
+    flex-grow: 1;
+}
+
 .image-placeholder {
     width: 120px;
     height: 120px;
@@ -48,14 +52,10 @@ body {
     margin-right: 30px;
 }
 
-.review-image {
+.cor-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.header-details {
-    flex-grow: 1;
 }
 
 .header-details h1 {
@@ -75,8 +75,6 @@ body {
 
 .meta-info span {
     margin-right: 15px;
-    display: inline-block;
-    margin-right: 15px;
 }
 
 .header-sidebar {
@@ -87,12 +85,6 @@ body {
     border-radius: 10px;
     padding: 20px;
     margin-top: 40px;
-}
-
-.about-box h3 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: #333;
 }
 
 .action-buttons {
@@ -125,6 +117,7 @@ body {
     color: #FFC107;
 }
 
+
 .fa-heart:hover {
     color: #FF4C4C;
 } 
@@ -134,7 +127,11 @@ body {
     color: #FFC107;
 }
 
-/*-------  내용 ---------*/
+.fa-envelope:hover {
+    transform: scale(1.1);
+}
+
+/*------ 내용 ---------*/
 .content-section {
     display: flex;
     justify-content: space-between;
@@ -153,7 +150,7 @@ body {
     white-space: normal; /* 텍스트를 자동으로 줄바꿈 */
 }
 
-/*------- 댓글 --------*/
+/*----------- 댓글 ------------------*/
 .section-divider {
     border: none;
     border-top: 1px solid #CCCCCC;
@@ -345,4 +342,27 @@ body {
 
 .btn-back i, .btn-edit i, .btn-delete i {
     margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .image-placeholder {
+        margin-bottom: 20px;
+    }
+
+    .content-section {
+        flex-direction: column;
+    }
+
+    .sidebar, .main-content {
+        flex-basis: 100%;
+    }
+
+    .sidebar {
+        margin-bottom: 30px;
+    }
 }

@@ -16,12 +16,12 @@ body {
     min-height: 100vh;
 }
 
-.review-container {
+.trend-container {
     border: 1px solid #CCCCCC;
     border-radius: 10px;
 }
 
-.review-detail {
+.trend-detail {
     padding: 40px;
     border-radius: 10px;
 }
@@ -39,6 +39,10 @@ body {
     justify-content: space-between;
 }
 
+.header-details {
+    flex-grow: 1;
+}
+
 .image-placeholder {
     width: 120px;
     height: 120px;
@@ -48,14 +52,10 @@ body {
     margin-right: 30px;
 }
 
-.review-image {
+.trend-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.header-details {
-    flex-grow: 1;
 }
 
 .header-details h1 {
@@ -68,14 +68,18 @@ body {
     overflow-wrap: break-word; /* 단어가 부모 요소를 넘을 경우 줄바꿈 */
 }
 
+.header-details h2 {
+    font-size: 1.5rem;
+    color: #666;
+    margin: 0 0 15px 0;
+}
+
 .meta-info {
     font-size: 0.9rem;
     color: #888;
 }
 
 .meta-info span {
-    margin-right: 15px;
-    display: inline-block;
     margin-right: 15px;
 }
 
@@ -345,4 +349,27 @@ body {
 
 .btn-back i, .btn-edit i, .btn-delete i {
     margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .image-placeholder {
+        margin-bottom: 20px;
+    }
+
+    .content-section {
+        flex-direction: column;
+    }
+
+    .sidebar, .main-content {
+        flex-basis: 100%;
+    }
+
+    .sidebar {
+        margin-bottom: 30px;
+    }
 }

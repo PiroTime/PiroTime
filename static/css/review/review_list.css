@@ -1,16 +1,15 @@
 body{
-    background-color: white;
     font-family: 'Hubballi', sans-serif; 
 }
 
-.main-container {
+.main--container {
     max-width: 1000px;
     margin: 3rem auto;
     padding: 20px;
     padding-bottom: 5rem;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 19rem);
+    min-height: 100vh;
 }
 
 /* 검색 및 필터 섹션 */
@@ -31,7 +30,7 @@ body{
     align-items: center;
     background-color: #fff;
     border-radius: 30px;
-    border: 2px solid #0BEC12;
+    border: 1px solid #0BEC12;
     max-width: 600px;
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -121,7 +120,6 @@ body{
 .review-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
 }
 
 .review-card {
@@ -155,6 +153,9 @@ body{
 .review-card-content h2 {
     margin: 0 0 10px 0;
     font-size: 1.2rem;
+    white-space: nowrap; /* 텍스트가 한 줄로 유지되도록 설정 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis;
 }
 
 .review-card-content p {
@@ -169,13 +170,14 @@ body{
     color: #49BF4D;
 }
 
+/*---페이지네이션----*/
 .step-links {
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
 }
-/*---페이지네이션----*/
+
 .step-links a {
     color: #333;
     text-decoration: none;
@@ -216,6 +218,10 @@ body{
     color: #FF0000;
 }
 
+.fas.fa-heart.liked {
+    color: #FF0000;
+}
+
 .scrap-icon {
     position: absolute;
     top: 20px;
@@ -229,6 +235,7 @@ body{
 .scrap-icon.scrapped {
     color: #FFC107;
 }
+
 /*--------- 프로필 정보 ----------*/
 .profile-info {
     border-radius: 10px;

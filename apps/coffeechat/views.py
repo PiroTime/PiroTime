@@ -19,7 +19,7 @@ from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
 from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 
 User = get_user_model()
-
+@login_required
 def home(request):
     cohort_range = range(1, 22)  # 1기부터 21기까지의 범위
     reviews = Review.objects.all().order_by('-created_at')[:27]  # 최신 27개 리뷰 가져오기
@@ -37,6 +37,7 @@ def home(request):
     }
     return render(request, 'coffeechat/home.html', context)
 
+@login_required
 def list(req):
     query = req.GET.get('search')
     if query:
@@ -125,15 +126,15 @@ def create_review(request, coffeechat_request_id):
         form = ReviewForm()
     return render(request, 'coffeechat/review_form.html', {'form': form})
 
+
 def detail(request, pk):
     profile = CoffeeChat.objects.get(pk=pk)
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
+    reviews = Review.objects.filter(coffeechat_request__coffeechat=profile)
     
     if request.method == "POST" and request.user != profile.receiver:
-        # existing_request = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile).exists()
         existing_request = False
         if not existing_request:
-
             start_of_day = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
             end_of_day = start_of_day + timedelta(days=1)
             daily_requests = CoffeeChatRequest.objects.filter(
@@ -143,19 +144,17 @@ def detail(request, pk):
             ).count()
 
             if daily_requests < 5:
-
                 form = CoffeechatRequestForm(request.POST)
-
                 if form.is_valid():
                     message = form.cleaned_data['requestContent']
 
-                    # #리쿼스트 생성
-                    # coffeechat_request = CoffeeChatRequest
-                    # coffeechat_request.coffeechat = profile
-                    # coffeechat_request.user = request.user
-                    # coffeechat_request.letterToSenior = form.requestContent
-                    # coffeechat_request.save()
-                    # print('Letter to senipai: ', coffeechat_request.letterToSenior)
+                    #메일 전송
+                    subject = "PiroTime: 커피챗 신청이 왔습니다!"
+                    content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
+                    sending_mail(profile.receiver, request.user, subject, content, message)
+
+                    #리쿼스트 생성
+
 
                     CoffeeChatRequest.objects.create(
                         user=request.user,
@@ -163,32 +162,26 @@ def detail(request, pk):
                         status='WAITING',
                         letterToSenior=message
                     )
-                    #메일 전송
 
-                    print('message: ', message)
+
                     subject = "PiroTime: 커피챗 신청이 왔습니다!"
                     content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
                     sending_mail(profile.receiver, request.user, subject, content, message)
-                    print("email sending")
+
 
             else:
                 profile.status = 'LIMITED'
                 profile.save()
-    
+
     is_waiting = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile, status='WAITING').exists()
     waiting_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=profile.receiver, status='WAITING').count()
     is_limited = waiting_requests >= 5 and not is_waiting
     hashtags = profile.hashtags.all()
     requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
 
-    show_review_button = False
-    coffeechat_request = None
-    if profile.receiver == request.user:
-        for req in coffeechat_requests:
-            if req.status == 'ACCEPTED':
-                show_review_button = True
-                coffeechat_request = req
-                break
+    # 요청마다 리뷰가 있는지 확인하여 request 객체에 속성 추가
+    for req in requests:
+        req.existing_review = hasattr(req, 'review')
 
     ctx = {
         'profile': profile,
@@ -196,11 +189,12 @@ def detail(request, pk):
         'is_limited': is_limited,
         'hashtags': hashtags,
         'requests': requests,
-        'show_review_button': show_review_button,
-        'coffeechat_request': coffeechat_request,
         'requestContent': CoffeechatRequestForm,
+        'reviews': reviews,  # 해당 사용자의 리뷰 추가
     }
     return render(request, 'coffeechat/detail.html', ctx)
+
+@login_required
 
 def coffeechat_request(request, post_id):
     coffeechat = CoffeeChat.objects.get(post_id)
@@ -310,13 +304,15 @@ def sending_mail(receiver, sender, subject, content, message):
 
     subject = subject
     content = content
+
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
     
 
     html_message = render_to_string(
         "corboard/message.html",
-        {"sender": sender.username, "receiver": receiver.username,
+        {"sender": sender.username,
+         "receiver": receiver.username,
          "content": content,
          "message": message},
 

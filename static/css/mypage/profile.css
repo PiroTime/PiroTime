@@ -1,3 +1,4 @@
+/* 기본 설정 */
 body {
     font-family: 'Hubballi', sans-serif;
     position: relative;
@@ -18,24 +19,44 @@ body {
     flex-direction: column;
 }
 
+/* 프로필 헤더 스타일 */
 .profile-header {
     display: flex;
     align-items: center;
     margin-bottom: 2rem;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
 }
 
 .profile-image {
-    flex: 0 0 150px;
-    margin-right: 2rem;
+    flex: 0 0 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background-color: #cccccc;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #CCCCCC;
 }
 
 .profile-image img {
     width: 80px;
     height: 80px;
     border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-image i {
+    font-size: 4rem;
+    color: #BBBBBB;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -46,15 +67,17 @@ body {
 .profile-info h1 {
     font-size: 1.6rem;
     font-weight: 500;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.5rem 1rem;
 }
 
 .profile-info p {
     color: black;
-    font-size: 1.6rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
+    margin-left: 50px;
 }
 
+/* 버튼 스타일 */
 .btn-primary {
     background-color: #0BEC12;
     color: white;
@@ -77,6 +100,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     margin-top: 2rem;
+    min-height: 500px;
 }
 
 .activity-filter {
@@ -90,31 +114,45 @@ body {
     padding-bottom: 1rem;
 }
 
+/* 활동 내용 래퍼 */
 .activity-content-wrapper {
     flex: 1;
     display: flex;
     overflow: hidden;
     margin-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
+/* 활동 네비게이션 바 */
 .activity-navbar {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    margin-right: 2rem;
     font-size: 1.2rem;
-    width: 200px;
+    width: 20%;
+    margin-right: 1rem;
 }
 
+/* 오른쪽 빈 공간 */
+.activity-empty-space-right {
+    flex-shrink: 0;
+    width: 20%;
+    margin-left: 1rem;
+}
+
+/* 활동 내용 */
 .activity-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     overflow-y: auto;
-    padding-right: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    max-height: 600px;
+    padding-right: 15px;
+    box-sizing: border-box;
 }
 
 .activity-link, .filter-link {
@@ -140,13 +178,17 @@ body {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 10px;
     border: 1px solid #CCCCCC;
     position: relative;
     cursor: pointer;
     transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
+    height: 200px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
 }
 
 .activity-card:hover {
@@ -155,98 +197,269 @@ body {
 
 .card-image {
     height: 100px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-radius: 10px;
     background-size: cover;
     background-position: center;
 }
 
-.card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-content h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1.4rem;
+.activity-card h3 {
+    font-size: 1.2rem;
+    margin: 0 0 5px 0;
     font-weight: 500;
-}
-
-.card-content p {
-    flex: 1;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    font-size: 1.2rem;
+}
+
+.activity-card span {
+    font-size: 0.9rem;
     color: #666;
+    margin: 0 0 10px 0;
+    flex: 1;
 }
 
-.card-footer {
-    margin-top: 10px;
-    font-size: 0.8em;
+.activity-card p {
+    font-size: 1.5rem;
     color: #666;
+    margin: 0 0 10px 0;
+    flex: 1;
+}
+
+.activity-card .info {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* 커피챗 카드 스타일 */
+.coffeechat-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #CCCCCC;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: auto;
+    width: fit-content;
 }
 
-.card-footer .date {
-    font-style: italic;
+.activity-content.coffeechat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
-.card-footer .status {
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    font-weight: 500;
+.coffeechat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-.card-footer .status.active {
-    background-color: #e6f7e6;
-    color: #28a745;
-}
-
-.card-footer .status.inactive {
-    background-color: #f8d7da;
-    color: #dc3545;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* 커피챗 및 내정보 디자인 */
-.activity-navbar {
-    width: 220px;
-}
-
-.activity-link {
+.coffeechat-card .profile-img {
+    background-color: lightgray;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 0.8rem 1rem;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.coffeechat-card .profile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.coffeechat-card .profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.coffeechat-card .profile-details .name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.coffeechat-card .profile-details .job {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.coffeechat-card .profile-details .hashtags {
+    font-size: 1rem;
+    color: #333;
+    margin-top: 5px;
+}
+
+.coffeechat-card .card-content {
+    padding: 5px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+.coffeechat-card .card-content .request-time {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.coffeechat-card .card-content .waiting-status {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.coffeechat-card .buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+/* 통일된 버튼 스타일 */
+.coffeechat-card button.btn-accept, 
+.coffeechat-card button.btn-reject,
+.coffeechat-card button.coffeechat-request {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 2px solid #0BEC12;
+    background-color: transparent;
+    color: #0BEC12;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.coffeechat-card button.btn-accept:hover,
+.coffeechat-card button.btn-reject:hover,
+.coffeechat-card button.coffeechat-request:hover {
+    background-color: #0BEC12;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* 커피챗 네비게이션 */
+.coffeechat-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.coffeechat-nav a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.activity-link:hover,
-.activity-link.active {
-    color: #0BEC12;
+.coffeechat-nav a:hover, .coffeechat-nav a.active {
+    background-color: #0BEC12;
+    color: white;
 }
 
-.activity-link i {
-    margin-right: 10px;
-    font-size: 1.6rem;
+/* 내정보 스타일 */
+.grid-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding-right: 20px;
+    overflow-y: auto;
+    min-height: 400px;
 }
 
-/* 커피챗 아이콘 */
-.activity-link.coffee-chat i::before {
-    content: "\2615"; /* 커피 이모지 유니코드 */
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    margin: 0 auto;
+    height: 100%;
 }
 
-/* 내정보 아이콘 */
-.activity-link.my-info i::before {
-    content: "\1F464"; /* 사용자 이모지 유니코드 */
+.myinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+}
+
+.myinfo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff; /* 항목 배경색 */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 작은 그림자 추가 */
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.myinfo-item strong {
+    min-width: 150px;
+    color: #0BEC12; /* 텍스트 색상 */
+}
+
+.myinfo-item img.profile-image {
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0BEC12; /* 이미지 테두리 */
+}
+
+.myinfo .btn-primary {
+    background-color: #0BEC12;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px; /* 둥근 버튼 */
+    border: none;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 20px;
+    width: 150px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.myinfo .btn-primary:hover {
+    background-color: #09D910;
+    transform: translateY(-2px); /* 호버 시 약간 위로 이동 */
+}
+
+/* 기본 프로필 아이콘 스타일 */
+.myinfo-item .default-profile-icon {
+    font-size: 4rem;
+    color: #CCCCCC;
+    border: 3px solid #0BEC12;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

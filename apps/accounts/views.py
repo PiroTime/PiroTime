@@ -1,6 +1,6 @@
 # 표준 라이브러리
 from datetime import timedelta
-
+from django.contrib.auth.decorators import login_required
 # Django 모듈
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -44,10 +44,11 @@ def login_view(request):
         form = CustomAuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('accounts:index')
-
+@login_required
 def start(req):
     now = timezone.now()
 

@@ -1,21 +1,27 @@
 {% load static %}
 
-<div class="review-grid">
+<div class="trend-grid">
     {% for trend in page_obj %}
     {% with random_image=image_files|random %}
-    <div class="review-card">
-        <div class="review-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
+    <div class="trend-card">
+        <div class="trend-card-image" style="background-image: url('{% static 'images/' %}{{ random_image }}');"></div>
         <form class="bookmark-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:bookmark_trend' trend.pk %}" method="post">
             {% csrf_token %}
             <button type="button" class="scrap-icon {% if request.user in trend.bookmarks.all %} scrapped{% endif %}">
                 <i class="fas fa-bookmark"></i>
             </button>
         </form>
-        <div class="review-card-content">
+        <div class="trend-card-content">
             <h2><a href="{% url 'trend:trend_detail' pk=trend.pk %}">{{ trend.title }}</a></h2>
-            <p>작성자: <a href="{% url 'mypage:profile_read' trend.writer.id %}">{{ trend.writer }}</a></p>
+            <p style="display: inline;">작성자: 
+                {% if trend.writer == user %}
+                  <a href="{% url 'mypage:profile' %}" style="display: inline;">{{ trend.writer }}</a>
+                {% else %}
+                  <a href="{% url 'mypage:profile_read' trend.writer.id %}" style="display: inline;">{{ trend.writer }}</a>
+                {% endif %}
+            </p>                      
             <p>날짜: {{ trend.date|date:"Y년 m월 d일" }}</p>
-            <div class="review-likes">
+            <div class="trend-likes">
                 <form class="like-form" data-trend-id="{{ trend.pk }}" action="{% url 'trend:like_trend' pk=trend.pk %}" method="post">
                     {% csrf_token %}
                     <button type="button" class="like-button">
@@ -34,17 +40,21 @@
 
 <!-- 페이지네이션 -->
 <div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">« 처음</button>
-            <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">이전</button>
-        {% endif %}
+<span class="step-links">
+    {% if page_obj.has_previous %}
+        <button class="page-link" data-page="1" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">« 처음</button>
         <span class="current">
             {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
         </span>
-        {% if page_obj.has_next %}
-            <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">다음</button>
-            <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">마지막 »</button>
-        {% endif %}
-    </span>
+        <button class="page-link" data-page="{{ page_obj.previous_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">이전</button>
+    {% endif %}
+    
+    {% if page_obj.has_next %}
+        <button class="page-link" data-page="{{ page_obj.next_page_number }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">다음</button>
+        <span class="current">
+            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+        <button class="page-link" data-page="{{ page_obj.paginator.num_pages }}" data-order-by="{{ order_by }}" data-search="{{ search|urlencode }}">마지막 »</button>
+    {% endif %}
+</span>
 </div>

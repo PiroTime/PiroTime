@@ -1,4 +1,6 @@
 <div class="comment-block">
+    {% if not comment.parent  %}
+
     <div class="comment" id="comment-{{ comment.id }}">
       <p>{{ comment.content }}</p>
       <div class="comment-meta">
@@ -8,44 +10,46 @@
           {% else %}
             <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
           {% endif %}
-        </span>            
-        <div class="comment-meta-data">
-          <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-          {% if comment.writer == user or user.is_staff %}
-            <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-              <i class="fas fa-trash-alt"></i> 삭제
-            </button>
-          {% endif %}
-          <button class="btn-reply" onclick="showReplyForm({{ comment.id }});">Reply</button>
-        </div>
+        </span>
+          <div class="comment-meta-data">
+              <button class="btn-reply" onclick="showReplyForm({{ comment.id }});"><i class="fa-regular fa-comment"></i></button>
+              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+              {% if comment.writer == user or user.is_staff %}
+                  <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                      <i class="fas fa-trash-alt"></i> 삭제
+                  </button>
+              {% endif %}
+          </div>
       </div>
     </div>
-    
+    {% else %}
     <!-- 대댓글 표시 -->
-    <div class="replies" style="margin-left: 20px;">
-      {% for reply in comment.get_replies %}
-        <div class="comment" id="comment-{{ reply.id }}">
-          <p>{{ reply.content }}</p>
+    <div class="replies" style="margin-left: 20px; display: flex; align-items: center;" id="comment-{{ comment.id }}">
+{#      {% for reply in comment.get_replies %}#}
+        <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
+        <div class="comment reply-comment" >
+          <p>{{ comment.content }}</p>
           <div class="comment-meta">
             <span><i class="fas fa-user"></i> 
-              {% if reply.writer == user %}
-                <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+              {% if comment.writer == user %}
+                <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
               {% else %}
-                <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
               {% endif %}
             </span>                  
             <div class="comment-meta-data">
-              <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
-              {% if reply.writer == user or user.is_staff %}
-                <button class="btn-delete-comment" data-comment-id="{{ reply.id }}">
+              <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+              {% if comment.writer == user or user.is_staff %}
+                <button class="btn-delete-comment" data-comment-id="{{ comment.id }}">
                   <i class="fas fa-trash-alt"></i> 삭제
                 </button>
               {% endif %}
             </div>
           </div>
         </div>
-      {% endfor %}
+{#      {% endfor %}#}
     </div>
+    {% endif %}
 
     <!-- 대댓글 입력 폼 -->
     <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
@@ -56,4 +60,4 @@
         <button type="submit" class="btn-add-comment">답글 등록</button>
       </form>
     </div>
-  </div>
+</div>

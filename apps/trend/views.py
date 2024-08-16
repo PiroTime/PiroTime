@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from .models import Trend, Comment
 from .forms import TrendForm, CommentForm
 
+@login_required
 def trend_list(request):
     search = request.GET.get('search', '')
     order_by = request.GET.get('order_by', 'date')
@@ -48,12 +49,13 @@ def trend_list(request):
         'image_files': image_files
     })
 
+@login_required
 def trend_create(request):
     if request.method == "POST":
         form = TrendForm(request.POST)
         if form.is_valid():
             trend = form.save(commit=False)
-            trend.writer = request.user if request.user.is_authenticated else None
+            trend.writer = request.user
             trend.created_at = timezone.now()
             trend.save()
             return redirect('trend:trend_detail', pk=trend.pk)
@@ -61,6 +63,7 @@ def trend_create(request):
         form = TrendForm()
     return render(request, 'trend/trend_create.html', {'form': form})
 
+@login_required
 def trend_delete(request, pk):
     trend = get_object_or_404(Trend, pk=pk)
     if trend.writer != request.user and not request.user.is_staff:
@@ -68,6 +71,7 @@ def trend_delete(request, pk):
     trend.delete()
     return redirect('trend:trend_list')
 
+@login_required
 def trend_update(request, pk):
     trend = get_object_or_404(Trend, pk=pk)
     
@@ -121,7 +125,6 @@ def add_comment(request, trend_pk):
                 comment.parent = parent_comment
             
             comment.save()
-
             # 댓글 렌더링 HTML
             comment_html = render_to_string('comment_partial.html', {'comment': comment, 'user': request.user})
 

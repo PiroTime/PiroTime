@@ -13,8 +13,10 @@ body {
     padding: 40px;
     border-radius: 10px;
     margin-bottom: 20px;
-    text-align: center;
-    width: 300px;
+    text-align: left;
+    max-width: 600px; /* 최대 너비를 600px로 제한 */
+    box-sizing: border-box;
+    margin: 0 auto; /* 중앙 정렬 */
 }
 
 .logo h1 {
@@ -70,14 +72,24 @@ body {
     background-color: #0aa90a;
 }
 
+.image-label-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* span과 button 사이의 공간을 균등하게 분배 */
+    margin-bottom: 10px; /* label과 프로필 이미지 사이의 간격 */
+}
+
 .image-upload {
     position: relative;
     display: inline-block;
     margin: 20px;
+    text-align: left; /* 이미지 업로드 섹션의 정렬을 텍스트와 일치 */
 }
 
 .image-upload span {
+    display: block; /* 텍스트를 이미지 업로드 섹션 위에 표시 */
     color: gray;
+    margin-bottom: 5px; /* 텍스트와 업로드 버튼 사이의 간격 추가 */
 }
 
 .upload-label {
@@ -96,11 +108,20 @@ body {
     margin-top: 10px;
 }
 
+.upload-label img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none; /* 이미지가 없을 때는 숨김 */
+    border-radius: 50%; /* 업로드된 이미지도 원형으로 표시 */
+}
+
 .upload-label i {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    color: gray;
 }
 
 .upload-label i:hover {
@@ -109,6 +130,21 @@ body {
 
 .form-input--img {
     display: none; 
+}
+
+.remove-image {
+    display: none;
+    margin-top: 10px; 
+    color: #0BEC12;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.remove-image:hover {
+    color: #0aa90a;
 }
 
 .error {

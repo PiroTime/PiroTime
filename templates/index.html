@@ -24,38 +24,75 @@
         transform: translateY(0);
     }
 
-    .activity-cards > div:nth-child(1) , .activity-cards > div:nth-child(3) {
-        background-color: #FFFFFF;
+    /* 700px 이하에서 hero--right 숨기기 */
+    @media screen and (max-width: 1100px) {
+        .hero--right {
+            display: none;
+        }
+        
+        .hero--left {
+            width: 100%;
+            text-align: center; 
+            margin: 0 auto; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-content {
+            flex-direction: column; 
+            text-align: center; 
+            text-align: center;
+            width: 100%;
+        }
+
+        .about-content .icon, 
+        .about-content .description {
+            max-width: 90%;
+        }
+
+        .icon {
+            margin-bottom: 20px; 
+        }
+
+        .icon img {
+            max-width: 400px; 
+        }
+
+        .description {
+            text-align: center; 
+        }
+
+        .activity-cards {
+            grid-template-columns: repeat(2, 1fr);
+            align-items: center;
+            justify-content: center;
+        }
     }
 
-    .activity-card {
-        border-radius: 120px;
+    /* 768px 이하일 때 activities 섹션 한 줄로 세로로 나열 */
+    @media screen and (max-width: 768px) {
+        .icon img {
+            max-width: 300px;
+        }
+
+        .description h1 {
+            font-size: 1.8rem;
+        }
+
+        .activity-card {
+            flex: 1 1 48%; 
+        }
     }
 
-    .activity-cards > div:hover {
-        background-color: #3CF041;
-        color: white;
-        border: none;
-        transform: scale(1.1);
-        transition: all 0.3s ease-in-out;
-    }
-
-    .activity-card {
-        height: 380px;
-    }
-
-    .circle-image {
-        position: absolute;
-        right: 1px;
-        top: 8%;
-        z-index: -1;
-    }
-
-    .circle-image2 {
-        position: absolute;
-        right: 0;
-        top: 45%;
-        z-index: -1;
+    @media screen and (max-width: 450px) {
+        .activity-card {
+            flex: 1 1 100%; 
+            max-width: 350px; 
+            height: 200px; 
+            margin: 10px auto; 
+        }
     }
 </style>
 
@@ -99,10 +136,21 @@
                 <img src="{% static 'images/laptop.svg' %}" alt="Laptop Icon">
             </div>
             <div class="description">
-                <h2>About</h2>
-                <h1>PiroTime</h1>
-                <p>Lorem ipsum dolor sit amet consectetur. Nulla elementum bibendum turpis egestas duis pulvinar. Nulla massa mauris duis.</p>
-                <p>Vivamus. Sed faucibus ultricies tempor sit tempor. In mauris in platea odio diam sollicitudin turpis et nisl.</p>
+                <h4 style="margin: 0;">About</h4>
+                <h2>PiroTime</h2>
+                <div>
+                    <p>
+                        피로타임(PiroTime)은 피로그래밍 동아리를 수료한 피로그래머들이 모여, 함께 성장하고 발전하는 공간입니다.
+                    </p>
+                    <p>
+                        이곳은 피로그래머들이 서로의 경험과 지식을 나누며, 실질적인 협업 기회를 창출하는 커뮤니티입니다.
+                        단순한 프로젝트 공유를 넘어, 피드백과 리뷰를 통해 더 나은 결과물을 만들어가며, 오프라인 행사까지 함께 기획하고 참여합니다.
+                        피로타임은 진정한 네트워킹과 협력의 장을 제공하여, 모든 피로그래머가 자신의 가능성을 최대한 발휘할 수 있도록 지원합니다.
+                    </p>
+                    <p>
+                        이제, 피로타임과 함께 더 큰 가능성을 발견하고, 함께 성장해 나가세요. <br/><span style="font-size: 2rem;">Let's PiroTime!</span>
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -142,7 +190,7 @@
                 }
             });
         }, {
-            threshold: 0.6 // 섹션의 70%가 보이면 나타나기
+            threshold: 0.4 // 섹션의 70%가 보이면 나타나기
         });
 
         sections.forEach(section => {

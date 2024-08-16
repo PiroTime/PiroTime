@@ -2,21 +2,19 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/review/review_create.css' %}">
+<link rel="stylesheet" href="{% static 'css/corboard/create.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <style>
-    .container {
-        min-height: calc(100vh - 11.8125rem);
-        margin-bottom: 0;
-    }
-    #editor-container {
-        height: 300px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+    @media (max-width: 768px) {
+        .btns {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
     }
 </style>
 <div class="container max-width-1200">
-    <div class="review-create-card">
+    <div class="cor-create-card">
         <h1 class="main-title">프로젝트 협업 게시물 작성하기</h1>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}

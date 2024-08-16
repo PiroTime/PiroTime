@@ -15,7 +15,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0px;
+    margin: 0 auto;  
+    width: 100%;
+    text-align: center; 
 }
 
 .profile-header img {
@@ -41,8 +43,10 @@
 
 .profile-details {
     background: white;
-    padding: 20px 20px 0 20px;
+    padding: 10px 20px 0 20px;
     border-radius: 10px;
+    display: contents;
+    margin: 0px 115px;
 }
 
 .flex {
@@ -54,6 +58,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
 }
 
 .profile-content h2 {
@@ -64,6 +69,7 @@
 .profile-content div {
     line-height: 1.6;
     font-size: 1.2em;
+    border-bottom: 1px solid #ddd;
 }
 
 .action-buttons {
