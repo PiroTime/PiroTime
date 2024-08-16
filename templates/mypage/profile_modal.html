@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 모달</title>
+    <link rel="stylesheet" href="{% static 'css/mypage/profile_modal.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- 모달 HTML 구조 -->
+    <div id="profile_modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-button">&times;</span>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-image">
+                        {% if profile_user.profile_image %}
+                            <img src="{{ profile_user.profile_image.url }}" alt="{{ profile_user.username }}의 프로필 이미지">
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
+                    </div>
+                    <div class="profile-info">
+                        <h1>🍀{{ profile_user.cohort }}기 피로그래머 {{ profile_user.username }}🍀</h1>
+                        <p>{{ profile_user.intro|default_if_none:"소개가 없습니다." }}</p>
+                    </div>
+                </div>
+
+                <div class="profile-activities">
+                    <div class="activity-filter">
+                        <a href="#" class="filter-link active" data-category="all">All</a>
+                        <a href="#" class="filter-link" data-category="review">review</a>
+                        <a href="#" class="filter-link" data-category="corboard">cooperation</a>
+                        <a href="#" class="filter-link" data-category="trend">ITtrend</a>
+                    </div>
+
+                    <div class="activity-content-wrapper">
+                        <div class="activity-navbar">
+                            <a href="#" class="activity-link active" data-filter="my_posts">{{ profile_user.username }}님의 글</a>
+                        </div>
+
+                        <div id="activity-content" class="activity-content">
+                            <!-- AJAX로 채워질 내용 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentFilter = 'my_posts';
+            let currentCategory = 'all';
+            const userId = "{{ profile_user.id }}";
+
+            // 모달 닫기 버튼 이벤트
+            document.getElementById('close-button').addEventListener('click', function() {
+                document.getElementById('profile_modal').style.display = 'none';
+            });
+
+            loadActivities(currentFilter, currentCategory, userId);
+
+            const activityLinks = document.querySelectorAll('.activity-link');
+            const filterLinks = document.querySelectorAll('.filter-link');
+
+            activityLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentFilter = this.getAttribute('data-filter');
+                    activityLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                    loadActivities(currentFilter, currentCategory, userId);
+                });
+            });
+
+            filterLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentCategory = this.getAttribute('data-category');
+                    filterLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                    loadActivities(currentFilter, currentCategory, userId);
+                });
+            });
+
+            function loadActivities(filter, category, userId) {
+                const url = `{% url 'mypage:ajax_activities' %}?filter=${filter}&category=${category}&user_id=${userId}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const activityContent = document.getElementById('activity-content');
+                        activityContent.innerHTML = '';
+
+                        if (data.posts && data.posts.length > 0) {
+                            const randomImage = "{% static 'images/' %}{{ random_image }}";
+
+                            data.posts.forEach(post => {
+                                const postElement = document.createElement('div');
+                                postElement.classList.add('activity-card');
+
+                                postElement.innerHTML = `
+                                    <a href="${post.url}" class="card-link">
+                                        <div class="card-image" style="background-image: url('${randomImage}');"></div>
+                                        <div class="card-content">
+                                            <h3>${post.title}</h3>
+                                            <br/>
+                                            <span>작성자: ${post.writer}</span><br/>
+                                            <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
+                                        </div>
+                                    </a>
+                                `;
+                                activityContent.appendChild(postElement);
+                            });
+                        } else {
+                            activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
+                        }
+                    })
+                    .catch(error => console.error('Error loading activities:', error));
+            }
+        });
+    </script>
+</body>
+</html>

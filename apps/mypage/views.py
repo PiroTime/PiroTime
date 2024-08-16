@@ -241,3 +241,12 @@ def coffeechat_bookmark_profile(request, pk):
         bookmarked = True
 
     return JsonResponse({'bookmarked': bookmarked})
+
+@login_required
+def profile_modal_view(request):
+    user_id = request.GET.get('user_id')
+    profile_user = get_object_or_404(CustomUser, id=user_id)
+    context = {
+        'profile_user': profile_user,
+    }
+    return render(request, 'mypage/profile_modal.html', context)

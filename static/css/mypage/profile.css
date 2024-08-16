@@ -241,12 +241,13 @@ body {
     align-items: center;
     background-color: #fff;
     margin-bottom: 20px;
-    padding: 10px; /* 패딩을 조금 줄였습니다 */
+    padding: 10px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 220px; /* 가로 크기 고정 */
-    height: 340px; /* 세로 크기 고정 */
+    width: 180px; /* 가로 크기 고정 */
+    height: 300px; /* 세로 크기 고정 */
     box-sizing: border-box;
+    position: relative; /* 북마크 아이콘 위치 조정을 위해 position 속성 추가 */
 }
 
 .activity-content.coffeechat-grid {
@@ -259,6 +260,7 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
+
 
 .coffeechat-card .profile-img {
     background-color: lightgray;
@@ -310,10 +312,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* 내용물 위쪽 정렬 */
     background-color: #ffffff;
     width: 100%;
-    flex-grow: 1; /* 여백 채우기 */
 }
 
 .coffeechat-card .card-content .request-time {
@@ -370,12 +371,13 @@ body {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    height: 30px; /* 고정된 높이 설정 */
 }
 
 .scrap-icon {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 10px; /* 카드 상단에 고정 */
+    right: 10px;
     font-size: 1.4rem;
     cursor: pointer;
     background: none;
@@ -387,7 +389,8 @@ body {
     color: #FFC107; /* 북마크가 활성화된 경우에도 노란색으로 표시 */
 }
 
-.hashtags {
+/* 해시태그 스타일 수정 */
+.coffeechat-card .hashtags {
     margin-bottom: 10px;
 }
 
