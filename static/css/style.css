@@ -147,7 +147,13 @@ ol, ul, li, a {
     justify-content: center;
     text-align: right;
     width: 100%;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
+}
+
+.about-content .icon, 
+.about-content .description {
+    flex: 1; /* 두 요소가 1대 1로 너비를 나눠 가지도록 설정 */
+    max-width: 50%; /* 최대 너비를 50%로 제한 */
 }
 
 .icon {
@@ -173,6 +179,10 @@ ol, ul, li, a {
     font-size: 3rem;
     font-weight: 500;
     margin: 0;
+}
+
+.description p {
+    font-size: 1.2rem;
 }
 
 .activities {
