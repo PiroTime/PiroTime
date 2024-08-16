@@ -331,23 +331,32 @@ body {
     margin-top: 5px;
 }
 
-/* 통일된 버튼 스타일 */
+/* 커피챗 버튼 스타일 */
 .coffeechat-card button.btn-accept, 
 .coffeechat-card button.btn-reject,
-.coffeechat-card button.coffeechat-request {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+.coffeechat-card button.coffeechat-request,
+.coffeechat-card a.coffeechat-request,
+.coffeechat-card button.coffeechat-review,
+.coffeechat-card a.coffeechat-review {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
     border-radius: 5px;
     border: 2px solid #0BEC12;
     background-color: transparent;
     color: #0BEC12;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .coffeechat-card button.btn-accept:hover,
 .coffeechat-card button.btn-reject:hover,
-.coffeechat-card button.coffeechat-request:hover {
+.coffeechat-card button.coffeechat-request:hover,
+.coffeechat-card a.coffeechat-request:hover,
+.coffeechat-card button.coffeechat-review:hover,
+.coffeechat-card a.coffeechat-review:hover {
     background-color: #0BEC12;
     color: white;
     transform: scale(1.05);
