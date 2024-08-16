@@ -290,7 +290,7 @@
                 `;
             } else if (category === 'bookmarked') {
                 cardElement.innerHTML += `
-                    <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" class="bookmark-btn">
+                    <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" class="coffeechat-request bookmark-btn">
                         ${coffeechat.bookmarked ? '북마크 취소' : '북마크 추가'}
                     </button>
                     <span class="waiting-status">커피챗 고민 중!</span>
@@ -303,8 +303,8 @@
                     <span class="waiting-status">${coffeechat.review_exists ? '리뷰가 작성되었습니다.' : '리뷰를 남겨주세요.'}</span>
                     <div class="buttons">
                         ${coffeechat.review_exists ? 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request">또 커피챗 요청하기!</a>` : 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request">작성하러 가기!</a>`
+                            `<a href="${coffeechat.detail_url}" class="coffeechat-request coffeechat-review">또 커피챗 요청하기!</a>` : 
+                            `<a href="${coffeechat.detail_url}" class="coffeechat-request coffeechat-review">리뷰 작성하러 가기!</a>`
                         }
                     </div>
                 `;

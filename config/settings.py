@@ -158,8 +158,8 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     os.system("pip install Pillow")
 
 # CSRF 설정
-CSRF_COOKIE_SECURE = True
-CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SECURE = False
+CSRF_USE_SESSIONS = True
 DEBUG = True
 
 MEDIA_URL = '/media/'
