@@ -86,10 +86,11 @@
                             <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
                             {% csrf_token %}
                             <div class="input-container">
-{#                                <textarea id="userInput" name="requestContent" rows="10" cols="50"#}
-{#                                          placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..." required></textarea>#}
                                 {% csrf_token %}
-                                {{ form.as_p }} <!-- 폼 필드를 자동으로 렌더링 -->
+
+                                <textarea id="content" name="letter" rows="10" cols="50"
+                                          placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..." required></textarea>
+
                                 <button type="submit" id="submitBtn">제출</button>
                             </div>
                         </div>

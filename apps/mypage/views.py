@@ -155,6 +155,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     })
 
                     data.append({
+                        'message': request.letterToSenior,
                         'sender': sender_username,
                         'receiver': receiver_username,
                         'job': job,
