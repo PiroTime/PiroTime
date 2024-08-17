@@ -112,7 +112,6 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: none; /* 이미지가 없을 때는 숨김 */
     border-radius: 50%; /* 업로드된 이미지도 원형으로 표시 */
 }
 

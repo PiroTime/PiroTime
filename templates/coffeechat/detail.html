@@ -227,15 +227,15 @@
     }
 
     .profile-details-box {
-        padding: 0px 120px;
+        padding: 0px 155px;
     }
 
     .profile-content div {
         line-height: 1.6;
         font-size: 1.2em;
-        border-bottom: 1px solid #ddd;
         text-align: start;
-        padding-left: 117px;
+        padding: 0px 285px;
+        border: none;
     }
 
     @media (max-width: 450px) {
@@ -282,6 +282,7 @@
             align-items: flex-start;
             justify-content: center;
             flex-wrap: nowrap;
+            margin-top: 30px;
         }
 
         .tab-item {
@@ -308,19 +309,16 @@
 
         .card-review {
             width: 90% !important;
-            /* 리뷰 카드의 너비를 100%로 설정하여 화면에 맞춥니다. */
             margin-bottom: 1rem;
         }
 
         .requests-list {
-            width: 100%;
-            /* 요청 목록의 너비를 100%로 설정하여 화면에 맞춥니다. */
-            padding: 0 1rem;
+            width: 92%;
+            padding: 0 .5rem;
         }
 
         .review-rule h5 {
             font-size: 14px;
-            /* 리뷰 유의사항의 글꼴 크기를 조정하여 작은 화면에서도 잘 보이도록 합니다. */
         }
 
         .review-check-box {
@@ -342,7 +340,7 @@
             margin-top: 1rem;
         }
 
-        .max-width-1200 {
+        .max-width-1100 {
             width: min(1123px, 80%);
             padding: 0 40px;
         }
@@ -375,15 +373,15 @@
         .profile-content div {
             line-height: 1.6;
             font-size: 1.2em;
-            border-bottom: 1px solid #ddd;
             text-align: center;
-            padding-left: 0px;
+            padding: 0px;
+            border: none;
         }
     }
 </style>
 <div class="container">
     <div class="profile-header">
-        <div class="max-width-1200">
+        <div class="max-width-1100 max-width-1200">
             <div class="profile-info">
                 <div class="profile-img">
                     {% if profile.receiver.profile_image %}
@@ -401,43 +399,45 @@
             </div>
             <div class="action-buttons">
                 {% if user.is_authenticated %}
-                {% if user == profile.receiver %}
-                <div>
-                    <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
-                        <i class="fas fa-edit"></i> 수정
-                    </a>
-                    <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
-                        style="display:inline;">
+                    {% if user == profile.receiver %}
+                        <!-- 프로필 소유자가 자신의 프로필을 보는 경우 -->
+                        <div>
+                            <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
+                                <i class="fas fa-edit"></i> 수정
+                            </a>
+                            <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="button" onclick="confirmDelete()" class="btn-delete">
+                                    <i class="fas fa-trash-alt"></i> 삭제
+                                </button>
+                            </form>
+                            <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
+                                {% if profile.is_public %}
+                                    비공개로 전환하기
+                                {% else %}
+                                    공개로 전환하기
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% else %}
                         {% csrf_token %}
-                        <button type="button" onclick="confirmDelete()" class="btn-delete">
-                            <i class="fas fa-trash-alt"></i> 삭제
-                        </button>
-                    </form>
-                    <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
-                        {% if profile.is_public %}
-                        비공개로 전환하기
+                        {% if is_limited %}
+                            <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
+                        {% elif is_waiting %}
+                            <p class="status-message">커피챗 수락대기중</p>
+                        {% elif has_pending_request %}
+                            <p class="status-message">당신에게 커피챗 신청 중</p>
                         {% else %}
-                        공개로 전환하기
+                            <button id="openModalBtn" type="button">커피챗 신청하기</button>
                         {% endif %}
-                    </a>
-                </div>
-                {% else %}
-                {% csrf_token %}
-                {% if is_limited %}
-                <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
-                {% elif is_waiting %}
-                <p class="status-message">커피챗 수락대기중</p>
-                {% else %}
-                <button id="openModalBtn" type="button">커피챗 신청하기</button>
-                {% endif %}
-
-                <!-- 북마크 버튼 -->
-                <button type="button"
-                    class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
-                    data-profile-id="{{ profile.pk }}">
-                    <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
-                </button>
-                {% endif %}
+            
+                        <!-- 북마크 버튼 -->
+                        <button type="button"
+                                class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
+                                data-profile-id="{{ profile.pk }}">
+                            <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
+                        </button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -471,6 +471,22 @@
         </div>
     </div>
 
+    <div class="profile-details max-width-1200">
+        <div class="profile-details-box flex">
+            <!-- <h4 class="hashtag-title">파트너의 관심사는</h4> -->
+            <div class="hashtag-box">
+                {% for hashtag in hashtags %}
+                <p>
+                    <a href="" class="hashtag" style="color: black;" onclick="event.preventDefault();">
+                        #{{ hashtag.name }}
+                    </a>
+                </p>
+                {% endfor %}
+            </div>
+            <!-- <h4 class="hashtag-title">입니다</h4> -->
+        </div>
+    </div>
+
     <div class="tab-container">
         <div class="tab-item active" data-target="content-1">파트너 소개</div>
         <div class="tab-item" data-target="content-2">파트너 전체 리뷰</div>
@@ -483,20 +499,6 @@
                 <div>{{ profile.content|safe }}</div>
             </div>
 
-            <div class="profile-details max-width-1200">
-                <div class="profile-details-box flex">
-                    <h4 class="hashtag-title">파트너의 관심사는</h4>
-                    <div class="hashtag-box">
-                        {% for hashtag in hashtags %}
-                        <p>
-                            <a href="{% url 'coffeechat:coffeechat_list' %}?search={{ hashtag.name }}" class="hashtag"
-                                style="color: black;">#{{ hashtag.name }}</a>
-                        </p>
-                        {% endfor %}
-                    </div>
-                    <h4 class="hashtag-title">입니다</h4>
-                </div>
-            </div>
         </div>
         <div id="content-2" class="tab-content">
             <div class="review-container">

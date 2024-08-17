@@ -8,12 +8,28 @@
         width: 100%;
         max-width: 1000px;
     }
+
+    @media (max-width: 768px) {
+        .container {
+            width: 90%;
+        }
+
+        .review-create-card {
+            padding: 20px;
+        }
+
+        .max-width-1100 {
+            width: min(1200px, 100%);
+            padding: 0 0px;
+            margin-top: 0px;
+        }
+    }
 </style>
 
 
-<div class="container max-width-1200">
+<div class="container max-width-1200 max-width-1100">
     <div class="review-create-card">
-        <h1 class="main-title">프로젝트 리뷰 수정하기</h1>
+        <h1 class="main-title">프로젝트 협업 게시물 수정하기</h1>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
@@ -55,5 +71,7 @@
         var content = document.getElementById('cor-content');
         content.value = quill.root.innerHTML; // 다시 content에 전달
     }
+
+    
 </script>
 {% endblock %}

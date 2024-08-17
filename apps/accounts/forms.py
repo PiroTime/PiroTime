@@ -47,6 +47,7 @@ class CustomUserCreationForm(forms.ModelForm):
 
 # 프로필 수정 폼
 class CustomUserChangeForm(UserChangeForm):
+    delete_profile_image = forms.BooleanField(required=False, label="프로필 이미지 삭제")
     password = None
 
     class Meta:
@@ -70,6 +71,12 @@ class CustomUserChangeForm(UserChangeForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
+
+        # 이미지 삭제 처리
+        if self.cleaned_data.get('delete_profile_image'):
+            user.profile_image.delete(save=False)  # 이미지 파일 삭제
+            user.profile_image = None  # 필드를 None으로 설정
+            
         if commit:
             user.save()
         return user

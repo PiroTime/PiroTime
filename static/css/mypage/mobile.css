@@ -120,6 +120,10 @@
         gap: 10px;
     }
 
+    .profile-info p {
+        margin-left: 0;
+    }
+
 
     /* 하단 네비게이션 바 */
     /* .bottom-navbar {

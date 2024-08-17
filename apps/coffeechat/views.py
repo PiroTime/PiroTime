@@ -131,7 +131,14 @@ def detail(request, pk):
     profile = CoffeeChat.objects.get(pk=pk)
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
     reviews = Review.objects.filter(coffeechat_request__coffeechat=profile)
-    
+
+    # 현재 사용자가 프로필 소유자로부터 커피챗 요청을 받았는지 확인
+    has_pending_request = CoffeeChatRequest.objects.filter(
+        user=profile.receiver,  # 프로필 소유자가 요청을 보낸 사람
+        coffeechat__receiver=request.user,  # 현재 로그인한 사용자가 이 요청을 받은 사람
+        status='WAITING'
+    ).exists()
+
     if request.method == "POST" and request.user != profile.receiver:
         existing_request = False
         if not existing_request:
@@ -173,6 +180,7 @@ def detail(request, pk):
                 profile.status = 'LIMITED'
                 profile.save()
 
+    
     is_waiting = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile, status='WAITING').exists()
     waiting_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=profile.receiver, status='WAITING').count()
     is_limited = waiting_requests >= 5 and not is_waiting
@@ -187,6 +195,7 @@ def detail(request, pk):
         'profile': profile,
         'is_waiting': is_waiting,
         'is_limited': is_limited,
+        'has_pending_request': has_pending_request,  # 새로 추가된 컨텍스트 변수
         'hashtags': hashtags,
         'requests': requests,
         'requestContent': CoffeechatRequestForm,

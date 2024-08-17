@@ -24,8 +24,22 @@
             align-items: flex-start;
         }
     }
+
+    @media (max-width: 430px) {
+        .container {
+            width: 300px;
+        }
+        form {
+            width: 300px;
+        }
+
+        .max-width-1100{
+            width: 90%;
+            
+        }
+    }
 </style>
-<div class="container max-width-1200">
+<div class="container max-width-1100">
     <div class="review-create-card">
         <h1 class="main-title">프로젝트 리뷰 작성하기</h1>
         <form method="post">
