@@ -204,18 +204,32 @@ def detail(request, pk):
     return render(request, 'coffeechat/detail.html', ctx)
 
 @login_required
-
 def coffeechat_request(request, post_id):
-    coffeechat = CoffeeChat.objects.get(post_id)
+    coffeechat = get_object_or_404(CoffeeChat, id=post_id)  # 커피챗 객체를 안전하게 가져오기
     receiver = coffeechat.receiver
-    chat_request = CoffeeChatRequest()
+    
+    # 이미 요청이 있는지 확인
+    if CoffeeChatRequest.objects.filter(coffeechat=coffeechat, user=request.user).exists():
+        messages.error(request, "이미 이 커피챗에 요청을 보냈습니다.")
+        return redirect('coffeechat:coffeechat_detail', pk=coffeechat.pk)
 
-    chat_request.coffeechat = coffeechat
-    chat_request.user = request.user
+    # 새로운 요청 생성
+    chat_request = CoffeeChatRequest(
+        coffeechat=coffeechat,
+        user=request.user  # 요청을 보낸 사람 (sender)
+    )
+    chat_request.save()  # 데이터베이스에 저장
+
+    # CoffeeChat의 sender 필드를 업데이트
+    coffeechat.sender = request.user
+    coffeechat.save()
+
+    # 필요시 추가 작업 가능
+    return redirect('coffeechat:coffeechat_detail', pk=coffeechat.pk)
 
 @login_required
 def accept_request(request, request_id):
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
     if request.user == coffeechat_request.coffeechat.receiver:
         coffeechat_request.status = 'ACCEPTED'
         coffeechat_request.save()
@@ -230,14 +244,14 @@ def accept_request(request, request_id):
         message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
         content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
         if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
-
+            messages.error(request, "메일 전송에 실패했습니다.")
+    
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
 
 
 @login_required
 def reject_request(request, request_id):
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
     if request.user == coffeechat_request.coffeechat.receiver:
         coffeechat_request.status = "REJECTED"
         coffeechat_request.save()
@@ -248,11 +262,9 @@ def reject_request(request, request_id):
         message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
         content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
         if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
-
+            messages.error(request, "메일 전송에 실패했습니다.")
+    
     return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
-
-
 
 @login_required
 def update(req, pk):

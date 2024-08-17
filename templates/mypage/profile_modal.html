@@ -1,0 +1,48 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/mypage/profile_modal.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="{% static 'js/modal.js' %}"></script>
+</head>
+
+<!-- 모달 HTML 구조 -->
+<div id="profile_modal" class="modal" data-user-id="{{ profile_user.id }}">
+    <div class="modal-content">
+        <span class="close-button" id="close-button">&times;</span>
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-image" style="background-color: black;">
+                    {% if profile_user.profile_image %}
+                        <img src="{{ profile_user.profile_image.url }}" alt="{{ profile_user.username }}의 프로필 이미지">
+                    {% else %}
+                        <i class="fas fa-user"></i>
+                    {% endif %}
+                </div>
+                <div class="profile-info">
+                    <h1>🍀{{ profile_user.cohort }}기 피로그래머 {{ profile_user.username }}🍀</h1>
+                    <p>{{ profile_user.intro|default_if_none:"소개가 없습니다." }}</p>
+                </div>
+            </div>
+
+            <div class="profile-activities">
+                <div class="activity-filter">
+                    <a href="#" class="filter-link active" data-category="all">All</a>
+                    <a href="#" class="filter-link" data-category="review">review</a>
+                    <a href="#" class="filter-link" data-category="corboard">cooperation</a>
+                    <a href="#" class="filter-link" data-category="trend">ITtrend</a>
+                </div>
+
+                <div class="activity-content-wrapper">
+                    <div class="activity-navbar">
+                        <a href="#" class="activity-link active" data-filter="my_posts">{{ profile_user.username }}님의 글</a>
+                    </div>
+
+                    <div id="activity-content" class="activity-content">
+                        <!-- AJAX로 채워질 내용 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

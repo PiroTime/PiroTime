@@ -78,13 +78,10 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 posts = Trend.objects.filter(bookmarks=target_user)
             elif category == 'corboard':
                 posts = Corboard.objects.filter(bookmarks=target_user)
-            elif category == 'coffeechat':
-                posts = CoffeeChat.objects.filter(bookmarks=target_user)
             else:
                 posts = list(Trend.objects.filter(bookmarks=target_user)) + \
                         list(Review.objects.filter(bookmarks=target_user)) + \
-                        list(Corboard.objects.filter(bookmarks=target_user)) + \
-                        list(CoffeeChat.objects.filter(bookmarks=target_user))
+                        list(Corboard.objects.filter(bookmarks=target_user))
 
         # 내가 좋아요한 글 필터링
         elif filter_type == 'liked':
@@ -123,25 +120,57 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             if category == 'requests_sent':
                 requests_sent = CoffeeChatRequest.objects.filter(user=target_user, status='WAITING')
                 data = [{
+                    'sender': request.user.username,
                     'receiver': request.coffeechat.receiver.username,
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
+                    'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                 } for request in requests_sent]
                 return JsonResponse({'requests_sent': data})
 
             elif category == 'requests_received':
-                requests_received = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='WAITING')
-                data = [{
-                    'sender': request.user.username,
-                    'job': request.coffeechat.job,
-                    'created_at': request.created_at.isoformat(),
-                    'status': request.get_status_display(),
-                    'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
-                    'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
-                } for request in requests_received]
+                requests_received = CoffeeChatRequest.objects.filter(user=target_user, status='WAITING')
+                data = []
+                debug_data = []
+
+                for request in requests_received:
+                    sender_username = request.user.username
+                    receiver_username = request.coffeechat.receiver.username if request.coffeechat.receiver else 'Unknown'
+                    job = request.coffeechat.job
+                    detail_url = reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id])
+
+                    # 디버깅 정보 리스트
+                    debug_data.append({
+                        'request_id': request.id,
+                        'coffeechat_id': request.coffeechat.id,
+                        'sender_username': sender_username,
+                        'receiver_username': receiver_username,
+                        'job': job,
+                        'detail_url': detail_url,
+                        'status': request.status,
+                        'receiver_id': request.coffeechat.receiver.id if request.coffeechat.receiver else 'None',
+                        'sender_id': request.user.id
+                    })
+
+                    data.append({
+                        'sender': sender_username,
+                        'receiver': receiver_username,
+                        'job': job,
+                        'created_at': request.created_at.isoformat(),
+                        'status': request.get_status_display(),
+                        'detail_url': detail_url,
+                        'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id if request.coffeechat.receiver else '']),
+                        'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
+                        'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
+                    })
+
+                # 디버깅 정보를 출력
+                print("Debug Data for requests_received:", debug_data)
+
                 return JsonResponse({'requests_received': data})
-            
+
             elif category == 'bookmarked':
                 bookmarked_coffeechats = CoffeeChat.objects.filter(bookmarks=target_user)
                 data = [{
@@ -152,24 +181,27 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'hashtags': [hashtag.name for hashtag in coffeechat.hashtags.all()],
                     'bookmarked': True,
                     'coffeechat_bookmark_profile': reverse_lazy('mypage:coffeechat_bookmark_profile', args=[coffeechat.id]),
-                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id])
+                    'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[coffeechat.id]),
+                    'profile_read_url': reverse_lazy('mypage:profile_read', args=[coffeechat.receiver.id if coffeechat.receiver else '']),
                 } for coffeechat in bookmarked_coffeechats]
                 return JsonResponse({'bookmarked_coffeechats': data})
             
             elif category == 'history':
-                accepted_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='ACCEPTED')
+                accepted_requests = CoffeeChatRequest.objects.filter(user=target_user, status='ACCEPTED')
                 data = [{
                     'sender': request.user.username,
                     'receiver': request.coffeechat.receiver.username,
                     'job': request.coffeechat.job,
                     'created_at': request.created_at.isoformat(),
                     'status': request.get_status_display(),
+                    'hashtags': [hashtag.name for hashtag in request.coffeechat.hashtags.all()],
                     'review': {
                         'rating': request.review.rating if hasattr(request, 'review') else None,
                         'content': request.review.content if hasattr(request, 'review') else None,
                         'created_at': request.review.created_at.isoformat() if hasattr(request, 'review') else None,
                     } if hasattr(request, 'review') else None,
                     'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
+                    'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                     'review_exists': True if hasattr(request, 'review') else False,
                 } for request in accepted_requests]
                 return JsonResponse({'accepted_requests': data})
@@ -243,3 +275,12 @@ def coffeechat_bookmark_profile(request, pk):
         bookmarked = True
 
     return JsonResponse({'bookmarked': bookmarked})
+
+@login_required
+def profile_modal_view(request):
+    user_id = request.GET.get('user_id')
+    profile_user = get_object_or_404(CustomUser, id=user_id)
+    context = {
+        'profile_user': profile_user,
+    }
+    return render(request, 'mypage/profile_modal.html', context)
