@@ -43,6 +43,15 @@
             width: 90%;
         }
     }
+
+    .review-writer {
+        color: #333; 
+        text-decoration: none; 
+    }
+
+    .review-writer:hover {
+        color: #0BEC12; 
+    }
 </style>
 <div class="main--container">
     <!-- 검색 및 필터 섹션 -->
@@ -78,9 +87,9 @@
                         <h2>{{ review.title }}</h2>
                         <p>작성자:
                             {% if review.writer == user %}
-                              <a href="{% url 'mypage:profile' %}">{{ review.writer }}</a>
+                              <a href="{% url 'mypage:profile' %}" class="review-writer">{{ review.writer }}</a>
                             {% else %}
-                              <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a>
+                              <a href="/" class="open-profile-modal review-writer" data-user-id="{{ review.writer.id }}">{{ review.writer }}</a>
                             {% endif %}
                             / 날짜: {{ review.date|date:"Y년 m월 d일" }}
                         </p>
@@ -170,13 +179,24 @@ $.ajaxSetup({
 });
 
 $(document).ready(function() {
-    function updateContent(data) {
-        var newContent = $('<div>').html(data);
-        $('.review-grid').html(newContent.find('.review-grid').html());
-        $('.pagination').html(newContent.find('.pagination').html());
+    function toggleModalCSS(load) {
+        const modalCSSId = 'modal-css';
+        if (load) {
+            if ($('#' + modalCSSId).length === 0) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = '{% static "css/mypage/profile_modal.css" %}';
+                link.id = modalCSSId;
+                document.head.appendChild(link);
+            }
+        } else {
+            var link = document.getElementById(modalCSSId);
+            if (link) {
+                document.head.removeChild(link);
+            }
+        }
     }
 
-    // 필터 버튼 클릭 이벤트 핸들러
     $('.btn-filter').click(function() {
         var button = $(this);  // 클릭된 버튼을 변수로 저장
         var orderBy = button.data('order-by');
