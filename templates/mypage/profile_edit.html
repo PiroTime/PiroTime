@@ -22,6 +22,7 @@
         .upload-label {
             width: 120px;
             height: 120px;
+            cursor: pointer;
         }
 
         .remove-image {
@@ -77,17 +78,18 @@
         <div class="form-group image-upload">
             <div class="image-label-wrapper">
                 <span>프로필 이미지 (선택)</span>
-                <button type="button" class="remove-image" onclick="removeImage()" style="display: none;">이미지 삭제</button>
+                <button type="button" class="remove-image" onclick="removeImage()">이미지 삭제</button>
             </div>
-            <label for="id_profile_image" class="upload-label">
+            <div class="upload-label" onclick="document.getElementById('id_profile_image').click();">
                 {% if user.profile_image %}
                     <img id="image-preview" src="{{ user.profile_image.url }}" alt="프로필 이미지 미리보기" class="profile-image">
                 {% else %}
                     <i class="fas fa-camera"></i>
-                    <img id="image-preview" alt="프로필 이미지 미리보기">
+                    <img id="image-preview" alt="프로필 이미지 미리보기" style="display:none;">
                 {% endif %}
-            </label>
-            <input type="file" name="profile_image" id="id_profile_image" accept="profile_images/*" class="form-input--img" onchange="previewImage(event)">
+            </div>
+            <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)" style="display:none;">
+            <input type="hidden" name="delete_profile_image" id="id_delete_profile_image" value="false">
         </div>
         {% if form.profile_image.errors %}
             <div class="error">{{ form.profile_image.errors }}</div>
@@ -141,9 +143,10 @@
         const cameraIcon = document.querySelector('.upload-label i');
         const removeBtn = document.querySelector('.remove-image');
         const fileInput = document.getElementById('id_profile_image');
+        const deleteImageInput = document.getElementById('id_delete_profile_image');
 
-        // 이미지 src를 빈 값으로 설정하고 숨기기
-        output.src = '';
+        // 이미지 src를 제거하고 이미지 숨기기
+        output.removeAttribute('src');
         output.style.display = 'none';
 
         // 카메라 아이콘 보이기
@@ -155,18 +158,32 @@
         removeBtn.style.display = 'none';
 
         // 파일 입력 초기화
-        fileInput.value = ''; 
+        fileInput.value = ""; 
+
+        // 이미지 삭제 의도 전송
+        deleteImageInput.value = "true";
     }
 
     // 페이지 로드 시 프로필 이미지가 있으면 삭제 버튼을 표시
     window.onload = function() {
         const output = document.getElementById('image-preview');
         const removeBtn = document.querySelector('.remove-image');
+        const cameraIcon = document.querySelector('.upload-label i');
         
-        // output.src가 빈 값이 아니라면, 삭제 버튼 표시
-        if (output.src && output.src.indexOf('data:') !== 0) {
+        // 프로필 이미지가 있으면 삭제 버튼 보이기
+        if (output.src && !output.src.includes('data:') && output.src !== '') {
             removeBtn.style.display = 'inline-block';
+            output.style.display = 'block'; // 이미지가 있는 경우 이미지를 보이게 설정
+            if (cameraIcon) {
+                cameraIcon.style.display = 'none'; // 아이콘 숨기기
+            }
+        } else {
+            if (cameraIcon) {
+                cameraIcon.style.display = 'block'; // 아이콘 보이기
+            }
+            removeBtn.style.display = 'none'; // 삭제 버튼 숨기기
+            output.style.display = 'none'; // 이미지 숨기기
         }
-    }
+    };
 </script>
 {% endblock %}
