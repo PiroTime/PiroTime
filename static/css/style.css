@@ -207,7 +207,7 @@ ol, ul, li, a {
     transition: all 0.3s ease-in-out;
 }
 
-.activity-card {
+.info-activity-card {
     flex: 1;
     max-width: 200px;
     height: 380px;
@@ -223,7 +223,7 @@ ol, ul, li, a {
     font-size: 1.1rem;
 }
 
-.activity-card h3 {
+.info-activity-card h3 {
     font-size: 1.8rem;
 }
 
