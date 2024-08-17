@@ -3,7 +3,11 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
 <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
+<<<<<<< HEAD
 <link rel="stylesheet" href="{% static 'css/modal.css'%}">
+=======
+<link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
+>>>>>>> origin/develop
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
@@ -69,13 +73,22 @@
             </form>
 
             <div id="activity-content" class="activity-content">
-                <!-- AJAX -->
+                <!-- AJAX로 불러올 내용이 여기에 표시됩니다 -->
             </div>
         </div>
     </div>
-    <form >
+
 
 </div>
+
+<!-- 모달 HTML 구조 -->
+<div id="coffeechatModal" class="modal">
+    <div class="modal-content">
+        <span id="coffeechatModalClose" class="close-button">&times;</span>
+        <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+    </div>
+</div>
+
 <!-- 하단에 추가된 고정 네비게이션 바
 <div class="bottom-navbar mobile">
     <a href="#" class="bottom-link" data-filter="my_posts"><i class="fas fa-heart"></i>내가 쓴 글</a>
@@ -85,7 +98,7 @@
     <a href="#" class="bottom-link" data-filter="coffeechat"><i class="fas fa-heart"></i>커피챗</a>
     <a href="#" class="bottom-link" data-filter="profile_info"><i class="fas fa-heart"></i>내 정보</a>
 </div> -->
-
+<script src="{% static 'js/coffeechat.js' %}"></script>
 <script>
 
 
@@ -93,24 +106,15 @@
     document.addEventListener("DOMContentLoaded", function() {
         const navbarToggle = document.getElementById('navbar-toggle');
         const activityList = document.querySelector('.activity-list');
-        // const bottomNavbar = document.querySelector('.bottom-navbar');
 
+        // 모바일/데스크탑 화면 크기 체크하여 적절한 네비게이션 바 표시
         function checkScreenWidth() {
             const isMobile = window.innerWidth <= 768;
-
-            // 모바일에서는 모바일 네비게이션 보이기, 데스크탑 네비게이션 숨기기
             document.querySelector('.activity-navbar.desktop').classList.toggle('hidden', isMobile);
             document.querySelector('.activity-navbar.mobile').classList.toggle('hidden', !isMobile);
-
-            // 토글 버튼이 화면에 보이지 않거나 DOM에 존재하지 않는다면 bottom-navbar를 보이게
-            // if (!navbarToggle || !navbarToggle.offsetParent) {
-            //     bottomNavbar.classList.add('active');
-            // } else {
-            //     bottomNavbar.classList.remove('active');
-            // }
         }
 
-        // 페이지 로드 시와 윈도우 크기 조정 시에 함수 호출
+        // 페이지 로드 및 윈도우 크기 조정 시 화면 크기 체크
         window.addEventListener('load', checkScreenWidth);
         window.addEventListener('resize', checkScreenWidth);
 
@@ -126,6 +130,7 @@
                 }
             });
 
+            // 모바일 메뉴에서 링크 클릭 시 토글 닫기
             document.querySelectorAll('.activity-link').forEach(function(link) {
                 link.addEventListener('click', function(event) {
                     event.preventDefault();
@@ -133,16 +138,13 @@
                     activityList.classList.remove('active');
                 });
             });
-        } else {
-            bottomNavbar.classList.add('active');
         }
 
-        //-------------------------------------------------
-
-        let currentFilter = 'my_posts';
-        let currentCategory = 'all';
+        let currentFilter = 'my_posts';  // 초기 필터 설정
+        let currentCategory = 'all';     // 초기 카테고리 설정
         const originalFilterContent = document.getElementById('activity-filter').innerHTML;
 
+        // 필터링 링크에 이벤트 리스너 추가
         function addFilterEventListeners() {
             const filterLinks = document.querySelectorAll('.filter-link');
             filterLinks.forEach(link => {
@@ -156,6 +158,7 @@
             });
         }
 
+        // AJAX를 사용하여 활동 내용을 불러오는 함수
         function loadActivities(filter, category) {
             const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
             
@@ -165,6 +168,7 @@
                     const activityContent = document.getElementById('activity-content');
                     activityContent.innerHTML = '';
 
+                    // 프로필 정보 필터 처리
                     if (filter === 'profile_info') {
                         activityContent.classList.remove('grid-content');
                         activityContent.classList.add('centered-content');
@@ -173,33 +177,21 @@
                         activityContent.classList.add('grid-content');
                     }
 
+                    // 프로필 정보 표시
                     if (filter === 'profile_info') {
                         const profileInfo = `
                             <div class="myinfo">
                                 <div class="myinfo-image">
                                     ${data.profile_image ? 
-                                        `
-                                        <img src="${data.profile_image}" alt="프로필 이미지" class="myinfo-profile-image">
-                                        ` : `
-                                        <div class="default-profile-icon"><i class="fas fa-user"></i></div>
-                                        `
+                                        `<img src="${data.profile_image}" alt="프로필 이미지" class="myinfo-profile-image">` : 
+                                        `<div class="default-profile-icon"><i class="fas fa-user"></i></div>`
                                     }
                                 </div>
-                                <div class="myinfo-item">
-                                    <strong>사용자 이름</strong> {{ user.username }}
-                                </div>
-                                <div class="myinfo-item">
-                                    <strong>이메일 주소</strong> {{ user.email }}
-                                </div>
-                                <div class="myinfo-item">
-                                    <strong>닉네임</strong> {{ user.nickname }}
-                                </div>
-                                <div class="myinfo-item">
-                                    <strong>기수</strong> {{ user.cohort }}
-                                </div>
-                                <div class="myinfo-item">
-                                    <strong>소개</strong> <span>{{ user.intro|default_if_none:"자기소개 없음" }}</span>
-                                </div>
+                                <div class="myinfo-item"><strong>사용자 이름</strong> {{ user.username }}</div>
+                                <div class="myinfo-item"><strong>이메일 주소</strong> {{ user.email }}</div>
+                                <div class="myinfo-item"><strong>닉네임</strong> {{ user.nickname }}</div>
+                                <div class="myinfo-item"><strong>기수</strong> {{ user.cohort }}</div>
+                                <div class="myinfo-item"><strong>소개</strong> <span>{{ user.intro|default_if_none:"자기소개 없음" }}</span></div>
                                 <a href="{% url 'mypage:profile_edit' %}" class="btn-primary">프로필 수정하기</a>
                             </div>
                         `;
@@ -207,6 +199,7 @@
                     } else if (filter === 'coffeechat') {
                         let coffeechatCards = '';
 
+                        // 커피챗 요청 필터 처리
                         if (category === 'requests_sent' && data.requests_sent) {
                             data.requests_sent.forEach(request => {
                                 coffeechatCards += createCoffeeChatCard(request, 'sent');
@@ -228,14 +221,13 @@
                         }
 
                         activityContent.innerHTML = coffeechatCards;
-
                         activityContent.classList.add('coffeechat-grid');
 
                     } else {
+                        // 다른 필터에 대한 게시물 처리
                         if (data.posts && data.posts.length > 0) {
                             data.posts.forEach(post => {
                                 const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
-
                                 const postElement = document.createElement('div');
                                 postElement.classList.add('activity-card');
                                 postElement.innerHTML = `
@@ -258,6 +250,7 @@
                 .catch(error => console.error('Error loading activities:', error));
         }
 
+        // 커피챗 카드 생성 함수
         function createCoffeeChatCard(coffeechat, category) {
             const options = { month: 'long', day: 'numeric' };
             let date = '';
@@ -272,7 +265,6 @@
             cardElement.className = 'coffeechat-card';
             cardElement.setAttribute('data-coffeechat-id', '{{ coffeechat.id }}')
         
-            // 카테고리별로 표시할 이름
             let displayName, job, hashtags;
 
             if (category === 'sent') {
@@ -322,15 +314,10 @@
                 cardElement.innerHTML += `
                     <span class="waiting-status">후배가 기다리는 중!</span>
                     <div class="buttons">
-                        <form method="post" action="${coffeechat.accept_url}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-accept">Accept</button>
-                        </form>
-                        <form method="post" action="${coffeechat.reject_url}">
-                            {% csrf_token %}
-                            <button class="btn-reject" type="submit">Reject</button>
-                        </form>
+                        <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
+                        <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
+                    <button type="button" class="btn-view-letter" data-letter="${coffeechat.letter_to_senior}">커피챗 문구보기</button>
                 `;
             
             } else if (category === 'bookmarked') {
@@ -339,9 +326,6 @@
                     <div class="hashtags">
                         ${hashtags.slice(0, 2).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
-                    {% comment %} <div class="buttons">
-                        <a href="${coffeechat.detail_url}" class="coffeechat-request">커피챗 요청하기!</a>
-                    </div> {% endcomment %}
                 `;
             
             } else if (category === 'history') {
@@ -360,6 +344,7 @@
             return cardElement.outerHTML;
         }
 
+        // 활동 링크에 이벤트 리스너 추가
         function addActivityLinkEventListeners() {
             const activityLinks = document.querySelectorAll('.activity-link');
             activityLinks.forEach(link => {
@@ -392,13 +377,73 @@
 
         addActivityLinkEventListeners();
         addFilterEventListeners();
+
+        // CSRF 토큰을 가져오는 함수
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrftoken = getCookie('csrftoken');
+        
+        // AJAX 요청을 보내는 함수
+        function sendRequest(url, successMessage, errorMessage) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'  // AJAX 요청임을 명시
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'accepted' || data.status === 'rejected') {
+                    alert(successMessage);
+                    location.reload(); // 필요 시 페이지 새로고침
+                } else if (data.error) {
+                    alert(errorMessage);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(errorMessage);
+            });
+        }
+        
+        // Accept 버튼 클릭 이벤트
+        document.querySelectorAll('.btn-accept').forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+                sendRequest(url, '요청이 수락되었습니다!', '요청 수락 중 오류가 발생했습니다.');
+            });
+        });
+        
+        // Reject 버튼 클릭 이벤트
+        document.querySelectorAll('.btn-reject').forEach(button => {
+            button.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+                sendRequest(url, '요청이 거절되었습니다.', '요청 거절 중 오류가 발생했습니다.');
+            });
+        });
     });
 
+    // 북마크 토글 함수
     function toggleBookmark(url, cardElement) {
         fetch(url, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
+                'X-CSRFToken': csrftoken,
                 'Content-Type': 'application/json'
             }
         })
@@ -410,8 +455,7 @@
         })
         .then(data => {
             if (!data.bookmarked) {
-                // 북마크가 취소되었으면 카드 제거
-                cardElement.remove();
+                cardElement.remove(); // 북마크가 취소되었으면 카드 제거
             } else {
                 alert('북마크가 추가되었습니다.');
             }

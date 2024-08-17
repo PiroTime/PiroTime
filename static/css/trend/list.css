@@ -145,7 +145,6 @@ body{
 .trend-card a {
     text-decoration: none;
     color: inherit;
-    display: block;
 }
 
 .trend-card-image {

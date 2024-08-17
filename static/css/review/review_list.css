@@ -260,7 +260,7 @@ body{
 }
 
 .mypage {
-    background-color: #007bff;
+    background-color: #0BEC12;
     color: white;
     border:none;
     border-radius: 10px;
@@ -268,7 +268,7 @@ body{
 }
 
 .mypage:hover {
-    background-color: #0056b3;
+    background-color: #0BEC12;
 }
 
 .profile-img i {

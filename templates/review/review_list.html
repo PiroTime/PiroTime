@@ -43,6 +43,15 @@
             width: 90%;
         }
     }
+
+    .review-writer {
+        color: #333; 
+        text-decoration: none; 
+    }
+
+    .review-writer:hover {
+        color: #0BEC12; 
+    }
 </style>
 <div class="main--container">
     <!-- 검색 및 필터 섹션 -->
@@ -78,9 +87,9 @@
                         <h2>{{ review.title }}</h2>
                         <p>작성자:
                             {% if review.writer == user %}
-                              <a href="{% url 'mypage:profile' %}">{{ review.writer }}</a>
+                              <a href="{% url 'mypage:profile' %}" class="review-writer">{{ review.writer }}</a>
                             {% else %}
-                              <a href="/" class="open-profile-modal" data-user-id="{{ review.writer.id }}">{{ review.writer }}</a>
+                              <a href="/" class="open-profile-modal review-writer" data-user-id="{{ review.writer.id }}">{{ review.writer }}</a>
                             {% endif %}
                             / 날짜: {{ review.date|date:"Y년 m월 d일" }}
                         </p>
@@ -149,7 +158,6 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'js/modal.js' %}"></script>
 <script>
 // CSRF 토큰을 자동으로 AJAX 요청에 포함하기 위한 설정
 function getCookie(name) {
@@ -195,6 +203,48 @@ $(document).ready(function() {
                 document.head.removeChild(link);
             }
         }
+    }
+
+    $(document).on('click', '.open-profile-modal', function(event) {
+        event.preventDefault();
+        var userId = $(this).data('user-id');
+        var url = `/mypage/ajax/profile-modal`;
+
+        // Make an AJAX request to load the modal content
+        $.ajax({
+            url: url,
+            data: { 'user_id': userId },
+            success: function(response) {
+                console.log(response); // 응답 내용을 확인
+                $('#modal-profile-content').html(response);
+                $('#profile_modal').show();
+
+                // 모달 로드 후 스크립트 초기화
+                initializeProfileModal(userId);
+                
+            },
+            error: function(xhr) {
+                alert('프로필을 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    $('.close-button').click(function() {
+        $('#profile_modal').hide();
+        toggleModalCSS(false);  // CSS 파일 제거
+    });
+
+    $(window).click(function(event) {
+        if (event.target.id === 'profile_modal') {
+            $('#profile_modal').hide();
+            toggleModalCSS(false);  // CSS 파일 제거
+        }
+    });
+
+    function updateContent(data) {
+        var newContent = $('<div>').html(data);
+        $('.review-grid').html(newContent.find('.review-grid').html());
+        $('.pagination').html(newContent.find('.pagination').html());
     }
 
     $('.btn-filter').click(function() {
@@ -298,42 +348,6 @@ $(document).ready(function() {
                 alert('북마크 처리 중 오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
             }
         });
-    });
-
-    $(document).on('click', '.open-profile-modal', function(event) {
-        event.preventDefault();
-        var userId = $(this).data('user-id');
-        var url = `/mypage/ajax/profile-modal`;
-
-        // Make an AJAX request to load the modal content
-        $.ajax({
-            url: url,
-            data: { 'user_id': userId },
-            success: function(response) {
-                console.log(response); // 응답 내용을 확인
-                $('#modal-profile-content').html(response);
-                $('#profile_modal').show();
-
-                // 모달 로드 후 스크립트 초기화
-                initializeProfileModal(userId);
-                
-            },
-            error: function(xhr) {
-                alert('프로필을 불러오는 중 오류가 발생했습니다.');
-            }
-        });
-    });
-
-    $('.close-button').click(function() {
-        $('#profile_modal').hide();
-        toggleModalCSS(false);  // CSS 파일 제거
-    });
-
-    $(window).click(function(event) {
-        if (event.target.id === 'profile_modal') {
-            $('#profile_modal').hide();
-            toggleModalCSS(false);  // CSS 파일 제거
-        }
     });
 });
 </script>

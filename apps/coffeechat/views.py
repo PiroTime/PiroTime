@@ -214,42 +214,47 @@ def coffeechat_request(request, post_id):
 
 @login_required
 def accept_request(request, request_id):
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
-    if request.user == coffeechat_request.coffeechat.receiver:
-        coffeechat_request.status = 'ACCEPTED'
-        coffeechat_request.save()
-        
-        # CoffeeChat 모델의 count 필드 증가
-        coffeechat = coffeechat_request.coffeechat
-        coffeechat.count += 1
-        coffeechat.save()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+        if request.user == coffeechat_request.coffeechat.receiver:
+            coffeechat_request.status = 'ACCEPTED'
+            coffeechat_request.save()
 
-        # 메일 보내기
-        subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
-        message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
-        content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
-        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
+            # CoffeeChat 모델의 count 필드 증가
+            coffeechat = coffeechat_request.coffeechat
+            coffeechat.count += 1
+            coffeechat.save()
 
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+            # 메일 보내기
+            subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
+            message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
+            content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
+            if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
+                return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=500)
 
+            return JsonResponse({"status": "accepted"}, status=200)
+    
+    return JsonResponse({"error": "잘못된 요청입니다."}, status=400)
 
 @login_required
 def reject_request(request, request_id):
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
-    if request.user == coffeechat_request.coffeechat.receiver:
-        coffeechat_request.status = "REJECTED"
-        coffeechat_request.save()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+        if request.user == coffeechat_request.coffeechat.receiver:
+            coffeechat_request.status = "REJECTED"
+            coffeechat_request.save()
 
-        coffeechat = coffeechat_request.coffeechat
+            coffeechat = coffeechat_request.coffeechat
 
-        subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
-        message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
-        content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
-        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
+            subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
+            message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
+            content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
+            if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
+                return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=500)
 
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+            return JsonResponse({"status": "rejected"}, status=200)
+    
+    return JsonResponse({"error": "잘못된 요청입니다."}, status=400)
 
 @login_required
 def update(req, pk):
