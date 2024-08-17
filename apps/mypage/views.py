@@ -131,7 +131,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 return JsonResponse({'requests_sent': data})
 
             elif category == 'requests_received':
-                requests_received = CoffeeChatRequest.objects.filter(user=target_user, status='WAITING')
+                requests_received = CoffeeChatRequest.objects.filter(coffeechat__receiver=target_user, status='WAITING')
                 data = []
                 debug_data = []
 
