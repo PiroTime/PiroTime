@@ -4,6 +4,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/corboard/detail.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/modal.css'%}">
 <style>
     @media screen and (max-width: 768px) {
         /* 더 작은 화면에서 검색창과 필터 버튼의 간격 조정 */
@@ -70,14 +71,31 @@
                   <i class="fas fa-bookmark {% if user in cor.bookmarks.all %}bookmarked{% endif %}"></i>
                 </button>
               </form>
-              <form action="{% url 'corboard:cor_mail' pk=cor.pk %}" method="post">
+              <form>
                   {% if cor.writer != user %}
                   {% csrf_token %}
-                  <button href="{% url 'corboard:cor_mail' pk=cor.pk %}" class="btn-action btn-mail" data-cor-id="{{ cor.id }}">
-                    <i class="fas fa-envelope"></i>
-                  </button>
+                      <button class="btn-action btn-mail" id="openModalBtn">
+                        <i class="fas fa-envelope"></i>
+                      </button>
                   {% endif %}
               </form>
+                <form  method="post">
+                    <div id="myModal" class="modal" >
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
+                            {% csrf_token %}
+                            <div class="input-container">
+{#                                <textarea id="userInput" name="requestContent" rows="10" cols="50"#}
+{#                                          placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..." required></textarea>#}
+                                {% csrf_token %}
+                                {{ form.as_p }} <!-- 폼 필드를 자동으로 렌더링 -->
+                                <button type="submit" id="submitBtn">제출</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
 
             </div>
           </div>
@@ -204,7 +222,9 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+{#<script src="../../static/js/coffeechat.js"></script>#}
+
+    <script>
     $(document).ready(function() {
         // CSRF 토큰 가져오기
         function getCSRFToken() {
@@ -266,23 +286,7 @@
     });
 
     // 메일 전송 기능
-    $('.btn-mail').click(function(e) {
-      e.preventDefault();
-      var corId = $(this).data('cor-id');
-      $.get('/corboard/cor_mail/' + corId + '/', {
-        csrfmiddlewaretoken: getCSRFToken()
-      }, function(data) {
-        if (data.success) {
-          alert('메일 전송에 성공했습니다. 작성자의 응답을 기다려주세요.');
-        }
-      }).fail(function(xhr, status, error) {
-        if (xhr.status == 302) {
-          window.location.href = xhr.getResponseHeader('Location');
-        } else {
-          alert('메일 전송에 실패했습니다. 다시 시도해주세요.');
-        }
-      });
-    });
+
 
     // 댓글 삭제 기능
     $(document).on('click', '.btn-delete-comment', function(){
@@ -307,8 +311,24 @@
         });
       }
     });
-
-
+    {#$('#submitBtn').click(function(e) {#}
+    {#    e.preventDefault();#}
+    {#    var corId = $(this).data('cor-id');#}
+    {#    console.log("++++++++")#}
+    {#    var modal = document.getElementById("myModal");#}
+    {#    modal.style.display = "none";#}
+    {#    $.post('/corboard/cor_mail/' + corId + '/' ,function(data) {#}
+    {#        if (data.success) {#}
+    {#            alert('메일 전송에 성공했습니다. 작성자의 응답을 기다려주세요.');#}
+    {#        }#}
+    {#    }).fail(function(xhr, status, error) {#}
+    {#        if (xhr.status == 302) {#}
+    {#            window.location.href = xhr.getResponseHeader('Location');#}
+    {#        } else {#}
+    {#            alert('메일 전송에 실패했습니다. 다시 시도해주세요.');#}
+    {#        }#}
+    {#    });#}
+//    });
 
     // 답글 폼 표시 및 숨기기
     $(document).on('click', '.btn-reply', function() {
@@ -316,7 +336,30 @@
       showReplyForm(commentId);
     });
 
+    // "신청하기" 버튼 클릭 시 모달 열기 기능
+    $('#openModalBtn').click(function (e) {
+        e.preventDefault(); // 기본 동작 막기
+        var modal = document.getElementById("myModal");
+        modal.style.display = "flex";
+    });
+
+    // 모달 닫기 (X 버튼 클릭 시)
+    $('.close').click(function () {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    });
+
+    // 모달 닫기 (모달 외부 클릭 시)
+    window.onclick = function (event) {
+        var modal = document.getElementById("myModal");
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
   });
+
+
 
   // 댓글 및 대댓글 작성 기능
   function submitCommentForm(form, parentId = null) {

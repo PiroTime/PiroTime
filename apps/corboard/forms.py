@@ -5,6 +5,7 @@ class CorboardForm(forms.ModelForm):
     class Meta:
         model = Corboard
         fields = ['title', 'content', 'corboardImg']
+    letter = forms.CharField(max_length=100, required=False, label='Search')
 
 class CorCommentForm(forms.ModelForm):
     class Meta:
@@ -18,3 +19,7 @@ class CorCommentForm(forms.ModelForm):
 
 class CorSearchForm(forms.Form):
     search = forms.CharField(max_length=100, required=False, label='Search')
+
+
+class CorLetter(forms.Form):
+    letter = forms.CharField(max_length=200, required=False, label='letter')

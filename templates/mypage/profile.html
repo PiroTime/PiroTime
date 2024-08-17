@@ -3,6 +3,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
 <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
+<link rel="stylesheet" href="{% static 'css/modal.css'%}">
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
@@ -54,12 +55,26 @@
                     <li><a href="#" class="activity-link" data-filter="profile_info">내 정보</a></li>
                 </ul>
             </div>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
+                    {% csrf_token %}
+                    <div class="input-container">
+                        <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..."></textarea>
+                        <button type="submit" id="submitBtn" data-cor-id="{{ cor.id }}">제출</button>
+                    </div>
+                </div>
+            </div>
+            </form>
 
             <div id="activity-content" class="activity-content">
                 <!-- AJAX -->
             </div>
         </div>
     </div>
+    <form >
+
 </div>
 <!-- 하단에 추가된 고정 네비게이션 바
 <div class="bottom-navbar mobile">
@@ -72,6 +87,9 @@
 </div> -->
 
 <script>
+
+
+
     document.addEventListener("DOMContentLoaded", function() {
         const navbarToggle = document.getElementById('navbar-toggle');
         const activityList = document.querySelector('.activity-list');
@@ -252,6 +270,7 @@
 
             const cardElement = document.createElement('div');
             cardElement.className = 'coffeechat-card';
+            cardElement.setAttribute('data-coffeechat-id', '{{ coffeechat.id }}')
         
             // 카테고리별로 표시할 이름
             let displayName, job, hashtags;
@@ -401,5 +420,43 @@
             console.error('Error toggling bookmark:', error);
         });
     }
+
+    $(document).ready(function() {
+        // CSRF 토큰 가져오기
+        function getCSRFToken() {
+            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        }
+
+        // AJAX 설정
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                }
+            }
+        });
+
+        // "신청하기" 버튼 클릭 시 모달 열기 기능
+        $('.coffeechat-card').click(function (e) {
+            e.preventDefault(); // 기본 동작 막기
+            var modal = document.getElementById("myModal");
+            modal.style.display = "flex";
+        });
+
+        // 모달 닫기 (X 버튼 클릭 시)
+        $('.close').click(function () {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        });
+
+        // 모달 닫기 (모달 외부 클릭 시)
+        window.onclick = function (event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    });
+
 </script>
 {% endblock %}
