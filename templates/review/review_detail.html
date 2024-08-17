@@ -179,7 +179,7 @@
               </div>
               {% endif %}
           {% empty %}
-              <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+            <p id="no-comments-message">댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
           {% endfor %}
       </div>
   </div>
@@ -374,6 +374,9 @@
         } else {
           $('.comments').append(data.comment_html);
         }
+        // 댓글이 성공적으로 추가되면 메시지 제거
+        $('#no-comments-message').remove();
+        
         $(form).find('textarea').val('');
       } else {
         alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
