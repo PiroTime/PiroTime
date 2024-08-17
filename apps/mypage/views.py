@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 # 프로젝트 내 모듈
 from apps.accounts.models import CustomUser
@@ -225,6 +227,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     list(Corboard.objects.filter(writer=target_user))
 
         posts_data = [{
+            'id': post.id,
+            'type': post.__class__.__name__.lower(),
             'title': post.title, 
             'content': post.content[:100],
             'writer': post.writer.username,
@@ -263,6 +267,31 @@ def profile_read(request, user_id):
         'profile_user': user_profile,
         'random_image': random_image,
     })
+
+@csrf_exempt
+def toggle_bookmark(request, post_type, post_id):
+    if request.method == 'POST':
+        try:
+            if post_type == 'review':
+                post = Review.objects.get(id=post_id)
+            elif post_type == 'trend':
+                post = Trend.objects.get(id=post_id)
+            elif post_type == 'corboard':
+                post = Corboard.objects.get(id=post_id)
+            else:
+                return JsonResponse({'error': 'Invalid post type'}, status=400)
+
+            if request.user in post.bookmarks.all():
+                post.bookmarks.remove(request.user)
+                return JsonResponse({'bookmarked': False})
+            else:
+                post.bookmarks.add(request.user)
+                return JsonResponse({'bookmarked': True})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @login_required
 def coffeechat_bookmark_profile(request, pk):

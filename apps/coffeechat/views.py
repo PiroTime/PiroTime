@@ -212,49 +212,62 @@ def coffeechat_request(request, post_id):
     chat_request.coffeechat = coffeechat
     chat_request.user = request.user
 
+from django.views.decorators.http import require_POST
+
 @login_required
+@require_POST
 def accept_request(request, request_id):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
-        if request.user == coffeechat_request.coffeechat.receiver:
-            coffeechat_request.status = 'ACCEPTED'
-            coffeechat_request.save()
+    # AJAX 요청인지 확인
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return JsonResponse({"error": "AJAX request required"}, status=400)
 
-            # CoffeeChat 모델의 count 필드 증가
-            coffeechat = coffeechat_request.coffeechat
-            coffeechat.count += 1
-            coffeechat.save()
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+    if request.user != coffeechat_request.coffeechat.receiver:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
 
-            # 메일 보내기
-            subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
-            message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
-            content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
-            if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-                return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=500)
+    coffeechat_request.status = 'ACCEPTED'
+    coffeechat_request.save()
 
-            return JsonResponse({"status": "accepted"}, status=200)
-    
-    return JsonResponse({"error": "잘못된 요청입니다."}, status=400)
+    coffeechat = coffeechat_request.coffeechat
+    coffeechat.count += 1
+    coffeechat.save()
+
+    subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
+    message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
+    content = ""
+
+    try:
+        sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message)
+    except Exception as e:
+        return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=503)
+
+    return JsonResponse({"status": "accepted"})
 
 @login_required
+@require_POST
 def reject_request(request, request_id):
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
-        if request.user == coffeechat_request.coffeechat.receiver:
-            coffeechat_request.status = "REJECTED"
-            coffeechat_request.save()
+    # AJAX 요청인지 확인
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return JsonResponse({"error": "AJAX request required"}, status=400)
 
-            coffeechat = coffeechat_request.coffeechat
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+    if request.user != coffeechat_request.coffeechat.receiver:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
 
-            subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
-            message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
-            content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
-            if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-                return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=500)
+    coffeechat_request.status = "REJECTED"
+    coffeechat_request.save()
 
-            return JsonResponse({"status": "rejected"}, status=200)
-    
-    return JsonResponse({"error": "잘못된 요청입니다."}, status=400)
+    coffeechat = coffeechat_request.coffeechat
+    subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
+    message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
+    content = ""
+
+    try:
+        sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message)
+    except Exception as e:
+        return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=503)
+
+    return JsonResponse({"status": "rejected"})
 
 @login_required
 def update(req, pk):

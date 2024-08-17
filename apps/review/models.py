@@ -35,6 +35,9 @@ class Review(models.Model):
     
     def get_absolute_url(self):
         return reverse('review:review_detail', args=[self.id])
+    
+    def get_post_type(self):
+        return 'review'
 
 # 리뷰에 대한 댓글 모델
 class Comment(models.Model):
