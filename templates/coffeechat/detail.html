@@ -399,43 +399,45 @@
             </div>
             <div class="action-buttons">
                 {% if user.is_authenticated %}
-                {% if user == profile.receiver %}
-                <div>
-                    <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
-                        <i class="fas fa-edit"></i> 수정
-                    </a>
-                    <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
-                        style="display:inline;">
+                    {% if user == profile.receiver %}
+                        <!-- 프로필 소유자가 자신의 프로필을 보는 경우 -->
+                        <div>
+                            <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
+                                <i class="fas fa-edit"></i> 수정
+                            </a>
+                            <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="button" onclick="confirmDelete()" class="btn-delete">
+                                    <i class="fas fa-trash-alt"></i> 삭제
+                                </button>
+                            </form>
+                            <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
+                                {% if profile.is_public %}
+                                    비공개로 전환하기
+                                {% else %}
+                                    공개로 전환하기
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% else %}
                         {% csrf_token %}
-                        <button type="button" onclick="confirmDelete()" class="btn-delete">
-                            <i class="fas fa-trash-alt"></i> 삭제
-                        </button>
-                    </form>
-                    <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
-                        {% if profile.is_public %}
-                        비공개로 전환하기
+                        {% if is_limited %}
+                            <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
+                        {% elif is_waiting %}
+                            <p class="status-message">커피챗 수락대기중</p>
+                        {% elif has_pending_request %}
+                            <p class="status-message">당신에게 커피챗 신청 중</p>
                         {% else %}
-                        공개로 전환하기
+                            <button id="openModalBtn" type="button">커피챗 신청하기</button>
                         {% endif %}
-                    </a>
-                </div>
-                {% else %}
-                {% csrf_token %}
-                {% if is_limited %}
-                <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
-                {% elif is_waiting %}
-                <p class="status-message">커피챗 수락대기중</p>
-                {% else %}
-                <button id="openModalBtn" type="button">커피챗 신청하기</button>
-                {% endif %}
-
-                <!-- 북마크 버튼 -->
-                <button type="button"
-                    class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
-                    data-profile-id="{{ profile.pk }}">
-                    <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
-                </button>
-                {% endif %}
+            
+                        <!-- 북마크 버튼 -->
+                        <button type="button"
+                                class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
+                                data-profile-id="{{ profile.pk }}">
+                            <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
+                        </button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
