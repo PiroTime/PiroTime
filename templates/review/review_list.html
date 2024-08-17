@@ -80,7 +80,7 @@
                             {% if review.writer == user %}
                               <a href="{% url 'mypage:profile' %}">{{ review.writer }}</a>
                             {% else %}
-                              <a href="/" class="open-profile-modal" data-user-id="{{ review.writer.id }}">{{ review.writer }}</a>
+                              <a href="{% url 'mypage:profile_read' review.writer.id %}">{{ review.writer }}</a>
                             {% endif %}
                             / 날짜: {{ review.date|date:"Y년 m월 d일" }}
                         </p>
@@ -140,16 +140,7 @@
     </div>
 </div>
 
-<!-- 모달 HTML 구조 -->
-<div id="profile_modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <div id="modal-profile-content"></div> <!-- 모달 AJAX -->
-    </div>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'js/modal.js' %}"></script>
 <script>
 // CSRF 토큰을 자동으로 AJAX 요청에 포함하기 위한 설정
 function getCookie(name) {
@@ -179,26 +170,15 @@ $.ajaxSetup({
 });
 
 $(document).ready(function() {
-    function toggleModalCSS(load) {
-        const modalCSSId = 'modal-css';
-        if (load) {
-            if ($('#' + modalCSSId).length === 0) {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = '{% static "css/mypage/profile_modal.css" %}';
-                link.id = modalCSSId;
-                document.head.appendChild(link);
-            }
-        } else {
-            var link = document.getElementById(modalCSSId);
-            if (link) {
-                document.head.removeChild(link);
-            }
-        }
+    function updateContent(data) {
+        var newContent = $('<div>').html(data);
+        $('.review-grid').html(newContent.find('.review-grid').html());
+        $('.pagination').html(newContent.find('.pagination').html());
     }
 
+    // 필터 버튼 클릭 이벤트 핸들러
     $('.btn-filter').click(function() {
-        var button = $(this);
+        var button = $(this);  // 클릭된 버튼을 변수로 저장
         var orderBy = button.data('order-by');
 
         $.ajax({
@@ -209,8 +189,9 @@ $(document).ready(function() {
             },
             success: function(data) {
                 updateContent(data);
-                $('.btn-filter').removeClass('active');
-                button.addClass('active');
+                // 필터 버튼 활성화 상태 변경
+                $('.btn-filter').removeClass('active');  // 모든 필터 버튼에서 active 클래스 제거
+                button.addClass('active');  // 클릭된 버튼에 active 클래스 추가
             },
             error: function(xhr) {
                 alert('오류가 발생했습니다: ' + xhr.status + ' ' + xhr.statusText);
@@ -218,6 +199,7 @@ $(document).ready(function() {
         });
     });
 
+    // 검색 버튼 클릭 이벤트 핸들러
     $('.search-form').submit(function(event) {
         event.preventDefault();
         $.ajax({
@@ -232,6 +214,7 @@ $(document).ready(function() {
         });
     });
 
+    // 페이지네이션 버튼 클릭 이벤트 핸들러
     $(document).on('click', '.page-link', function() {
         var page = $(this).data('page');
         var orderBy = $(this).data('order-by');
@@ -252,7 +235,8 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('click', '.fas.fa-heart', function(event) {
+     // 좋아요 버튼 클릭 이벤트 핸들러
+     $(document).on('click', '.fas.fa-heart', function(event) {
         event.preventDefault();
         var heartIcon = $(this);
         var button = heartIcon.closest('.like-button');
@@ -277,6 +261,7 @@ $(document).ready(function() {
         });
     });
 
+    // 북마크 버튼 클릭 이벤트 핸들러
     $(document).on('click', '.scrap-icon', function(event) {
         event.preventDefault();
         var button = $(this);
@@ -299,42 +284,7 @@ $(document).ready(function() {
             }
         });
     });
-
-    $(document).on('click', '.open-profile-modal', function(event) {
-        event.preventDefault();
-        var userId = $(this).data('user-id');
-        var url = `/mypage/ajax/profile-modal`;
-
-        // Make an AJAX request to load the modal content
-        $.ajax({
-            url: url,
-            data: { 'user_id': userId },
-            success: function(response) {
-                console.log(response); // 응답 내용을 확인
-                $('#modal-profile-content').html(response);
-                $('#profile_modal').show();
-
-                // 모달 로드 후 스크립트 초기화
-                initializeProfileModal(userId);
-                
-            },
-            error: function(xhr) {
-                alert('프로필을 불러오는 중 오류가 발생했습니다.');
-            }
-        });
-    });
-
-    $('.close-button').click(function() {
-        $('#profile_modal').hide();
-        toggleModalCSS(false);  // CSS 파일 제거
-    });
-
-    $(window).click(function(event) {
-        if (event.target.id === 'profile_modal') {
-            $('#profile_modal').hide();
-            toggleModalCSS(false);  // CSS 파일 제거
-        }
-    });
 });
 </script>
+    
 {% endblock %}
