@@ -140,6 +140,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     receiver_username = request.coffeechat.receiver.username if request.coffeechat.receiver else 'Unknown'
                     job = request.coffeechat.job
                     detail_url = reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id])
+                    cohort = request.user.cohort  # 신청한 사람의 기수
 
                     # 디버깅 정보 리스트
                     debug_data.append({
@@ -148,6 +149,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'sender_username': sender_username,
                         'receiver_username': receiver_username,
                         'job': job,
+                        'cohort': cohort,  # 추가된 부분
                         'detail_url': detail_url,
                         'status': request.status,
                         'receiver_id': request.coffeechat.receiver.id if request.coffeechat.receiver else 'None',
@@ -160,6 +162,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'sender': sender_username,
                         'receiver': receiver_username,
                         'job': job,
+                        'cohort': cohort,  # 추가된 부분
                         'created_at': request.created_at.isoformat(),
                         'status': request.get_status_display(),
                         'detail_url': detail_url,
