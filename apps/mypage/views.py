@@ -287,7 +287,16 @@ def coffeechat_bookmark_profile(request, pk):
 def profile_modal_view(request):
     user_id = request.GET.get('user_id')
     profile_user = get_object_or_404(CustomUser, id=user_id)
+
+    image_files = ['back.png', 'back1.png', 'back2.png']
+    random_image = random.choice(image_files)
+
     context = {
         'profile_user': profile_user,
+        'random_image': random_image,
     }
+
+    # 서버 로그에 출력
+    print(f"Random Image URL: /static/images/{random_image}")
+
     return render(request, 'mypage/profile_modal.html', context)
