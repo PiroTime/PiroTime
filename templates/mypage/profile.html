@@ -3,6 +3,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
 <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
+<link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
@@ -62,6 +63,14 @@
     </div>
 </div>
 
+<!-- 모달 HTML 구조 -->
+<div id="coffeechatModal" class="modal">
+    <div class="modal-content">
+        <span id="coffeechatModalClose" class="close-button">&times;</span>
+        <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+    </div>
+</div>
+
 <!-- 하단에 추가된 고정 네비게이션 바
 <div class="bottom-navbar mobile">
     <a href="#" class="bottom-link" data-filter="my_posts"><i class="fas fa-heart"></i>내가 쓴 글</a>
@@ -71,7 +80,7 @@
     <a href="#" class="bottom-link" data-filter="coffeechat"><i class="fas fa-heart"></i>커피챗</a>
     <a href="#" class="bottom-link" data-filter="profile_info"><i class="fas fa-heart"></i>내 정보</a>
 </div> -->
-
+<script src="{% static 'js/coffeechat.js' %}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const navbarToggle = document.getElementById('navbar-toggle');
@@ -286,6 +295,7 @@
                         <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
+                    <button type="button" class="btn-view-letter" data-letter="${coffeechat.letter_to_senior}">커피챗 문구보기</button>
                 `;
             
             } else if (category === 'bookmarked') {

@@ -151,7 +151,9 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'detail_url': detail_url,
                         'status': request.status,
                         'receiver_id': request.coffeechat.receiver.id if request.coffeechat.receiver else 'None',
-                        'sender_id': request.user.id
+                        'sender_id': request.user.id,
+                        'letter_to_senior': request.letterToSenior,  # 추가된 부분
+                        
                     })
 
                     data.append({
@@ -164,6 +166,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id if request.coffeechat.receiver else '']),
                         'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
                         'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
+                        'letter_to_senior': request.letterToSenior,  # 추가된 부분
                     })
 
                 # 디버깅 정보를 출력
