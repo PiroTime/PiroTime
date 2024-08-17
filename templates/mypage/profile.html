@@ -273,7 +273,8 @@
                 hashtags = coffeechat.hashtags;
             } else if (category === 'received') {
                 displayName = coffeechat.sender;
-                job = coffeechat.sender_job;
+                job = '피로그래밍' + coffeechat.cohort + '기';
+                //job = coffeechat.sender_job;
                 hashtags = coffeechat.hashtags;
             } else if (category === 'bookmarked') {
                 displayName = coffeechat.receiver;
@@ -301,7 +302,7 @@
                 </div>
                 <div class="profile-details">
                     <a href="${profileLink}" class="name">${displayName}</a>
-                    ${category !== 'history' ? `<span class="job">${coffeechat.job}</span>` : ''}
+                    ${category !== 'history' ? `<span class="job">${job}</span>` : ''}
                 </div>
                 <div class="card-content">
                     ${category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
