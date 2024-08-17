@@ -17,7 +17,7 @@
             {% endif %}
         </div>
         <div class="profile-info">
-            <h1>🍀{{ user.cohort }}기 피로그래머 {{ user.username }}🍀</h1>
+            <h1>{{ user.cohort }}기 피로그래머 {{ user.username }}</h1>
             <p>{{ profile.intro|default_if_none:"소개가 없습니다." }}</p>
         </div>
     </div>
@@ -241,40 +241,64 @@
         }
 
         function createCoffeeChatCard(coffeechat, category) {
-            const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
             const options = { month: 'long', day: 'numeric' };
-            const date = new Date(coffeechat.created_at).toLocaleDateString('ko-KR', options);
-            const time = new Date(coffeechat.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-        
-            const cardElement = document.createElement('div');
-            cardElement.className = 'coffeechat-card';
+            let date = '';
+            let time = '';
 
-            // 카테고리별로 표시할 이름 설정
-            let displayName;
-            if (category === 'history') {
-                displayName = coffeechat.sender === '{{ user.username }}' ? coffeechat.receiver : coffeechat.sender;
-            } else if (category === 'sent') {
-                displayName = coffeechat.receiver;
-            } else if (category === 'received') {
-                displayName = coffeechat.sender;
-            } else {
-                displayName = coffeechat.receiver;
+            if (coffeechat.created_at) {
+                date = new Date(coffeechat.created_at).toLocaleDateString('ko-KR', options);
+                time = new Date(coffeechat.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
             }
 
+            const cardElement = document.createElement('div');
+            cardElement.className = 'coffeechat-card';
+        
+            // 카테고리별로 표시할 이름
+            let displayName, job, hashtags;
+
+            if (category === 'sent') {
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
+                hashtags = coffeechat.hashtags;
+            } else if (category === 'received') {
+                displayName = coffeechat.receiver;
+                job = coffeechat.sender_job;
+                hashtags = coffeechat.hashtags;
+            } else if (category === 'bookmarked') {
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
+                hashtags = coffeechat.hashtags;
+            } else {
+                displayName = coffeechat.receiver;
+                job = coffeechat.receiver_job;
+                hashtags = coffeechat.hashtags;
+            }
+            
+            const profileLink = coffeechat.detail_url ? coffeechat.detail_url : mypage.profile_read_url;
+      
             cardElement.innerHTML = `
+                <div class="card-header">
+                    ${category === 'bookmarked' ? `
+                        <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" 
+                                class="scrap-icon ${coffeechat.bookmarked ? 'scrapped' : ''}">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    ` : '<div class="scrap-placeholder"></div>'}
+                </div>
                 <div class="profile-img">
                     ${coffeechat.profile_image ? `<img src="${coffeechat.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
                 </div>
                 <div class="profile-details">
-                    <span class="name">${displayName}</span>
+                    <a href="${profileLink}" class="name">${displayName}</a>
                     ${category !== 'history' ? `<span class="job">${coffeechat.job}</span>` : ''}
                 </div>
                 <div class="card-content">
-                    <span class="request-time">${date} ${time}</span><br>
+                    ${category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
             `;
         
             if (category === 'sent') {
                 cardElement.innerHTML += `<span class="waiting-status">선배님 기다리는 중..</span>`;
+            
             } else if (category === 'received') {
                 cardElement.innerHTML += `
                     <span class="waiting-status">후배가 기다리는 중!</span>
@@ -289,24 +313,23 @@
                         </form>
                     </div>
                 `;
+            
             } else if (category === 'bookmarked') {
                 cardElement.innerHTML += `
-                    <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" class="bookmark-btn">
-                        ${coffeechat.bookmarked ? '북마크 취소' : '북마크 추가'}
-                    </button>
                     <span class="waiting-status">커피챗 고민 중!</span>
-                    <div class="buttons">
-                        <a href="${coffeechat.detail_url}" class="coffeechat-request">커피챗 요청하기!</a>
+                    <div class="hashtags">
+                        ${hashtags.slice(0, 2).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
+                    {% comment %} <div class="buttons">
+                        <a href="${coffeechat.detail_url}" class="coffeechat-request">커피챗 요청하기!</a>
+                    </div> {% endcomment %}
                 `;
+            
             } else if (category === 'history') {
                 cardElement.innerHTML += `
-                    <span class="waiting-status">${coffeechat.review_exists ? '리뷰가 작성되었습니다.' : '리뷰를 남겨주세요.'}</span>
-                    <div class="buttons">
-                        ${coffeechat.review_exists ? 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request">또 커피챗 요청하기!</a>` : 
-                            `<a href="${coffeechat.detail_url}" class="coffeechat-request">작성하러 가기!</a>`
-                        }
+                    <span class="waiting-status">커피챗 완료!</span>
+                    <div class="hashtags">
+                        ${hashtags.slice(0, 4).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
                 `;
             }
