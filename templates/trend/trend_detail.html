@@ -104,9 +104,9 @@
                       <div class="comment-meta">
                           <span><i class="fas fa-user"></i> 
                               {% if comment.writer == user %}
-                                  <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+                                  <a href="{% url 'mypage:profile' %}" class="trend-writer">{{ comment.writer }}</a>
                               {% else %}
-                                  <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+                                <a href="/" class="open-profile-modal trend-writer" data-user-id="{{ comment.writer.id }}">{{ comment.writer }}</a>
                               {% endif %}
                           </span>
                           <div class="comment-meta-data">
@@ -132,9 +132,9 @@
                                       <div class="comment-meta">
                                           <span><i class="fas fa-user"></i> 
                                               {% if reply.writer == user %}
-                                                  <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+                                                  <a href="{% url 'mypage:profile' %}" class="trend-writer">{{ reply.writer }}</a>
                                               {% else %}
-                                                  <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                                                <a href="/" class="open-profile-modal trend-writer" data-user-id="{{ reply.writer.id }}">{{ reply.writer }}</a>
                                               {% endif %}
                                           </span> 
                                           <div class="comment-meta-data">

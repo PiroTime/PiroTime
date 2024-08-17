@@ -113,9 +113,9 @@
                   <div class="comment-meta">
                     <span><i class="fas fa-user"></i>
                       {% if comment.writer == user %}
-                        <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+                        <a href="{% url 'mypage:profile' %}" class="cor-writer">{{ comment.writer }}</a>
                       {% else %}
-                        <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+                        <a href="/" class="open-profile-modal cor-writer" data-user-id="{{ comment.writer.id }}">{{ comment.writer }}</a>
                       {% endif %}
                     </span>
                       <div class="comment-meta-data">
@@ -144,9 +144,9 @@
                                 <div class="comment-meta">
                                     <span><i class="fas fa-user"></i>
                                       {% if reply.writer == user %}
-                                        <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+                                        <a href="{% url 'mypage:profile' %}" class="cor-writer">{{ reply.writer }}</a>
                                       {% else %}
-                                        <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                                        <a href="/" class="open-profile-modal cor-writer" data-user-id="{{ reply.writer.id }}">{{ reply.writer }}</a>
                                       {% endif %}
                                     </span>
                                     <div class="comment-meta-data">
@@ -184,7 +184,7 @@
           </div> <!-- .comment-block 끝 -->
           {% endif %}
       {% empty %}
-          <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+        <p id="no-comments-message">댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
       {% endfor %}
     </div>
       <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
@@ -379,8 +379,6 @@
           }
         });
 
-
-
         // 답글 폼 표시 및 숨기기
         $(document).on('click', '.btn-reply', function() {
           var commentId = $(this).data('comment-id');
@@ -412,6 +410,9 @@
               } else {
                   $('.comments').append(data.comment_html);
               }
+              // 댓글이 성공적으로 추가되면 메시지 제거
+              $('#no-comments-message').remove();
+            
               $(form).find('textarea').val('');
           } else {
               alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
