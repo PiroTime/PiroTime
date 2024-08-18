@@ -128,15 +128,16 @@
     function previewImage(event) {
         console.log('previewImage called'); // 디버깅: 함수가 호출되는지 확인
         const reader = new FileReader();
+        const deleteImageInput = document.getElementById('id_delete_profile_image'); // 추가된 부분
+        const output = document.getElementById('image-preview');
+        const cameraIcon = document.querySelector('.upload-label i');
+        const removeBtn = document.querySelector('.remove-image');
+
         reader.onload = function() {
-            const output = document.getElementById('image-preview');
-            const cameraIcon = document.querySelector('.upload-label i');
-            const removeBtn = document.querySelector('.remove-image');
-            
             // 이미지 미리보기 설정
             output.src = reader.result;
             output.style.display = 'block';
-            
+
             // 카메라 아이콘 숨기기
             if (cameraIcon) {
                 cameraIcon.style.display = 'none';
@@ -146,7 +147,12 @@
             removeBtn.style.display = 'inline-block';
             console.log('Image loaded:', reader.result); // 디버깅: 이미지가 제대로 로드되었는지 확인
         }
+
         reader.readAsDataURL(event.target.files[0]);
+
+        // 새로운 이미지가 선택되면 delete_profile_image 값을 false로 설정
+        deleteImageInput.value = "false"; // 추가된 부분
+        console.log('New image selected, delete_profile_image set to false'); // 디버깅: 새로운 이미지 선택 시 상태 확인
     }
 
     function removeImage() {
