@@ -28,22 +28,34 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // "커피챗 문구보기" 버튼 클릭 시 모달 열기
     document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('btn-view-letter')) {
+        if (event.target.classList.contains('btn-accept-letter')) {
             const letterContent = event.target.getAttribute('data-letter');
             const urlRej = event.target.getAttribute('data-url-rej');
             const urlAcc = event.target.getAttribute('data-url-acc');
+            console.log('accept')
+            console.log(letterContent)
 
 
             modalContent.innerHTML = `
-                <p>${letterContent.replace(/\r?\n/g, '<br>')}</p>
+                <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
+<!--                <p>수락하기 버튼을 누르면 신청자에게 연락처가 전달됩니다. 동의하십니까?</p>-->
+                <label for="is_agree">수락하기 버튼을 누르면 신청자에게 연락처가 전달됩니다. 동의하십니까?</label>
+                <input type="checkbox" id="is_agree" name="is_agree" value=True>        
                 <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
                 <button type="button" class="btn-reject modal-reject" data-url="${urlRej}">Reject</button>
             `;
             modal.style.display = "flex";
         }
 
-        if (event.target.classList.contains('coffeechat-card')) {
+        if (event.target.classList.contains('btn-view-letter')) {
+            const letterContent = event.target.getAttribute('data-letter');
+            console.log('letter')
+            console.log(letterContent)
 
+            modalContent.innerHTML = `
+                <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
+            `;
+            modal.style.display = "flex";
         }
     });
 
