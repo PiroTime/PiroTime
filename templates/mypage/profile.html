@@ -88,6 +88,11 @@
                 <h2>커피챗 신청자가 보낸 메세지입니다.</h2>
                 <span id="coffeechatModalClose" class="close-button">&times;</span>
                 <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+
+                <h2>수락시 신청자가 사용할 연락수단을 입력하세요</h2>
+                <textarea class="comment-input" name="way" placeholder="답글을 입력하세요..." required></textarea>
+                <input type="hidden" name="parent" value="{{ comment.id }}">
+
                 <div class="button-container">
     {#                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>#}
     {#                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>#}

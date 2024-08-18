@@ -13,6 +13,8 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import get_user_model
+from apps.coffeechat.forms import WayToContect
+
 
 # 프로젝트 내 모듈
 from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
@@ -224,6 +226,11 @@ def accept_request(request, request_id):
     coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
     if request.user != coffeechat_request.coffeechat.receiver:
         return JsonResponse({"error": "Unauthorized"}, status=403)
+
+    inp = WayToContect(request.POST)
+    if inp.is_valid():
+        way = inp.cleaned_data['way']
+        print(way)
 
     coffeechat_request.status = 'ACCEPTED'
     coffeechat_request.save()
