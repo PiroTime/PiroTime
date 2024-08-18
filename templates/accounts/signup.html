@@ -72,7 +72,7 @@
                 {% if form.password2.errors %}
                     <div class="error">{{ form.password2.errors }}</div>
                 {% endif %}
-                <input type="text" name="nickname" placeholder="사용자 닉네임" class="form-input" value="{{ form.nickname.value|default_if_none:'' }}">
+                <input type="text" name="nickname" placeholder="사용자 닉네임(실명을 입력해주세요!)" class="form-input" value="{{ form.nickname.value|default_if_none:'' }}">
                 {% if form.nickname.errors %}
                     <div class="error">{{ form.nickname.errors }}</div>
                 {% endif %}
