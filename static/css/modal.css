@@ -95,3 +95,35 @@ textarea {
 #submitBtn:hover {
     background-color: #45a049;
 }
+
+#coffeechatModalContent {
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+
+.modal-accept, .modal-reject {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer
+}
+.modal-accept:hover {
+    background-color: #45a049;
+}
+
+.modal-reject {
+    color: white;
+    margin-top: 5px;
+    background-color: #BBBBBB;
+}
+.modal-reject:hover {
+    background-color: #888888;
+}
