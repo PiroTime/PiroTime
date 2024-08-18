@@ -3,45 +3,7 @@
 <link rel="stylesheet" href="{% static 'css/mypage/profile_edit.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
-<style>
-    @media screen and (max-width: 768px) {
-        .form-container {
-            width: 600px;
-        }
 
-        .form-input, .form-textarea {
-            padding: 12px;
-            font-size: 1rem;
-        }
-
-        .form-button {
-            padding: 15px;
-            font-size: 1rem;
-        }
-
-        .upload-label {
-            width: 120px;
-            height: 120px;
-            cursor: pointer;
-        }
-
-        .remove-image {
-            font-size: 1rem;
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .form-container {
-            width: 400px;
-            padding: 15px;
-        }
-
-        .upload-label {
-            width: 100px;
-            height: 100px;
-        }
-    }
-</style>
 <div class="form-container">
     <div class="logo">
         <img src="{% static 'images/logo.svg' %}" alt="PiroTime Logo" width="170" height="170">
@@ -126,9 +88,9 @@
 
 <script>
     function previewImage(event) {
-        console.log('previewImage called'); // 디버깅: 함수가 호출되는지 확인
+        console.log('previewImage called');
         const reader = new FileReader();
-        const deleteImageInput = document.getElementById('id_delete_profile_image'); // 추가된 부분
+        const deleteImageInput = document.getElementById('id_delete_profile_image');
         const output = document.getElementById('image-preview');
         const cameraIcon = document.querySelector('.upload-label i');
         const removeBtn = document.querySelector('.remove-image');
@@ -145,18 +107,17 @@
 
             // 삭제 버튼 보이기
             removeBtn.style.display = 'inline-block';
-            console.log('Image loaded:', reader.result); // 디버깅: 이미지가 제대로 로드되었는지 확인
+            console.log('Image loaded:', reader.result);
         }
 
         reader.readAsDataURL(event.target.files[0]);
 
-        // 새로운 이미지가 선택되면 delete_profile_image 값을 false로 설정
-        deleteImageInput.value = "false"; // 추가된 부분
-        console.log('New image selected, delete_profile_image set to false'); // 디버깅: 새로운 이미지 선택 시 상태 확인
+        deleteImageInput.value = "false";
+        console.log('New image selected, delete_profile_image set to false');
     }
 
     function removeImage() {
-        console.log('removeImage called'); // 디버깅: 함수가 호출되는지 확인
+        console.log('removeImage called');
         const output = document.getElementById('image-preview');
         const cameraIcon = document.querySelector('.upload-label i');
         const removeBtn = document.querySelector('.remove-image');
@@ -177,15 +138,14 @@
 
         // 파일 입력 초기화
         fileInput.value = ""; 
-        console.log('Image removed'); // 디버깅: 이미지 삭제 후 상태 확인
+        console.log('Image removed');
 
-        deleteImageInput.value = "true"; // 새로 추가된 부분
+        deleteImageInput.value = "true";
         console.log('Image removed and marked for deletion');
     }
 
-    // 페이지 로드 시 프로필 이미지가 있으면 삭제 버튼을 표시
     window.onload = function() {
-        console.log('Window loaded'); // 디버깅: 페이지 로드 확인
+        console.log('Window loaded');
         const output = document.getElementById('image-preview');
         const removeBtn = document.querySelector('.remove-image');
         const cameraIcon = document.querySelector('.upload-label i');
@@ -193,18 +153,18 @@
         // 프로필 이미지가 있으면 삭제 버튼 보이기
         if (output.src && !output.src.includes('data:') && output.src !== '') {
             removeBtn.style.display = 'inline-block';
-            output.style.display = 'block'; // 이미지가 있는 경우 이미지를 보이게 설정
+            output.style.display = 'block';
             if (cameraIcon) {
-                cameraIcon.style.display = 'none'; // 아이콘 숨기기
+                cameraIcon.style.display = 'none';
             }
-            console.log('Profile image found, showing remove button'); // 디버깅: 이미지가 있는 경우 상태 확인
+            console.log('Profile image found, showing remove button');
         } else {
             if (cameraIcon) {
-                cameraIcon.style.display = 'block'; // 아이콘 보이기
+                cameraIcon.style.display = 'block';
             }
-            removeBtn.style.display = 'none'; // 삭제 버튼 숨기기
-            output.style.display = 'none'; // 이미지 숨기기
-            console.log('No profile image found'); // 디버깅: 이미지가 없는 경우 상태 확인
+            removeBtn.style.display = 'none';
+            output.style.display = 'none';
+            console.log('No profile image found');
         }
     };
 
