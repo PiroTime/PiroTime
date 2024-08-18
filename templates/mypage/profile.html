@@ -235,7 +235,7 @@
                     // 다른 필터에 대한 게시물 처리
                     if (data.posts && data.posts.length > 0) {
                         data.posts.forEach(post => {
-                            console.log('Post data:', post); // 디버깅 로그
+                            console.log('Post data:', post);
 
                             const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
                             const postElement = document.createElement('div');
