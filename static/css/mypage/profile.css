@@ -337,11 +337,13 @@ body {
     gap: 10px;
     margin-top: 5px;
     justify-content: center;
+    width: 100%;
 }
 
 /* 커피챗 버튼 스타일 */
 .coffeechat-card button.btn-accept, 
 .coffeechat-card button.btn-reject,
+.coffeechat-card button.btn-view-letter,
 .coffeechat-card button.coffeechat-request,
 .coffeechat-card a.coffeechat-request,
 .coffeechat-card button.coffeechat-review,
@@ -358,9 +360,15 @@ body {
     display: inline-block;
     text-align: center;
 }
+.coffeechat-card button.btn-view-letter {
+    margin-top: 5px;
+
+}
+
 
 .coffeechat-card button.btn-accept:hover,
 .coffeechat-card button.btn-reject:hover,
+.coffeechat-card button.btn-view-letter:hover,
 .coffeechat-card button.coffeechat-request:hover,
 .coffeechat-card a.coffeechat-request:hover,
 .coffeechat-card button.coffeechat-review:hover,

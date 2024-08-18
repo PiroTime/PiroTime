@@ -1,191 +1,191 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
-<link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
-<<<<<<< HEAD
-<link rel="stylesheet" href="{% static 'css/modal.css'%}">
-=======
-<link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
->>>>>>> origin/develop
-<div class="profile-container">
-    <div class="profile-header">
-        <div class="profile-image">
-            {% if profile and profile.profile_image %}
-                <img src="{{ profile.profile_image.url }}" alt="{{ user.username }}의 프로필 이미지">
-            {% else %}
-                {% if user.profile_image %}
-                    <img src="{{ user.profile_image.url }}" alt="Profile Image">
+    <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-image">
+                {% if profile and profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ user.username }}의 프로필 이미지">
                 {% else %}
-                    <i class="fas fa-user"></i>
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="Profile Image">
+                    {% else %}
+                        <i class="fas fa-user"></i>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </div>
-        <div class="profile-info">
-            <h1>{{ user.cohort }}기 피로그래머 {{ user.username }}</h1>
-            <p>{{ profile.intro|default_if_none:"소개가 없습니다." }}</p>
-        </div>
-    </div>
-
-    <div class="profile-activities">
-        <div class="activity-filter" id="activity-filter">
-            <a href="#" class="filter-link active" data-category="all">All</a>
-            <a href="#" class="filter-link" data-category="review">review</a>
-            <a href="#" class="filter-link" data-category="corboard">cooperation</a>
-            <a href="#" class="filter-link" data-category="trend">ITtrend</a>
+            </div>
+            <div class="profile-info">
+                <h1>{{ user.cohort }}기 피로그래머 {{ user.username }}</h1>
+                <p>{{ profile.intro|default_if_none:"소개가 없습니다." }}</p>
+            </div>
         </div>
 
-        <div class="activity-content-wrapper">
-            <div class="activity-navbar desktop">
-                <a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a>
-                <a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a>
-                <a href="#" class="activity-link" data-filter="liked">좋아요한 글</a>
-                <a href="#" class="activity-link" data-filter="commented">댓글 단 글</a>
-                <a href="#" class="activity-link" data-filter="coffeechat">커피챗</a>
-                <a href="#" class="activity-link" data-filter="profile_info">내 정보</a>
+        <div class="profile-activities">
+            <div class="activity-filter" id="activity-filter">
+                <a href="#" class="filter-link active" data-category="all">All</a>
+                <a href="#" class="filter-link" data-category="review">review</a>
+                <a href="#" class="filter-link" data-category="corboard">cooperation</a>
+                <a href="#" class="filter-link" data-category="trend">ITtrend</a>
             </div>
-            
-            <div class="activity-navbar mobile">
-                <button id="navbar-toggle" class="navbar-toggle">
-                    <span>내가 쓴 글</span>
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <ul class="activity-list">
-                    <li><a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a></li>
-                    <li><a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a></li>
-                    <li><a href="#" class="activity-link" data-filter="liked">좋아요한 글</a></li>
-                    <li><a href="#" class="activity-link" data-filter="commented">댓글 단 글</a></li>
-                    <li><a href="#" class="activity-link" data-filter="coffeechat">커피챗</a></li>
-                    <li><a href="#" class="activity-link" data-filter="profile_info">내 정보</a></li>
-                </ul>
-            </div>
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
-                    {% csrf_token %}
-                    <div class="input-container">
-                        <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..."></textarea>
-                        <button type="submit" id="submitBtn" data-cor-id="{{ cor.id }}">제출</button>
+
+            <div class="activity-content-wrapper">
+                <div class="activity-navbar desktop">
+                    <a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a>
+                    <a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a>
+                    <a href="#" class="activity-link" data-filter="liked">좋아요한 글</a>
+                    <a href="#" class="activity-link" data-filter="commented">댓글 단 글</a>
+                    <a href="#" class="activity-link" data-filter="coffeechat">커피챗</a>
+                    <a href="#" class="activity-link" data-filter="profile_info">내 정보</a>
+                </div>
+
+                <div class="activity-navbar mobile">
+                    <button id="navbar-toggle" class="navbar-toggle">
+                        <span>내가 쓴 글</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="activity-list">
+                        <li><a href="#" class="activity-link active" data-filter="my_posts">내가 쓴 글</a></li>
+                        <li><a href="#" class="activity-link" data-filter="bookmarked">북마크한 글</a></li>
+                        <li><a href="#" class="activity-link" data-filter="liked">좋아요한 글</a></li>
+                        <li><a href="#" class="activity-link" data-filter="commented">댓글 단 글</a></li>
+                        <li><a href="#" class="activity-link" data-filter="coffeechat">커피챗</a></li>
+                        <li><a href="#" class="activity-link" data-filter="profile_info">내 정보</a></li>
+                    </ul>
+                </div>
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
+                        {% csrf_token %}
+                        <div class="input-container">
+                            <textarea id="userInput" name="requestContent" rows="10" cols="50"
+                                      placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..."></textarea>
+                            <button type="submit" id="submitBtn" data-cor-id="{{ cor.id }}">제출</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            </form>
+                </form>
 
-            <div id="activity-content" class="activity-content">
-                <!-- AJAX로 불러올 내용이 여기에 표시됩니다 -->
+                <div id="activity-content" class="activity-content">
+                    <!-- AJAX로 불러올 내용이 여기에 표시됩니다 -->
+                </div>
             </div>
+        </div>
+
+
+    </div>
+
+    <!-- 모달 HTML 구조 -->
+    <div id="coffeechatModal" class="modal">
+        <div class="modal-content">
+            <span id="coffeechatModalClose" class="close-button">&times;</span>
+            <h2 class="coffeechat-modal-h2">신청자가 보낸 메세지입니다.</h2>
+            <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+            <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>
+            <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>
         </div>
     </div>
 
-
-</div>
-
-<!-- 모달 HTML 구조 -->
-<div id="coffeechatModal" class="modal">
-    <div class="modal-content">
-        <span id="coffeechatModalClose" class="close-button">&times;</span>
-        <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
-    </div>
-</div>
-
-<!-- 하단에 추가된 고정 네비게이션 바
-<div class="bottom-navbar mobile">
-    <a href="#" class="bottom-link" data-filter="my_posts"><i class="fas fa-heart"></i>내가 쓴 글</a>
-    <a href="#" class="bottom-link" data-filter="bookmarked"><i class="fas fa-heart"></i>북마크한 글</a>
-    <a href="#" class="bottom-link" data-filter="liked"><i class="fas fa-heart"></i>좋아요한 글</a>
-    <a href="#" class="bottom-link" data-filter="commented"><i class="fas fa-heart"></i>댓글 단 글</a>
-    <a href="#" class="bottom-link" data-filter="coffeechat"><i class="fas fa-heart"></i>커피챗</a>
-    <a href="#" class="bottom-link" data-filter="profile_info"><i class="fas fa-heart"></i>내 정보</a>
-</div> -->
-<script src="{% static 'js/coffeechat.js' %}"></script>
-<script>
+    <!-- 하단에 추가된 고정 네비게이션 바
+    <div class="bottom-navbar mobile">
+        <a href="#" class="bottom-link" data-filter="my_posts"><i class="fas fa-heart"></i>내가 쓴 글</a>
+        <a href="#" class="bottom-link" data-filter="bookmarked"><i class="fas fa-heart"></i>북마크한 글</a>
+        <a href="#" class="bottom-link" data-filter="liked"><i class="fas fa-heart"></i>좋아요한 글</a>
+        <a href="#" class="bottom-link" data-filter="commented"><i class="fas fa-heart"></i>댓글 단 글</a>
+        <a href="#" class="bottom-link" data-filter="coffeechat"><i class="fas fa-heart"></i>커피챗</a>
+        <a href="#" class="bottom-link" data-filter="profile_info"><i class="fas fa-heart"></i>내 정보</a>
+    </div> -->
+    <script src="{% static 'js/coffeechat.js' %}"></script>
+    <script>
 
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const activityList = document.querySelector('.activity-list');
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const navbarToggle = document.getElementById('navbar-toggle');
-        const activityList = document.querySelector('.activity-list');
+            // 모바일/데스크탑 화면 크기 체크하여 적절한 네비게이션 바 표시
+            function checkScreenWidth() {
+                const isMobile = window.innerWidth <= 768;
+                document.querySelector('.activity-navbar.desktop').classList.toggle('hidden', isMobile);
+                document.querySelector('.activity-navbar.mobile').classList.toggle('hidden', !isMobile);
+            }
 
-        // 모바일/데스크탑 화면 크기 체크하여 적절한 네비게이션 바 표시
-        function checkScreenWidth() {
-            const isMobile = window.innerWidth <= 768;
-            document.querySelector('.activity-navbar.desktop').classList.toggle('hidden', isMobile);
-            document.querySelector('.activity-navbar.mobile').classList.toggle('hidden', !isMobile);
-        }
+            // 페이지 로드 및 윈도우 크기 조정 시 화면 크기 체크
+            window.addEventListener('load', checkScreenWidth);
+            window.addEventListener('resize', checkScreenWidth);
 
-        // 페이지 로드 및 윈도우 크기 조정 시 화면 크기 체크
-        window.addEventListener('load', checkScreenWidth);
-        window.addEventListener('resize', checkScreenWidth);
-
-        // 모바일 메뉴 토글 기능
-        if (navbarToggle) {
-            navbarToggle.addEventListener('click', function() {
-                activityList.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function(event) {
-                if (!navbarToggle.contains(event.target) && !activityList.contains(event.target)) {
-                    activityList.classList.remove('active');
-                }
-            });
-
-            // 모바일 메뉴에서 링크 클릭 시 토글 닫기
-            document.querySelectorAll('.activity-link').forEach(function(link) {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    navbarToggle.querySelector('span').textContent = this.textContent;
-                    activityList.classList.remove('active');
+            // 모바일 메뉴 토글 기능
+            if (navbarToggle) {
+                navbarToggle.addEventListener('click', function () {
+                    activityList.classList.toggle('active');
                 });
-            });
-        }
 
-        let currentFilter = 'my_posts';  // 초기 필터 설정
-        let currentCategory = 'all';     // 초기 카테고리 설정
-        const originalFilterContent = document.getElementById('activity-filter').innerHTML;
-
-        // 필터링 링크에 이벤트 리스너 추가
-        function addFilterEventListeners() {
-            const filterLinks = document.querySelectorAll('.filter-link');
-            filterLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    currentCategory = this.getAttribute('data-category');
-                    filterLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                    loadActivities(currentFilter, currentCategory);
-                });
-            });
-        }
-
-        // AJAX를 사용하여 활동 내용을 불러오는 함수
-        function loadActivities(filter, category) {
-            const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
-            
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const activityContent = document.getElementById('activity-content');
-                    activityContent.innerHTML = '';
-
-                    // 프로필 정보 필터 처리
-                    if (filter === 'profile_info') {
-                        activityContent.classList.remove('grid-content');
-                        activityContent.classList.add('centered-content');
-                    } else {
-                        activityContent.classList.remove('centered-content');
-                        activityContent.classList.add('grid-content');
+                document.addEventListener('click', function (event) {
+                    if (!navbarToggle.contains(event.target) && !activityList.contains(event.target)) {
+                        activityList.classList.remove('active');
                     }
+                });
 
-                    // 프로필 정보 표시
-                    if (filter === 'profile_info') {
-                        const profileInfo = `
+                // 모바일 메뉴에서 링크 클릭 시 토글 닫기
+                document.querySelectorAll('.activity-link').forEach(function (link) {
+                    link.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        navbarToggle.querySelector('span').textContent = this.textContent;
+                        activityList.classList.remove('active');
+                    });
+                });
+            }
+
+            let currentFilter = 'my_posts';  // 초기 필터 설정
+            let currentCategory = 'all';     // 초기 카테고리 설정
+            const originalFilterContent = document.getElementById('activity-filter').innerHTML;
+
+            // 필터링 링크에 이벤트 리스너 추가
+            function addFilterEventListeners() {
+                const filterLinks = document.querySelectorAll('.filter-link');
+                filterLinks.forEach(link => {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        currentCategory = this.getAttribute('data-category');
+                        filterLinks.forEach(link => link.classList.remove('active'));
+                        this.classList.add('active');
+                        loadActivities(currentFilter, currentCategory);
+                    });
+                });
+            }
+
+            // AJAX를 사용하여 활동 내용을 불러오는 함수
+            function loadActivities(filter, category) {
+                const url = `{% url 'mypage:ajax_activities' %}?filter=` + filter + `&category=` + category;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const activityContent = document.getElementById('activity-content');
+                        activityContent.innerHTML = '';
+
+                        // 프로필 정보 필터 처리
+                        if (filter === 'profile_info') {
+                            activityContent.classList.remove('grid-content');
+                            activityContent.classList.add('centered-content');
+                        } else {
+                            activityContent.classList.remove('centered-content');
+                            activityContent.classList.add('grid-content');
+                        }
+
+                        // 프로필 정보 표시
+                        if (filter === 'profile_info') {
+                            const profileInfo = `
                             <div class="myinfo">
                                 <div class="myinfo-image">
-                                    ${data.profile_image ? 
-                                        `<img src="${data.profile_image}" alt="프로필 이미지" class="myinfo-profile-image">` : 
-                                        `<div class="default-profile-icon"><i class="fas fa-user"></i></div>`
-                                    }
+                                    ${data.profile_image ?
+                                `<img src="${data.profile_image}" alt="프로필 이미지" class="myinfo-profile-image">` :
+                                `<div class="default-profile-icon"><i class="fas fa-user"></i></div>`
+                            }
                                 </div>
                                 <div class="myinfo-item"><strong>사용자 이름</strong> {{ user.username }}</div>
                                 <div class="myinfo-item"><strong>이메일 주소</strong> {{ user.email }}</div>
@@ -195,42 +195,42 @@
                                 <a href="{% url 'mypage:profile_edit' %}" class="btn-primary">프로필 수정하기</a>
                             </div>
                         `;
-                        activityContent.innerHTML = profileInfo;
-                    } else if (filter === 'coffeechat') {
-                        let coffeechatCards = '';
+                            activityContent.innerHTML = profileInfo;
+                        } else if (filter === 'coffeechat') {
+                            let coffeechatCards = '';
 
-                        // 커피챗 요청 필터 처리
-                        if (category === 'requests_sent' && data.requests_sent) {
-                            data.requests_sent.forEach(request => {
-                                coffeechatCards += createCoffeeChatCard(request, 'sent');
-                            });
-                        } else if (category === 'requests_received' && data.requests_received) {
-                            data.requests_received.forEach(request => {
-                                coffeechatCards += createCoffeeChatCard(request, 'received');
-                            });
-                        } else if (category === 'bookmarked' && data.bookmarked_coffeechats) {
-                            data.bookmarked_coffeechats.forEach(coffeechat => {
-                                coffeechatCards += createCoffeeChatCard(coffeechat, 'bookmarked');
-                            });
-                        } else if (category === 'history' && data.accepted_requests) {
-                            data.accepted_requests.forEach(request => {
-                                coffeechatCards += createCoffeeChatCard(request, 'history');
-                            });
+                            // 커피챗 요청 필터 처리
+                            if (category === 'requests_sent' && data.requests_sent) {
+                                data.requests_sent.forEach(request => {
+                                    coffeechatCards += createCoffeeChatCard(request, 'sent');
+                                });
+                            } else if (category === 'requests_received' && data.requests_received) {
+                                data.requests_received.forEach(request => {
+                                    coffeechatCards += createCoffeeChatCard(request, 'received');
+                                });
+                            } else if (category === 'bookmarked' && data.bookmarked_coffeechats) {
+                                data.bookmarked_coffeechats.forEach(coffeechat => {
+                                    coffeechatCards += createCoffeeChatCard(coffeechat, 'bookmarked');
+                                });
+                            } else if (category === 'history' && data.accepted_requests) {
+                                data.accepted_requests.forEach(request => {
+                                    coffeechatCards += createCoffeeChatCard(request, 'history');
+                                });
+                            } else {
+                                coffeechatCards = '<p>해당하는 요청이 없습니다.</p>';
+                            }
+
+                            activityContent.innerHTML = coffeechatCards;
+                            activityContent.classList.add('coffeechat-grid');
+
                         } else {
-                            coffeechatCards = '<p>해당하는 요청이 없습니다.</p>';
-                        }
-
-                        activityContent.innerHTML = coffeechatCards;
-                        activityContent.classList.add('coffeechat-grid');
-
-                    } else {
-                        // 다른 필터에 대한 게시물 처리
-                        if (data.posts && data.posts.length > 0) {
-                            data.posts.forEach(post => {
-                                const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
-                                const postElement = document.createElement('div');
-                                postElement.classList.add('activity-card');
-                                postElement.innerHTML = `
+                            // 다른 필터에 대한 게시물 처리
+                            if (data.posts && data.posts.length > 0) {
+                                data.posts.forEach(post => {
+                                    const randomImage = "{% static 'images/' %}" + "{{ image_files|random }}";
+                                    const postElement = document.createElement('div');
+                                    postElement.classList.add('activity-card');
+                                    postElement.innerHTML = `
                                     <div class="card-image" style="background-image: url('${randomImage}');"></div>
                                     <div class="card-content">
                                         <h3><a href="${post.url}"><strong>${post.title}</strong></a></h3>
@@ -238,57 +238,60 @@
                                         <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
                                     </div>
                                 `;
-                                activityContent.appendChild(postElement);
-                            });
-                        } else {
-                            activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
+                                    activityContent.appendChild(postElement);
+                                });
+                            } else {
+                                activityContent.innerHTML = '<p>해당하는 글이 없습니다.</p>';
+                            }
+
+                            activityContent.classList.remove('coffeechat-grid');
                         }
-
-                        activityContent.classList.remove('coffeechat-grid');
-                    }
-                })
-                .catch(error => console.error('Error loading activities:', error));
-        }
-
-        // 커피챗 카드 생성 함수
-        function createCoffeeChatCard(coffeechat, category) {
-            const options = { month: 'long', day: 'numeric' };
-            let date = '';
-            let time = '';
-
-            if (coffeechat.created_at) {
-                date = new Date(coffeechat.created_at).toLocaleDateString('ko-KR', options);
-                time = new Date(coffeechat.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+                    })
+                    .catch(error => console.error('Error loading activities:', error));
             }
 
-            const cardElement = document.createElement('div');
-            cardElement.className = 'coffeechat-card';
-            cardElement.setAttribute('data-coffeechat-id', '{{ coffeechat.id }}')
-        
-            let displayName, job, hashtags;
+            // 커피챗 카드 생성 함수
+            function createCoffeeChatCard(coffeechat, category) {
+                const options = {month: 'long', day: 'numeric'};
+                let date = '';
+                let time = '';
 
-            if (category === 'sent') {
-                displayName = coffeechat.receiver;
-                job = coffeechat.receiver_job;
-                hashtags = coffeechat.hashtags;
-            } else if (category === 'received') {
-                displayName = coffeechat.sender;
-                job = '피로그래밍' + coffeechat.cohort + '기';
-                //job = coffeechat.sender_job;
-                hashtags = coffeechat.hashtags;
-            } else if (category === 'bookmarked') {
-                displayName = coffeechat.receiver;
-                job = coffeechat.receiver_job;
-                hashtags = coffeechat.hashtags;
-            } else {
-                displayName = coffeechat.receiver;
-                job = coffeechat.receiver_job;
-                hashtags = coffeechat.hashtags;
-            }
-            
-            const profileLink = coffeechat.detail_url ? coffeechat.detail_url : mypage.profile_read_url;
-      
-            cardElement.innerHTML = `
+                if (coffeechat.created_at) {
+                    date = new Date(coffeechat.created_at).toLocaleDateString('ko-KR', options);
+                    time = new Date(coffeechat.created_at).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+
+                const cardElement = document.createElement('div');
+                cardElement.className = 'coffeechat-card';
+                cardElement.setAttribute('data-coffeechat-id', '{{ coffeechat.id }}')
+
+                let displayName, job, hashtags;
+
+                if (category === 'sent') {
+                    displayName = coffeechat.receiver;
+                    job = coffeechat.receiver_job;
+                    hashtags = coffeechat.hashtags;
+                } else if (category === 'received') {
+                    displayName = coffeechat.sender;
+                    job = '피로그래밍' + coffeechat.cohort + '기';
+                    //job = coffeechat.sender_job;
+                    hashtags = coffeechat.hashtags;
+                } else if (category === 'bookmarked') {
+                    displayName = coffeechat.receiver;
+                    job = coffeechat.receiver_job;
+                    hashtags = coffeechat.hashtags;
+                } else {
+                    displayName = coffeechat.receiver;
+                    job = coffeechat.receiver_job;
+                    hashtags = coffeechat.hashtags;
+                }
+
+                const profileLink = coffeechat.detail_url ? coffeechat.detail_url : mypage.profile_read_url;
+
+                cardElement.innerHTML = `
                 <div class="card-header">
                     ${category === 'bookmarked' ? `
                         <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" 
@@ -307,12 +310,12 @@
                 <div class="card-content">
                     ${category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
             `;
-        
-            if (category === 'sent') {
-                cardElement.innerHTML += `<span class="waiting-status">선배님 기다리는 중..</span>`;
-            
-            } else if (category === 'received') {
-                cardElement.innerHTML += `
+
+                if (category === 'sent') {
+                    cardElement.innerHTML += `<span class="waiting-status">선배님 기다리는 중..</span>`;
+
+                } else if (category === 'received') {
+                    cardElement.innerHTML += `
                     <span class="waiting-status">후배가 기다리는 중!</span>
                     <div class="buttons">
                         <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
@@ -320,188 +323,188 @@
                     </div>
                     <button type="button" class="btn-view-letter" data-letter="${coffeechat.letter_to_senior}">커피챗 문구보기</button>
                 `;
-            
-            } else if (category === 'bookmarked') {
-                cardElement.innerHTML += `
+
+                } else if (category === 'bookmarked') {
+                    cardElement.innerHTML += `
                     <span class="waiting-status">커피챗 고민 중!</span>
                     <div class="hashtags">
                         ${hashtags.slice(0, 2).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
                 `;
-            
-            } else if (category === 'history') {
-                cardElement.innerHTML += `
+
+                } else if (category === 'history') {
+                    cardElement.innerHTML += `
                     <span class="waiting-status">커피챗 완료!</span>
                     <div class="hashtags">
                         ${hashtags.slice(0, 4).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
                     </div>
                 `;
-            }
-        
-            cardElement.innerHTML += `
+                }
+
+                cardElement.innerHTML += `
                 </div>
             `;
-        
-            return cardElement.outerHTML;
-        }
 
-        // 활동 링크에 이벤트 리스너 추가
-        function addActivityLinkEventListeners() {
-            const activityLinks = document.querySelectorAll('.activity-link');
-            activityLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    currentFilter = this.getAttribute('data-filter');
-                    activityLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    if (currentFilter === 'coffeechat') {
-                        document.querySelector('.activity-filter').innerHTML = `
+                return cardElement.outerHTML;
+            }
+
+            // 활동 링크에 이벤트 리스너 추가
+            function addActivityLinkEventListeners() {
+                const activityLinks = document.querySelectorAll('.activity-link');
+                activityLinks.forEach(link => {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        currentFilter = this.getAttribute('data-filter');
+                        activityLinks.forEach(link => link.classList.remove('active'));
+                        this.classList.add('active');
+
+                        if (currentFilter === 'coffeechat') {
+                            document.querySelector('.activity-filter').innerHTML = `
                             <a href="#" class="filter-link active" data-category="requests_sent">Sent</a>
                             <a href="#" class="filter-link" data-category="requests_received">Received</a>
                             <a href="#" class="filter-link" data-category="bookmarked">Interested</a>
                             <a href="#" class="filter-link" data-category="history">History</a>
                         `;
-                        addFilterEventListeners();
-                        loadActivities(currentFilter, 'requests_sent');
-                    } else {
-                        document.querySelector('.activity-filter').innerHTML = originalFilterContent;
-                        addFilterEventListeners();
-                        loadActivities(currentFilter, currentCategory);
-                    }
+                            addFilterEventListeners();
+                            loadActivities(currentFilter, 'requests_sent');
+                        } else {
+                            document.querySelector('.activity-filter').innerHTML = originalFilterContent;
+                            addFilterEventListeners();
+                            loadActivities(currentFilter, currentCategory);
+                        }
+                    });
                 });
-            });
-        }
+            }
 
-        // 초기 로딩 시 기본값 설정
-        loadActivities(currentFilter, currentCategory);
+            // 초기 로딩 시 기본값 설정
+            loadActivities(currentFilter, currentCategory);
 
-        addActivityLinkEventListeners();
-        addFilterEventListeners();
+            addActivityLinkEventListeners();
+            addFilterEventListeners();
 
-        // CSRF 토큰을 가져오는 함수
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
+            // CSRF 토큰을 가져오는 함수
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
                     }
                 }
+                return cookieValue;
             }
-            return cookieValue;
-        }
-        
-        const csrftoken = getCookie('csrftoken');
-        
-        // AJAX 요청을 보내는 함수
-        function sendRequest(url, successMessage, errorMessage) {
+
+            const csrftoken = getCookie('csrftoken');
+
+            // AJAX 요청을 보내는 함수
+            function sendRequest(url, successMessage, errorMessage) {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'  // AJAX 요청임을 명시
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'accepted' || data.status === 'rejected') {
+                            alert(successMessage);
+                            location.reload(); // 필요 시 페이지 새로고침
+                        } else if (data.error) {
+                            alert(errorMessage);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert(errorMessage);
+                    });
+            }
+
+            // Accept 버튼 클릭 이벤트
+            document.querySelectorAll('.btn-accept').forEach(button => {
+                button.addEventListener('click', function () {
+                    const url = this.getAttribute('data-url');
+                    sendRequest(url, '요청이 수락되었습니다!', '요청 수락 중 오류가 발생했습니다.');
+                });
+            });
+
+            // Reject 버튼 클릭 이벤트
+            document.querySelectorAll('.btn-reject').forEach(button => {
+                button.addEventListener('click', function () {
+                    const url = this.getAttribute('data-url');
+                    sendRequest(url, '요청이 거절되었습니다.', '요청 거절 중 오류가 발생했습니다.');
+                });
+            });
+        });
+
+        // 북마크 토글 함수
+        function toggleBookmark(url, cardElement) {
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'  // AJAX 요청임을 명시
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'accepted' || data.status === 'rejected') {
-                    alert(successMessage);
-                    location.reload(); // 필요 시 페이지 새로고침
-                } else if (data.error) {
-                    alert(errorMessage);
+                    'Content-Type': 'application/json'
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(errorMessage);
-            });
-        }
-        
-        // Accept 버튼 클릭 이벤트
-        document.querySelectorAll('.btn-accept').forEach(button => {
-            button.addEventListener('click', function() {
-                const url = this.getAttribute('data-url');
-                sendRequest(url, '요청이 수락되었습니다!', '요청 수락 중 오류가 발생했습니다.');
-            });
-        });
-        
-        // Reject 버튼 클릭 이벤트
-        document.querySelectorAll('.btn-reject').forEach(button => {
-            button.addEventListener('click', function() {
-                const url = this.getAttribute('data-url');
-                sendRequest(url, '요청이 거절되었습니다.', '요청 거절 중 오류가 발생했습니다.');
-            });
-        });
-    });
-
-    // 북마크 토글 함수
-    function toggleBookmark(url, cardElement) {
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (!data.bookmarked) {
-                cardElement.remove(); // 북마크가 취소되었으면 카드 제거
-            } else {
-                alert('북마크가 추가되었습니다.');
-            }
-        })
-        .catch(error => {
-            console.error('Error toggling bookmark:', error);
-        });
-    }
-
-    $(document).ready(function() {
-        // CSRF 토큰 가져오기
-        function getCSRFToken() {
-            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.bookmarked) {
+                        cardElement.remove(); // 북마크가 취소되었으면 카드 제거
+                    } else {
+                        alert('북마크가 추가되었습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error toggling bookmark:', error);
+                });
         }
 
-        // AJAX 설정
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+        $(document).ready(function () {
+            // CSRF 토큰 가져오기
+            function getCSRFToken() {
+                return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            }
+
+            // AJAX 설정
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                    }
                 }
-            }
-        });
+            });
 
-        // "신청하기" 버튼 클릭 시 모달 열기 기능
-        $('.coffeechat-card').click(function (e) {
-            e.preventDefault(); // 기본 동작 막기
-            var modal = document.getElementById("myModal");
-            modal.style.display = "flex";
-        });
+            // "신청하기" 버튼 클릭 시 모달 열기 기능
+            $('.coffeechat-card').click(function (e) {
+                e.preventDefault(); // 기본 동작 막기
+                var modal = document.getElementById("myModal");
+                modal.style.display = "flex";
+            });
 
-        // 모달 닫기 (X 버튼 클릭 시)
-        $('.close').click(function () {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "none";
-        });
-
-        // 모달 닫기 (모달 외부 클릭 시)
-        window.onclick = function (event) {
-            var modal = document.getElementById("myModal");
-            if (event.target == modal) {
+            // 모달 닫기 (X 버튼 클릭 시)
+            $('.close').click(function () {
+                var modal = document.getElementById("myModal");
                 modal.style.display = "none";
-            }
-        };
-    });
+            });
 
-</script>
+            // 모달 닫기 (모달 외부 클릭 시)
+            window.onclick = function (event) {
+                var modal = document.getElementById("myModal");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+        });
+
+    </script>
 {% endblock %}
