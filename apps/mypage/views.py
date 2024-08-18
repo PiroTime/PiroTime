@@ -130,6 +130,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
                     'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                 } for request in requests_sent]
+                print("Debug Data for requests_sent:", data)
                 return JsonResponse({'requests_sent': data})
 
             elif category == 'requests_received':
@@ -139,6 +140,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
 
                 for request in requests_received:
                     sender_username = request.user.username
+                    sender_id = request.user.id
                     receiver_username = request.coffeechat.receiver.username if request.coffeechat.receiver else 'Unknown'
                     job = request.coffeechat.job
                     detail_url = reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id])
@@ -161,8 +163,8 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     })
 
                     data.append({
-                        'message': request.letterToSenior,
                         'sender': sender_username,
+                        'sender_id': sender_id,
                         'receiver': receiver_username,
                         'job': job,
                         'cohort': cohort,  # 추가된 부분

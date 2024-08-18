@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
 <link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
 <link rel="stylesheet" href="{% static 'css/modal.css'%}">
+<style>
+</style>
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
@@ -83,8 +85,14 @@
         <!-- 모달 HTML 구조 -->
         <div id="coffeechatModal" class="modal">
             <div class="modal-content">
+                <h2>커피챗 신청자가 보낸 메세지입니다.</h2>
                 <span id="coffeechatModalClose" class="close-button">&times;</span>
                 <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+                <div class="button-container">
+    {#                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>#}
+    {#                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>#}
+                </div>
+
             </div>
         </div>
 
@@ -330,12 +338,13 @@
                     const cardElement = document.createElement('div');
                     cardElement.className = 'coffeechat-card';
                     cardElement.setAttribute('data-coffeechat-id', '{{ coffeechat.id }}')
+                    cardElement.setAttribute('data-coffeechat_sender-id', '{{ coffeechat.sender_id }}')
 
                     let displayName, job, hashtags;
 
                     if (category === 'sent') {
                         displayName = coffeechat.receiver;
-                        job = coffeechat.receiver_job;
+                        job = coffeechat.job;
                         hashtags = coffeechat.hashtags;
                     } else if (category === 'received') {
                         displayName = coffeechat.sender;
@@ -344,11 +353,11 @@
                         hashtags = coffeechat.hashtags;
                     } else if (category === 'bookmarked') {
                         displayName = coffeechat.receiver;
-                        job = coffeechat.receiver_job;
+                        job = coffeechat.job;
                         hashtags = coffeechat.hashtags;
                     } else {
                         displayName = coffeechat.receiver;
-                        job = coffeechat.receiver_job;
+                        job = coffeechat.job;
                         hashtags = coffeechat.hashtags;
                     }
 
@@ -388,7 +397,10 @@
                         <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
-                    <button type="button" class="btn-view-letter" data-letter="${coffeechat.letter_to_senior}">커피챗 문구보기</button>
+                    <button type="button" class="btn-view-letter"
+                        data-letter="${coffeechat.letter_to_senior}"
+                        data-url-acc="${coffeechat.accept_url}"
+                        data-url-rej="${coffeechat.reject_url}">커피챗 문구보기</button>
                 `;
 
                     } else if (category === 'bookmarked') {
