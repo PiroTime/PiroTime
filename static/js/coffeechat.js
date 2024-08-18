@@ -28,10 +28,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // "커피챗 문구보기" 버튼 클릭 시 모달 열기
     document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('btn-view-letter')) {
+        if (event.target.classList.contains('btn-accept-letter')) {
             const letterContent = event.target.getAttribute('data-letter');
             const urlRej = event.target.getAttribute('data-url-rej');
             const urlAcc = event.target.getAttribute('data-url-acc');
+            console.log('accept')
+            console.log(letterContent)
 
 
             modalContent.innerHTML = `
@@ -45,8 +47,15 @@ document.addEventListener("DOMContentLoaded", function() {
             modal.style.display = "flex";
         }
 
-        if (event.target.classList.contains('coffeechat-card')) {
+        if (event.target.classList.contains('btn-view-letter')) {
+            const letterContent = event.target.getAttribute('data-letter');
+            console.log('letter')
+            console.log(letterContent)
 
+            modalContent.innerHTML = `
+                <p>${letterContent.replace(/\r?\n/g, '<br>')}</p>
+            `;
+            modal.style.display = "flex";
         }
     });
 

@@ -83,27 +83,13 @@
         </div>
 
         <!-- 모달 HTML 구조 -->
-        <div id="coffeechatModal_letter" class="modal">
-            <div class="modal-content">
-                <h2>커피챗 신청자가 보낸 메세지입니다.</h2>
-                <span id="coffeechatModalClose" class="close-button">&times;</span>
-                <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
-                <div class="button-container">
-
-                </div>
-
-            </div>
-        </div>
         <div id="coffeechatModal" class="modal">
             <div class="modal-content">
                 <h2>커피챗 신청자가 보낸 메세지입니다.</h2>
                 <span id="coffeechatModalClose" class="close-button">&times;</span>
                 <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
                 <div class="button-container">
-    {#                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>#}
-    {#                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>#}
                 </div>
-
             </div>
         </div>
 
@@ -378,9 +364,7 @@
                         <div class="card-header">
                             ${category === 'received' ? `
                                 <button type="button" class="btn-view-letter"
-                                    data-letter="${coffeechat.letter_to_senior}"
-                                    data-url-acc="${coffeechat.accept_url}"
-                                    data-url-rej="${coffeechat.reject_url}">
+                                    data-letter="${coffeechat.letter_to_senior}">
                                     <i class="fas fa-message"></i>
                                 </button>
                             ` : '<div class="scrap-placeholder"></div>'}
@@ -414,7 +398,10 @@
                         cardElement.innerHTML += `
                     <span class="waiting-status">후배가 기다리는 중!</span>
                     <div class="buttons">
-                        <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
+                        <button type="button" class="btn-accept-letter btn-accept"
+                            data-letter="${coffeechat.letter_to_senior}"
+                            data-url-acc="${coffeechat.accept_url}"
+                            data-url-rej="${coffeechat.reject_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
                     {% comment %} <button type="button" class="btn-view-letter"
