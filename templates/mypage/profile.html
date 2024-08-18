@@ -6,6 +6,19 @@
 <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
 <link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
 <link rel="stylesheet" href="{% static 'css/modal.css'%}">
+<style>
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .modal-accept, .modal-reject {
+        flex: 1;
+        margin: 0 10px; 
+        border-radius: 10px;
+    }
+</style>
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
@@ -83,10 +96,13 @@
         <!-- 모달 HTML 구조 -->
         <div id="coffeechatModal" class="modal">
             <div class="modal-content">
+                <h2>커피챗 신청자가 보낸 메세지입니다.</h2>
                 <span id="coffeechatModalClose" class="close-button">&times;</span>
                 <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
-{#                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>#}
-{#                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>#}
+                <div class="button-container">
+    {#                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>#}
+    {#                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>#}
+                </div>
 
             </div>
         </div>
@@ -339,7 +355,7 @@
 
                     if (category === 'sent') {
                         displayName = coffeechat.receiver;
-                        job = coffeechat.receiver_job;
+                        job = coffeechat.job;
                         hashtags = coffeechat.hashtags;
                     } else if (category === 'received') {
                         displayName = coffeechat.sender;
@@ -348,11 +364,11 @@
                         hashtags = coffeechat.hashtags;
                     } else if (category === 'bookmarked') {
                         displayName = coffeechat.receiver;
-                        job = coffeechat.receiver_job;
+                        job = coffeechat.job;
                         hashtags = coffeechat.hashtags;
                     } else {
                         displayName = coffeechat.receiver;
-                        job = coffeechat.receiver_job;
+                        job = coffeechat.job;
                         hashtags = coffeechat.hashtags;
                     }
 

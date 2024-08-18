@@ -130,6 +130,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     'detail_url': reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id]),
                     'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id]),
                 } for request in requests_sent]
+                print("Debug Data for requests_sent:", data)
                 return JsonResponse({'requests_sent': data})
 
             elif category == 'requests_received':
