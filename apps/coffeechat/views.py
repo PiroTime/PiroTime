@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import get_user_model
 
 # 프로젝트 내 모듈
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
+from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser, informationAgree
 from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 
 User = get_user_model()
@@ -224,6 +224,12 @@ def accept_request(request, request_id):
     coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
     if request.user != coffeechat_request.coffeechat.receiver:
         return JsonResponse({"error": "Unauthorized"}, status=403)
+
+    agree = informationAgree()
+    agree.coffeechat_request = coffeechat_request
+    agree.date = timezone.now()
+    agree.user = coffeechat_request.coffeechat.receiver
+    agree.is_agree = True
 
     coffeechat_request.status = 'ACCEPTED'
     coffeechat_request.save()
