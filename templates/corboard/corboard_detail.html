@@ -2,504 +2,406 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/corboard/detail.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/modal.css'%}">
-<style>
-    @media screen and (max-width: 768px) {
-        /* 더 작은 화면에서 검색창과 필터 버튼의 간격 조정 */
-        .container, .comment {
-            width: 90%;
-        }
-        
-        .action-buttons-bottom {
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: flex-end;
-        }
+    <link rel="stylesheet" href="{% static 'css/corboard/detail.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/modal.css'%}">
+    <style>
+        @media screen and (max-width: 768px) {
+            /* 더 작은 화면에서 검색창과 필터 버튼의 간격 조정 */
+            .container, .comment {
+                width: 90%;
+            }
 
-        .header-container {
-            flex-direction: column;
+            .action-buttons-bottom {
+                flex-direction: column;
+                justify-content: flex-end;
+                align-items: flex-end;
+            }
+
+            .header-container {
+                flex-direction: column;
+            }
+
+            .header-details {
+                margin-bottom: 20px; /* 아래에 공간 추가 */
+            }
+
+            .header-sidebar {
+                position: static; /* 절대 위치를 해제하여 문서 흐름 내에 배치 */
+                width: 100%; /* 전체 너비를 차지하도록 설정 */
+                margin-top: 10px; /* 위쪽에 약간의 공간 추가 */
+            }
+
+            .about-box {
+                padding: 20px;
+                margin-top: 0; /* 기본 마진 제거 */
+            }
         }
-
-        .header-details {
-            margin-bottom: 20px; /* 아래에 공간 추가 */
-        }
-
-        .header-sidebar {
-            position: static; /* 절대 위치를 해제하여 문서 흐름 내에 배치 */
-            width: 100%; /* 전체 너비를 차지하도록 설정 */
-            margin-top: 10px; /* 위쪽에 약간의 공간 추가 */
-        }
-
-        .about-box {
-            padding: 20px;
-            margin-top: 0; /* 기본 마진 제거 */
-        }
-      }
-
-      .cor-writer {
-          color: #333; 
-          text-decoration: none; 
-      }
-
-      .cor-writer:hover {
-          color: #0BEC12; 
-      }
-</style>
-<meta name="csrf-token" content="{{ csrf_token }}">
-<div class="container max-width-1200">
-  <div class="cor-container">
-    <div class="cor-detail">
-      <div class="header-container justify-space-between">
-        <div class="header-details">
-          <h1>{{ cor.title }}</h1>
-          <div class="meta-info">
-            <span><i class="fas fa-user"></i> 
-              {% if cor.writer == user %}
-                <a href="{% url 'mypage:profile' %}" class="cor-writer">{{ cor.writer }}</a>
-              {% else %}
-              <a href="/" class="open-profile-modal cor-writer" data-user-id="{{ cor.writer.id }}">{{ cor.writer }}</a>
-              {% endif %}
+    </style>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <div class="container max-width-1200">
+        <div class="cor-container">
+            <div class="cor-detail">
+                <div class="header-container justify-space-between">
+                    <div class="header-details">
+                        <h1>{{ cor.title }}</h1>
+                        <div class="meta-info">
+            <span><i class="fas fa-user"></i>
+                {% if cor.writer == user %}
+                    <a href="{% url 'mypage:profile' %}">{{ cor.writer }}</a>
+                {% else %}
+                    <a href="{% url 'mypage:profile_read' cor.writer.id %}">{{ cor.writer }}</a>
+                {% endif %}
             </span>
-            <span><i class="fas fa-calendar-alt"></i> {{ cor.date }}</span>
-          </div>
-        </div>
-        <div class="header-sidebar">
-          <div class="about-box">
-            <div class="action-buttons">
-              <form action="{% url 'corboard:cor_like' pk=cor.pk %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn-action btn-like {% if user in cor.likes.all %}liked{% endif %}" data-cor-id="{{ cor.id }}">
-                  <i class="fas fa-heart {% if user in cor.likes.all %}liked{% endif %}"></i>
-                </button>
-              </form>
-              <form action="{% url 'corboard:cor_bookmark' pk=cor.pk %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn-action btn-bookmark {% if user in cor.bookmarks.all %}bookmarked{% endif %}" data-cor-id="{{ cor.id }}">
-                  <i class="fas fa-bookmark {% if user in cor.bookmarks.all %}bookmarked{% endif %}"></i>
-                </button>
-              </form>
-              <form>
-                  {% if cor.writer != user %}
-                  {% csrf_token %}
-                      <button class="btn-action btn-mail" id="openModalBtn">
-                        <i class="fas fa-envelope"></i>
-                      </button>
-                  {% endif %}
-              </form>
-                <form  method="post">
-                    <div id="myModal" class="modal" >
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
-                            {% csrf_token %}
-                            <div class="input-container">
-                                {% csrf_token %}
+                            <span><i class="fas fa-calendar-alt"></i> {{ cor.date }}</span>
+                        </div>
+                    </div>
+                    <div class="header-sidebar">
+                        <div class="about-box">
+                            <div class="action-buttons">
+                                <form action="{% url 'corboard:cor_like' pk=cor.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-action btn-like {% if user in cor.likes.all %}liked{% endif %}" data-cor-id="{{ cor.id }}">
+                                        <i class="fas fa-heart {% if user in cor.likes.all %}liked{% endif %}"></i>
+                                    </button>
+                                </form>
+                                <form action="{% url 'corboard:cor_bookmark' pk=cor.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-action btn-bookmark {% if user in cor.bookmarks.all %}bookmarked{% endif %}" data-cor-id="{{ cor.id }}">
+                                        <i class="fas fa-bookmark {% if user in cor.bookmarks.all %}bookmarked{% endif %}"></i>
+                                    </button>
+                                </form>
+                                <form>
+                                    {% if cor.writer != user %}
+                                        {% csrf_token %}
+                                        <button class="btn-action btn-mail" id="openModalBtn">
+                                            <i class="fas fa-envelope"></i>
+                                        </button>
+                                    {% endif %}
+                                </form>
+                                <form  method="post">
+                                    <div id="myModal" class="modal" >
+                                        <div class="modal-content">
+                                            <span class="close">&times;</span>
+                                            <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
+                                            {% csrf_token %}
+                                            <div class="input-container">
+                                                {% csrf_token %}
 
-                                <textarea id="content" name="letter" rows="10" cols="50"
-                                          placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..." required></textarea>
+                                                <textarea id="content" name="letter" rows="10" cols="50"
+                                                          placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..." required></textarea>
 
-                                <button type="submit" id="submitBtn">제출</button>
+                                                <button type="submit" id="submitBtn">제출</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+
                             </div>
                         </div>
                     </div>
-                </form>
-
-
+                </div>
+                <div class="content-section">
+                    <div class="main-content">
+                        {{ cor.content|safe }}
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="content-section">
-        <div class="main-content">
-          {{ cor.content|safe }}
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <hr class="section-divider">
-  <span class="like-count">좋아요 {{ cor.total_likes }}개</span>
-  <div class="comment-section">
-    <h3>댓글</h3>
-    <div class="comments">
-      {% for comment in comments %}
-          {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
-          <div class="comment-block" > <!-- 각 댓글 블록을 감싸는 div 추가 -->
-              <div class="comment" id="comment-{{ comment.id }}">
-                  <p>{{ comment.content }}</p>
-                  <div class="comment-meta">
-                    <span><i class="fas fa-user"></i>
-                      {% if comment.writer == user %}
-                        <a href="{% url 'mypage:profile' %}" class="cor-writer">{{ comment.writer }}</a>
-                      {% else %}
-                        <a href="/" class="open-profile-modal cor-writer" data-user-id="{{ comment.writer.id }}">{{ comment.writer }}</a>
-                      {% endif %}
-                    </span>
-                      <div class="comment-meta-data">
-                        <button class="btn-reply" data-comment-id="{{ comment.id }}"><i class="fa-regular fa-comment"></i></button>
-                        <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
-                        {% if comment.writer == user or user.is_staff %}
-                            <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn-delete-comment" data-comment-id="{{ comment.id }}">
-                                    <i class="fas fa-trash-alt"></i> 삭제
-                                </button>
-                            </form>
-                        {% endif %}
-                      </div>
-                  </div>
-                  <br/>
-
-                  <!-- 대댓글 표시 -->
-                  <div class="replies">
-                    {% for reply in comment.get_replies %}
-                    <div class="comment-block" >
-                        <div style="display: flex; align-items: center; margin-left: 20px;" id="comment-{{ reply.id }}">
-                            <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
-                            <div class="comment reply-comment" style="margin-left: 10px;">
-                                <p>{{ reply.content }}</p>
+        <hr class="section-divider">
+        <span class="like-count">좋아요 {{ cor.total_likes }}개</span>
+        <div class="comment-section">
+            <h3>댓글</h3>
+            <div class="comments">
+                {% for comment in comments %}
+                    {% if not comment.parent %} <!-- 대댓글이 아닌 경우에만 출력 -->
+                        <div class="comment-block" > <!-- 각 댓글 블록을 감싸는 div 추가 -->
+                            <div class="comment" id="comment-{{ comment.id }}">
+                                <p>{{ comment.content }}</p>
                                 <div class="comment-meta">
-                                    <span><i class="fas fa-user"></i>
-                                      {% if reply.writer == user %}
-                                        <a href="{% url 'mypage:profile' %}" class="cor-writer">{{ reply.writer }}</a>
-                                      {% else %}
-                                        <a href="/" class="open-profile-modal cor-writer" data-user-id="{{ reply.writer.id }}">{{ reply.writer }}</a>
-                                      {% endif %}
-                                    </span>
+                    <span><i class="fas fa-user"></i>
+                        {% if comment.writer == user %}
+                            <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+                        {% else %}
+                            <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+                        {% endif %}
+                    </span>
                                     <div class="comment-meta-data">
-                                        <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
-                                        {% if reply.writer == user or user.is_staff %}
-                                        <form action="{% url 'corboard:cor_delete_comment' pk=reply.pk %}" method="post" style="display:inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn-delete-comment" data-comment-id="{{ reply.id }}">
-                                                <i class="fas fa-trash-alt"></i> 삭제
-                                            </button>
-                                        </form>
+                                        <button class="btn-reply" data-comment-id="{{ comment.id }}"><i class="fa-regular fa-comment"></i></button>
+                                        <span><i class="fas fa-calendar-alt"></i> {{ comment.date }}</span>
+                                        {% if comment.writer == user or user.is_staff %}
+                                            <form action="{% url 'corboard:cor_delete_comment' pk=comment.pk %}" method="post" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn-delete-comment" data-comment-id="{{ comment.id }}">
+                                                    <i class="fas fa-trash-alt"></i> 삭제
+                                                </button>
+                                            </form>
                                         {% endif %}
                                     </div>
                                 </div>
+                                <br/>
+
+                                <!-- 대댓글 표시 -->
+                                <div class="replies">
+                                    {% for reply in comment.get_replies %}
+                                        <div class="comment-block" >
+                                            <div style="display: flex; align-items: center; margin-left: 20px;" id="comment-{{ reply.id }}">
+                                                <i class="fa-solid fa-arrow-turn-up rotated-icon"></i>
+                                                <div class="comment reply-comment" style="margin-left: 10px;">
+                                                    <p>{{ reply.content }}</p>
+                                                    <div class="comment-meta">
+                                    <span><i class="fas fa-user"></i>
+                                        {% if reply.writer == user %}
+                                            <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+                                        {% else %}
+                                            <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                                        {% endif %}
+                                    </span>
+                                                        <div class="comment-meta-data">
+                                                            <span><i class="fas fa-calendar-alt"></i> {{ reply.date }}</span>
+                                                            {% if reply.writer == user or user.is_staff %}
+                                                                <form action="{% url 'corboard:cor_delete_comment' pk=reply.pk %}" method="post" style="display:inline;">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn-delete-comment" data-comment-id="{{ reply.id }}">
+                                                                        <i class="fas fa-trash-alt"></i> 삭제
+                                                                    </button>
+                                                                </form>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                    {% endfor %}
+                                </div>
+
+                                <!-- 대댓글 입력 폼 -->
+                                <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
+                                    <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
+                                        {% csrf_token %}
+                                        <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
+                                        <input type="hidden" name="parent" value="{{ comment.id }}">
+                                        <button type="submit" class="btn-add-comment">답글 등록</button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    {% endfor %}
-                  </div>
-
-                  <!-- 대댓글 입력 폼 -->
-                  <div class="reply-form" id="reply-form-{{ comment.id }}" style="display:none;">
-                      <form method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this, {{ comment.id }});">
-                          {% csrf_token %}
-                          <textarea class="comment-input" name="content" placeholder="답글을 입력하세요..." required></textarea>
-                          <input type="hidden" name="parent" value="{{ comment.id }}">
-                          <button type="submit" class="btn-add-comment">답글 등록</button>
-                      </form>
-                  </div>
-              </div>
-              {% if not forloop.last %}
-{#                  <hr class="comment-divider"/>#}
-              {% endif %}
-          </div> <!-- .comment-block 끝 -->
-          {% endif %}
-      {% empty %}
-        <p id="no-comments-message">댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
-      {% endfor %}
-    </div>
-      <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
-          {% csrf_token %}
-          <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
-          <button type="submit" class="btn-add-comment">등록</button>
-      </form>
-  </div>
-    <div class="action-buttons-bottom">
-        <a href="{% url 'corboard:cor_list' %}" class="btn-action btn-back">
-            <i class="fas fa-arrow-left"></i> 목록으로 돌아가기
-        </a>
-        {% if user == cor.writer or user.is_staff %}
-            <a href="{% url 'corboard:cor_update' pk=cor.pk %}" class="btn-action btn-edit">
-                <i class="fas fa-edit"></i> 수정
-            </a>
-            <form method="post" action="{% url 'corboard:cor_delete' pk=cor.pk %}" style="display: inline;">
+                            {% if not forloop.last %}
+                                {#                  <hr class="comment-divider"/>#}
+                            {% endif %}
+                        </div> <!-- .comment-block 끝 -->
+                    {% endif %}
+                {% empty %}
+                    <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+                {% endfor %}
+            </div>
+            <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
                 {% csrf_token %}
-                <button type="submit" class="btn-action btn-delete" onclick="return confirm('정말로 이 게시글을 삭제하시겠습니까?');">
-                    <i class="fas fa-trash-alt"></i> 삭제
-                </button>
+                <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
+                <button type="submit" class="btn-add-comment">등록</button>
             </form>
-        {% endif %}
+        </div>
+        <div class="action-buttons-bottom">
+            <a href="{% url 'corboard:cor_list' %}" class="btn-action btn-back">
+                <i class="fas fa-arrow-left"></i> 목록으로 돌아가기
+            </a>
+            {% if user == cor.writer or user.is_staff %}
+                <a href="{% url 'corboard:cor_update' pk=cor.pk %}" class="btn-action btn-edit">
+                    <i class="fas fa-edit"></i> 수정
+                </a>
+                <form method="post" action="{% url 'corboard:cor_delete' pk=cor.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-action btn-delete" onclick="return confirm('정말로 이 게시글을 삭제하시겠습니까?');">
+                        <i class="fas fa-trash-alt"></i> 삭제
+                    </button>
+                </form>
+            {% endif %}
+        </div>
     </div>
-</div>
 
-<!-- 모달 HTML 구조 -->
-<div id="profile_modal" class="modal">
-  <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <div id="modal-profile-content"></div> <!-- 모달 AJAX -->
-  </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{#<script src="../../static/js/coffeechat.js"></script>#}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {#<script src="../../static/js/coffeechat.js"></script>#}
 
     <script>
-    $(document).ready(function() {
-        // CSRF 토큰 가져오기
-        function getCSRFToken() {
-            return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        }
-
-        // AJAX 설정
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
-                }
+        $(document).ready(function() {
+            // CSRF 토큰 가져오기
+            function getCSRFToken() {
+                return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             }
-        });
-    
-        //모달 기능
-        function toggleModalCSS(load) {
-            const modalCSSId = 'modal-css';
-            if (load) {
-                if ($('#' + modalCSSId).length === 0) {
-                    var link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.href = '{% static "css/mypage/profile_modal.css" %}';
-                    link.id = modalCSSId;
-                    document.head.appendChild(link);
-                }
-            } else {
-                var link = document.getElementById(modalCSSId);
-                if (link) {
-                    document.head.removeChild(link);
-                }
-            }
-        }
 
-        $(document).on('click', '.open-profile-modal', function(event) {
-            event.preventDefault();
-            var userId = $(this).data('user-id');
-            var url = `/mypage/ajax/profile-modal`;
-
-            // Make an AJAX request to load the modal content
-            $.ajax({
-                url: url,
-                data: { 'user_id': userId },
-                success: function(response) {
-                    console.log(response); // 응답 내용을 확인
-                    $('#modal-profile-content').html(response);
-                    $('#profile_modal').show();
-
-
-                    // 모달 로드 후 스크립트 초기화
-                    initializeProfileModal(userId);
-                    
-                },
-                error: function(xhr) {
-                    alert('프로필을 불러오는 중 오류가 발생했습니다.');
+            // AJAX 설정
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                    }
                 }
             });
-        });
 
-
-        $('.close-button').click(function() {
-            $('#profile_modal').hide();
-            toggleModalCSS(false);  // CSS 파일 제거
-        });
-
-        $(window).click(function(event) {
-            if (event.target.id === 'profile_modal') {
-                $('#profile_modal').hide();
-                toggleModalCSS(false);  // CSS 파일 제거
-            }
-        });
-
-        // 좋아요 기능
-        $('.btn-like').click(function(e) {
-          e.preventDefault();
-          var corId = $(this).data('cor-id');
-          var likeButton = $(this);
-          $.post('/corboard/like/' + corId + '/', {
-            csrfmiddlewaretoken: getCSRFToken()
-          }, function(data) {
-            if (data.liked) {
-              likeButton.addClass('liked');
-            } else {
-              likeButton.removeClass('liked');
-            }
-            $('span.like-count').text('좋아요 ' + data.total_likes + '개');
-          }).fail(function(xhr, status, error) {
-            if (xhr.status == 302) {
-              window.location.href = xhr.getResponseHeader('Location');
-            } else {
-              alert('좋아요 요청에 실패했습니다. 다시 시도해주세요.');
-            }
-          });
-        });
-
-        // 북마크 기능
-        $('.btn-bookmark').click(function(e) {
-          e.preventDefault();
-          var corId = $(this).data('cor-id');
-          var bookmarkButton = $(this);
-          $.post('/corboard/bookmark/' + corId + '/', {
-            csrfmiddlewaretoken: getCSRFToken()
-          }, function(data) {
-            if (data.bookmarked) {
-              bookmarkButton.addClass('bookmarked');
-            } else {
-              bookmarkButton.removeClass('bookmarked');
-            }
-          }).fail(function(xhr, status, error) {
-            if (xhr.status == 302) {
-              window.location.href = xhr.getResponseHeader('Location');
-            } else {
-              alert('북마크 요청에 실패했습니다. 다시 시도해주세요.');
-            }
-          });
-        });
-
-        // 메일 전송 기능
-        $('.btn-mail').click(function(e) {
-          e.preventDefault();
-          var corId = $(this).data('cor-id');
-          $.get('/corboard/cor_mail/' + corId + '/', {
-            csrfmiddlewaretoken: getCSRFToken()
-          }, function(data) {
-            if (data.success) {
-              alert('메일 전송에 성공했습니다. 작성자의 응답을 기다려주세요.');
-            }
-          }).fail(function(xhr, status, error) {
-            if (xhr.status == 302) {
-              window.location.href = xhr.getResponseHeader('Location');
-            } else {
-              alert('메일 전송에 실패했습니다. 다시 시도해주세요.');
-            }
-          });
-        });
-
-        // 댓글 삭제 기능
-        $(document).on('click', '.btn-delete-comment', function(){
-          var commentId = $(this).data('comment-id');
-          if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
-            $.ajax({
-              url: '/corboard/comment/delete/' + commentId + '/',
-              type: 'POST',
-              headers: {
-                'X-CSRFToken': getCSRFToken()
-              },
-              success: function() {
-                  $('#comment-' + commentId).remove();
-              },
-              error: function(xhr, status, error) {
-                if (xhr.status == 302) {
-                  window.location.href = xhr.getResponseHeader('Location');
-                } else {
-                  alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
-                }
-              }
+            // 좋아요 기능
+            $('.btn-like').click(function(e) {
+                e.preventDefault();
+                var corId = $(this).data('cor-id');
+                var likeButton = $(this);
+                $.post('/corboard/like/' + corId + '/', {
+                    csrfmiddlewaretoken: getCSRFToken()
+                }, function(data) {
+                    if (data.liked) {
+                        likeButton.addClass('liked');
+                    } else {
+                        likeButton.removeClass('liked');
+                    }
+                    $('span.like-count').text('좋아요 ' + data.total_likes + '개');
+                }).fail(function(xhr, status, error) {
+                    if (xhr.status == 302) {
+                        window.location.href = xhr.getResponseHeader('Location');
+                    } else {
+                        alert('좋아요 요청에 실패했습니다. 다시 시도해주세요.');
+                    }
+                });
             });
-          }
-        });
+
+            // 북마크 기능
+            $('.btn-bookmark').click(function(e) {
+                e.preventDefault();
+                var corId = $(this).data('cor-id');
+                var bookmarkButton = $(this);
+                $.post('/corboard/bookmark/' + corId + '/', {
+                    csrfmiddlewaretoken: getCSRFToken()
+                }, function(data) {
+                    if (data.bookmarked) {
+                        bookmarkButton.addClass('bookmarked');
+                    } else {
+                        bookmarkButton.removeClass('bookmarked');
+                    }
+                }).fail(function(xhr, status, error) {
+                    if (xhr.status == 302) {
+                        window.location.href = xhr.getResponseHeader('Location');
+                    } else {
+                        alert('북마크 요청에 실패했습니다. 다시 시도해주세요.');
+                    }
+                });
+            });
+
+            // 메일 전송 기능
 
 
-
-
-    {#$('#submitBtn').click(function(e) {#}
-    {#    e.preventDefault();#}
-    {#    var corId = $(this).data('cor-id');#}
-    {#    console.log("++++++++")#}
-    {#    var modal = document.getElementById("myModal");#}
-    {#    modal.style.display = "none";#}
-    {#    $.post('/corboard/cor_mail/' + corId + '/' ,function(data) {#}
-    {#        if (data.success) {#}
-    {#            alert('메일 전송에 성공했습니다. 작성자의 응답을 기다려주세요.');#}
-    {#        }#}
-    {#    }).fail(function(xhr, status, error) {#}
-    {#        if (xhr.status == 302) {#}
-    {#            window.location.href = xhr.getResponseHeader('Location');#}
-    {#        } else {#}
-    {#            alert('메일 전송에 실패했습니다. 다시 시도해주세요.');#}
-    {#        }#}
-    {#    });#}
+            // 댓글 삭제 기능
+            $(document).on('click', '.btn-delete-comment', function(){
+                var commentId = $(this).data('comment-id');
+                if (confirm('정말로 이 댓글을 삭제하시겠습니까?')) {
+                    $.ajax({
+                        url: '/corboard/comment/delete/' + commentId + '/',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        success: function() {
+                            $('#comment-' + commentId).remove();
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status == 302) {
+                                window.location.href = xhr.getResponseHeader('Location');
+                            } else {
+                                alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+                            }
+                        }
+                    });
+                }
+            });
+            {#$('#submitBtn').click(function(e) {#}
+            {#    e.preventDefault();#}
+            {#    var corId = $(this).data('cor-id');#}
+            {#    console.log("++++++++")#}
+            {#    var modal = document.getElementById("myModal");#}
+            {#    modal.style.display = "none";#}
+            {#    $.post('/corboard/cor_mail/' + corId + '/' ,function(data) {#}
+            {#        if (data.success) {#}
+            {#            alert('메일 전송에 성공했습니다. 작성자의 응답을 기다려주세요.');#}
+            {#        }#}
+            {#    }).fail(function(xhr, status, error) {#}
+            {#        if (xhr.status == 302) {#}
+            {#            window.location.href = xhr.getResponseHeader('Location');#}
+            {#        } else {#}
+            {#            alert('메일 전송에 실패했습니다. 다시 시도해주세요.');#}
+            {#        }#}
+            {#    });#}
 //    });
 
-    // 답글 폼 표시 및 숨기기
-    $(document).on('click', '.btn-reply', function() {
-      var commentId = $(this).data('comment-id');
-      showReplyForm(commentId);
-    });
+            // 답글 폼 표시 및 숨기기
+            $(document).on('click', '.btn-reply', function() {
+                var commentId = $(this).data('comment-id');
+                showReplyForm(commentId);
+            });
+
+            // "신청하기" 버튼 클릭 시 모달 열기 기능
+            $('#openModalBtn').click(function (e) {
+                e.preventDefault(); // 기본 동작 막기
+                var modal = document.getElementById("myModal");
+                modal.style.display = "flex";
+            });
+
+            // 모달 닫기 (X 버튼 클릭 시)
+            $('.close').click(function () {
+                var modal = document.getElementById("myModal");
+                modal.style.display = "none";
+            });
+
+            // 모달 닫기 (모달 외부 클릭 시)
+            window.onclick = function (event) {
+                var modal = document.getElementById("myModal");
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+        });
 
 
 
-    // "신청하기" 버튼 클릭 시 모달 열기 기능
-    $('#openModalBtn').click(function (e) {
-        e.preventDefault(); // 기본 동작 막기
-        var modal = document.getElementById("myModal");
-        modal.style.display = "flex";
-    });
+        // 댓글 및 대댓글 작성 기능
+        function submitCommentForm(form, parentId = null) {
+            var formData = $(form).serializeArray();
+            var postId = "{{ cor.id }}";
+            console.log("Form data before submission:", formData);
 
-    // 모달 닫기 (X 버튼 클릭 시)
-    $('.close').click(function () {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    });
+            // content 필드 확인
+            var contentField = formData.find(field => field.name === 'content');
 
-    // 모달 닫기 (모달 외부 클릭 시)
-    window.onclick = function (event) {
-        var modal = document.getElementById("myModal");
-        if (event.target == modal) {
-            modal.style.display = "none";
+            // content 필드가 비어 있는지 확인
+            if (!contentField || !contentField.value.trim()) {
+                alert("댓글 내용을 입력하세요.");
+                return;
+            }
+
+            $.post("/corboard/" + postId + "/comment/",formData, function(data) {
+                if (data.success) {
+                    if (parentId) {
+                        $('#reply-form-' + parentId).before(data.comment_html);
+                        $('#reply-form-' + parentId).hide();
+                    } else {
+                        $('.comments').append(data.comment_html);
+                    }
+                    $(form).find('textarea').val('');
+                } else {
+                    alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+                }
+            }).fail(function(xhr, status, error) {
+                alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+            });
         }
-    };
 
-
-
-
-
-  // 댓글 및 대댓글 작성 기능
-  function submitCommentForm(form, parentId = null) {
-      var formData = $(form).serializeArray();
-      var postId = "{{ cor.id }}";
-      console.log("Form data before submission:", formData);
-
-      // content 필드 확인
-      var contentField = formData.find(field => field.name === 'content');
-
-      // content 필드가 비어 있는지 확인
-      if (!contentField || !contentField.value.trim()) {
-          alert("댓글 내용을 입력하세요.");
-          return;
-      }
-
-      $.post("/corboard/" + postId + "/comment/",formData, function(data) {
-          if (data.success) {
-              if (parentId) {
-                  $('#reply-form-' + parentId).before(data.comment_html);
-                  $('#reply-form-' + parentId).hide();
-              } else {
-                  $('.comments').append(data.comment_html);
-              }
-              // 댓글이 성공적으로 추가되면 메시지 제거
-              $('#no-comments-message').remove();
-            
-              $(form).find('textarea').val('');
-          } else {
-              alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
-          }
-      }).fail(function(xhr, status, error) {
-          alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
-      });
-  }
-
-  function showReplyForm(commentId) {
-    var replyForm = $('#reply-form-' + commentId);
-    if (replyForm.is(':visible')) {
-      replyForm.hide();
-    } else {
-      replyForm.show();
-    }
-  }
-</script>
+        function showReplyForm(commentId) {
+            var replyForm = $('#reply-form-' + commentId);
+            if (replyForm.is(':visible')) {
+                replyForm.hide();
+            } else {
+                replyForm.show();
+            }
+        }
+    </script>
 
 {% endblock %}
