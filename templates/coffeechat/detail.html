@@ -259,7 +259,6 @@
 
         .profile-img img {
             width: 80px;
-            /* 이미지 크기를 줄여줍니다. 필요에 따라 조정하세요. */
             height: 80px;
         }
 
@@ -272,8 +271,7 @@
 
         .action-buttons a,
         .action-buttons button {
-            width: 132%;
-            /* 버튼 너비를 100%로 설정하여 화면을 가득 채웁니다. */
+            width: 40%;
             margin-bottom: 0.5rem;
         }
 
@@ -388,6 +386,18 @@
             position: relative;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             margin: 0px 10px 0px 0px;
+        }
+
+        .btn-bookmark.bookmarked {
+            background-color: black;
+            color: #FFC107;
+            width: 40%;
+        }
+
+        .btn-action:hover {
+            background-color: black;
+            color: white;
+            width: 40%;
         }
     }
 </style>
