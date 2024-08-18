@@ -38,8 +38,9 @@
     }
 
     .filter-link:hover {
-        background-color: antiquewhite;
-        border-radius: 10px;
+        background-color: #0BEC12;
+        color: white;
+        border-radius: 20px;
     }
 
     .activity-content-wrapper {
@@ -111,7 +112,8 @@
     }
 
     .activity-link:hover {
-        background-color: #f0f0f0;
+        color: white;
+        background-color: #0BEC12;
     }
 
     .activity-content.coffeechat-grid {
@@ -191,8 +193,11 @@
     }
 
     .coffeechat-card {
-        max-width: 370px; /* 화면 너비가 480px 이하일 때 최대 너비를 100%로 설정 */
         margin: 0;
         max-height: 280px;
+    }
+
+    .myinfo {
+        width: 100%;
     }
 }

@@ -1,5 +1,5 @@
 /* 모달 창 스타일 */
-.modal {
+.mymodal {
     position: fixed;
     z-index: 1;
     left: 0;
@@ -23,7 +23,7 @@
 }
 
 /* 모달 컨텐츠 스타일 */
-.modal-content {
+.cor-modal-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;

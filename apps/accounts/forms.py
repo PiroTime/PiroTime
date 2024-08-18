@@ -18,17 +18,29 @@ class CustomUserCreationForm(forms.ModelForm):
         label='Cohort',
         help_text='몇기인지 입력하세요.'
     )
+    phone_number = forms.CharField(
+        label='전화번호',
+        help_text='전화번호를 입력하세요.',
+        required=True,  # 필수 항목으로 지정
+    )
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'nickname', 'profile_image', 'cohort')  # 소개 필드 제외
+        fields = ('username', 'email', 'nickname', 'profile_image', 'cohort', 'phone_number')  # 소개 필드 제외
         help_texts = {
             'username': '',
             'email': '',
             'nickname': '',
             'profile_image': '',
             'cohort': '',
+            'phone_number': '',
         }
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number:
+            raise forms.ValidationError("전화번호를 입력하세요.")
+        return phone_number
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -41,6 +53,7 @@ class CustomUserCreationForm(forms.ModelForm):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         user.cohort = self.cleaned_data.get("cohort")  # cohort 필드를 저장
+        user.phone_number = self.cleaned_data.get("phone_number")
         if commit:
             user.save()
         return user
@@ -52,13 +65,14 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'nickname', 'profile_image', 'cohort', 'intro']
+        fields = ['username', 'email', 'nickname', 'profile_image', 'cohort', 'intro', 'phone_number']
         help_texts = {
             'username': '사용자 이름을 입력하세요.',
             'email': '유효한 이메일 주소를 입력하세요.',
             'nickname': '닉네임을 입력하세요.',
             'profile_image': '프로필 이미지를 선택하세요.',
             'cohort': '몇기인지 입력하세요.',
+            'phone_number': '전화번호를 입력하세요.',
         }
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-input'}),
@@ -67,6 +81,7 @@ class CustomUserChangeForm(UserChangeForm):
             'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
             'cohort': forms.NumberInput(attrs={'class': 'form-input'}),
             'intro': forms.Textarea(attrs={'class': 'form-textarea', 'placeholder': '소개'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-input'}),
         }
 
     def save(self, commit=True):

@@ -55,3 +55,10 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review by {self.reviewer.username} for request {self.coffeechat_request.id}'
+
+
+class informationAgree(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE) # 동의한 사람
+    date = models.DateTimeField(default=timezone.now) #동의 시간
+    coffeechat_request = models.OneToOneField(CoffeeChatRequest, related_name='infoAgree', on_delete=models.CASCADE)
+    is_agree = models.BooleanField(default=False)
