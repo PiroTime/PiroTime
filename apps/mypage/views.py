@@ -235,6 +235,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                 'profile_image': user.profile_image.url if user.profile_image else None,
                 'cohort': user.cohort,
                 'intro': user.intro,
+                'phone_number': user.phone_number,
             }
             return JsonResponse(data)
 
