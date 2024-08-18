@@ -369,9 +369,9 @@ body {
     padding: 4.8px 9.6px; /* 0.3rem 0.6rem = 4.8px 9.6px */
     font-size: 14.4px; /* 0.9rem = 14.4px */
     border-radius: 5px;
-    border: 2px solid #0BEC12;
+    border: 1.5px solid #0BEC12;
     background-color: transparent;
-    color: #0BEC12;
+    color: #000000;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
     text-decoration: none;

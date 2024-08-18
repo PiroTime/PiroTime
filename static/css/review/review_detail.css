@@ -79,6 +79,10 @@ body {
     margin-right: 15px;
 }
 
+.meta-info i {
+    font-size: 15px;
+}
+
 .header-sidebar {
     flex-basis: 25%;
 }

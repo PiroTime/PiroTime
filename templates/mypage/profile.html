@@ -488,7 +488,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === status) {
-                    alert(`Coffee chat request has been ${status}`);
+                    if (status === 'accepted') {
+                        alert('커피챗 요청이 수락되었습니다');
+                    } else if (status === 'rejected') {
+                        alert('커피챗 요청이 거절되었습니다');
+                    } else {
+                        alert(`Coffee chat request has been ${status}`);
+                    }
                     loadActivities(currentFilter, currentCategory);
                 } else {
                     alert('요청을 처리하는 중 오류가 발생했습니다.');
