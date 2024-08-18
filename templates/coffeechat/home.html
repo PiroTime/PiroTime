@@ -181,7 +181,7 @@
         color: black;
     }
 
-    .profile-img{
+    .profile-img {
         width: 70px;
         height: 70px;
         background-color: lightgray;
@@ -228,23 +228,32 @@
     }
 
     @media (max-width: 450px) {
-    .card {
-        width: 90% !important; 
-        margin-bottom: 1rem;
-    }
-    .card-url {
-        display: flex;
-        flex-direction: column; 
-        gap: 0.5rem; 
-    }
-    .card-text{
-        margin-bottom: 20px;
-    }
-    .btn-none{
-        display: none;
-    }
+        .card {
+            width: 90% !important;
+            margin-bottom: 1rem;
+        }
 
-}
+        .card-url {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card-text {
+            margin-bottom: 20px;
+        }
+
+        .btn-none {
+            display: none;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .job-box.empty {
+                display: none;
+            }
+        }
+
+    }
 </style>
 {% load custom_filters %}
 
@@ -286,7 +295,8 @@
                 <p class="card-text">궁금한 피로그래머와 다이렉트로 연결되고, 피로그래밍의 멋쟁이 후배들을 만나보세요</p>
                 <div class="card-url">
                     <a href="{% url 'coffeechat:coffeechat_create' %}" class="btn btn-primary">커피챗 프로필 등록하기</a>
-                    <a href="{% url 'coffeechat:coffeechat_how_received' %}" class="btn btn-primary btn-none">커피챗 받기 이용 방법</a>
+                    <a href="{% url 'coffeechat:coffeechat_how_received' %}" class="btn btn-primary btn-none">커피챗 받기 이용
+                        방법</a>
                 </div>
             </div>
         </div>
@@ -304,10 +314,10 @@
                 <div class="profile-info">
                     <div class="profile-img">
                         {% if review.coffeechat_request.coffeechat.receiver.profile_image %}
-                            <img src="{{ review.coffeechat_request.coffeechat.receiver.profile_image.url }}" 
-                                alt="Profile Picture">
+                        <img src="{{ review.coffeechat_request.coffeechat.receiver.profile_image.url }}"
+                            alt="Profile Picture">
                         {% else %}
-                            <i class="fas fa-user"></i>
+                        <i class="fas fa-user"></i>
                         {% endif %}
                     </div>
                     <a href="{% url 'coffeechat:coffeechat_detail' review.coffeechat_request.coffeechat.pk %}">
@@ -321,7 +331,7 @@
                             <p class="card-profile">Job information not available</p>
                             {% endif %} -->
                             <p class="card-profile-text">직업 {{ review.coffeechat_request.coffeechat.job }}</p>
-                            <p class="card-profile-text">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort }}기</p>
+                            <p class="card-profile-text">피로그래밍 {{ review.coffeechat_request.coffeechat.receiver.cohort}}기</p>
                             <p class="card-profile-text">커피챗 {{ review.coffeechat_request.coffeechat.count }}회</p>
                         </div>
                     </a>
