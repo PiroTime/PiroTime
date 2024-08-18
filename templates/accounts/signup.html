@@ -76,6 +76,10 @@
                 {% if form.nickname.errors %}
                     <div class="error">{{ form.nickname.errors }}</div>
                 {% endif %}
+                <input type="text" name="phone_number" placeholder="전화번호" class="form-input" value="{{ form.phone_number.value|default_if_none:'' }}">
+                {% if form.phone_number.errors %}
+                    <div class="error">{{ form.phone_number.errors }}</div>
+                {% endif %}
                 <input type="email" name="email" placeholder="email" class="form-input" value="{{ form.email.value|default_if_none:'' }}">
                 {% if form.email.errors %}
                     <div class="error">{{ form.email.errors }}</div>
