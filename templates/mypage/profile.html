@@ -70,6 +70,10 @@
     
     // 북마크 토글 함수
     function toggleBookmark(url, cardElement) {
+        if (!confirm('정말로 취소하시겠습니까?')) {
+            return;
+        }
+
         console.log('Calling toggleBookmark with URL:', url); // URL 로그 확인
         console.log('Requesting URL:', url);
     
@@ -405,7 +409,7 @@
                 handleCoffeeChatResponse(url, 'rejected');
             }
         });
-        
+
         // 커피챗 수락,거절 버튼
         function handleCoffeeChatResponse(url, status) {
             fetch(url, {
@@ -420,7 +424,7 @@
             .then(data => {
                 if (data.status === status) {
                     alert(`Coffee chat request has been ${status}`);
-                    location.reload();
+                    loadActivities(currentFilter, currentCategory);
                 } else {
                     alert('요청을 처리하는 중 오류가 발생했습니다.');
                 }
