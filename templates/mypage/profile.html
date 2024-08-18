@@ -348,7 +348,7 @@
                         hashtags = coffeechat.hashtags;
                     } else if (category === 'received') {
                         displayName = coffeechat.sender;
-                        job = '피로그래밍' + coffeechat.cohort + '기';
+                        job = coffeechat.cohort + '기';
                         //job = coffeechat.sender_job;
                         hashtags = coffeechat.hashtags;
                     } else if (category === 'bookmarked') {
@@ -365,6 +365,15 @@
 
                     cardElement.innerHTML = `
                         <div class="card-header">
+                            ${category === 'received' ? `
+                                <button type="button" class="btn-view-letter"
+                                    data-letter="${coffeechat.letter_to_senior}"
+                                    data-url-acc="${coffeechat.accept_url}"
+                                    data-url-rej="${coffeechat.reject_url}">
+                                    <i class="fas fa-message"></i>
+                                </button>
+                            ` : '<div class="scrap-placeholder"></div>'}
+
                             ${category === 'bookmarked' ? `
                                 <button onclick="toggleBookmark('${coffeechat.coffeechat_bookmark_profile}', this.closest('.coffeechat-card'))" 
                                         class="scrap-icon ${coffeechat.bookmarked ? 'scrapped' : ''}">
@@ -376,8 +385,8 @@
                             ${coffeechat.profile_image ? `<img src="${coffeechat.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
                         </div>
                         <div class="profile-details">
-                            ${category !== 'history' ? 
-                                `<a href="${profileLink}" class="name">${displayName}</a>` : 
+                            ${category !== 'received' && category !== 'history' ? 
+                                `<a href="${profileLink}" class="name">${displayName}</a>` :
                                 `<span class="name">${displayName}</span>`}
                             ${category !== 'history' ? `<span class="job">${job}</span>` : ''}
                         </div>
@@ -397,10 +406,10 @@
                         <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
-                    <button type="button" class="btn-view-letter"
+                    {% comment %} <button type="button" class="btn-view-letter"
                         data-letter="${coffeechat.letter_to_senior}"
                         data-url-acc="${coffeechat.accept_url}"
-                        data-url-rej="${coffeechat.reject_url}">커피챗 문구보기</button>
+                        data-url-rej="${coffeechat.reject_url}">커피챗 문구보기</button> {% endcomment %}
                 `;
 
                     } else if (category === 'bookmarked') {
