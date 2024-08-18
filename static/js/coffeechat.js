@@ -32,10 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const letterContent = event.target.getAttribute('data-letter');
             const urlRej = event.target.getAttribute('data-url-rej');
             const urlAcc = event.target.getAttribute('data-url-acc');
-            console.log("+++++++++++++++++++++++++");
-            console.log(urlRej);
-            console.log(urlAcc);
-            console.log(letterContent);
+
 
             modalContent.innerHTML = `
                 <p>${letterContent.replace(/\r?\n/g, '<br>')}</p>
@@ -43,6 +40,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 <button type="button" class="btn-reject modal-reject" data-url="${urlRej}">Reject</button>
             `;
             modal.style.display = "flex";
+        }
+
+        if (event.target.classList.contains('coffeechat-card')) {
+
         }
     });
 
@@ -57,4 +58,60 @@ document.addEventListener("DOMContentLoaded", function() {
             modal.style.display = "none";
         }
     }
+});
+
+$(document).ready(function() {
+    function toggleModalCSS(load) {
+        const modalCSSId = 'modal-css';
+        if (load) {
+            if ($('#' + modalCSSId).length === 0) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = '{% static "css/mypage/profile_modal.css" %}';
+                link.id = modalCSSId;
+                document.head.appendChild(link);
+            }
+        } else {
+            var link = document.getElementById(modalCSSId);
+            if (link) {
+                document.head.removeChild(link);
+            }
+        }
+    }
+
+    $(document).on('click', '.coffeechat-card', function (event) {
+        event.preventDefault();
+        var userId = event.target.getAttribute('data-coffeechat-sender-id')
+        var url = `/mypage/ajax/profile-modal`;
+        console.log("++++++++++++++++++++++++++", userId)
+
+        // Make an AJAX request to load the modal content
+        $.ajax({
+            url: url,
+            data: {'user_id': userId},
+            success: function (response) {
+                $('#modal-profile-content').html(response);
+                $('#profile_modal').show();
+
+                // 모달 로드 후 스크립트 초기화
+                initializeProfileModal(userId);
+
+            },
+            error: function (xhr) {
+                alert('프로필을 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    $('.close-button').click(function () {
+        $('#profile_modal').hide();
+        toggleModalCSS(false);  // CSS 파일 제거
+    });
+
+    $(window).click(function (event) {
+        if (event.target.id === 'profile_modal') {
+            $('#profile_modal').hide();
+            toggleModalCSS(false);  // CSS 파일 제거
+        }
+    });
 });
