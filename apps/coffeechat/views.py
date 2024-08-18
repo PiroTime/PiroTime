@@ -252,6 +252,7 @@ def accept_request(request, request_id):
 @login_required
 @require_POST
 def reject_request(request, request_id):
+    print("++++++++++reject")
     # AJAX 요청인지 확인
     if request.headers.get('x-requested-with') != 'XMLHttpRequest':
         return JsonResponse({"error": "AJAX request required"}, status=400)
