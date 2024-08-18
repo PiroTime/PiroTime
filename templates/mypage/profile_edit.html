@@ -51,6 +51,8 @@
     <form method="post" action="{% url 'mypage:profile_edit' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
+        <input type="hidden" name="delete_profile_image" id="id_delete_profile_image" value="false">
+
         <div class="form-group image-upload">
             <div class="image-label-wrapper">
                 <span>프로필 이미지 (선택)</span>
@@ -153,6 +155,7 @@
         const cameraIcon = document.querySelector('.upload-label i');
         const removeBtn = document.querySelector('.remove-image');
         const fileInput = document.getElementById('id_profile_image');
+        const deleteImageInput = document.getElementById('id_delete_profile_image');
 
         // 이미지 src를 제거하고 이미지 숨기기
         output.removeAttribute('src');
@@ -169,6 +172,9 @@
         // 파일 입력 초기화
         fileInput.value = ""; 
         console.log('Image removed'); // 디버깅: 이미지 삭제 후 상태 확인
+
+        deleteImageInput.value = "true"; // 새로 추가된 부분
+        console.log('Image removed and marked for deletion');
     }
 
     // 페이지 로드 시 프로필 이미지가 있으면 삭제 버튼을 표시
