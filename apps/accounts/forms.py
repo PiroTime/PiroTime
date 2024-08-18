@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserChangeForm, AuthenticationForm
+from phonenumber_field.formfields import PhoneNumberField
 from .models import CustomUser
 
 # 회원가입 폼
@@ -18,10 +19,12 @@ class CustomUserCreationForm(forms.ModelForm):
         label='Cohort',
         help_text='몇기인지 입력하세요.'
     )
-    phone_number = forms.CharField(
+    phone_number = PhoneNumberField(
         label='전화번호',
         help_text='전화번호를 입력하세요.',
-        required=True,  # 필수 항목으로 지정
+        required=True,
+        region='KR',  # 한국 전화번호 형식
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': '010-1234-5678'})
     )
 
     class Meta:
@@ -35,12 +38,6 @@ class CustomUserCreationForm(forms.ModelForm):
             'cohort': '',
             'phone_number': '',
         }
-
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data.get('phone_number')
-        if not phone_number:
-            raise forms.ValidationError("전화번호를 입력하세요.")
-        return phone_number
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -62,6 +59,13 @@ class CustomUserCreationForm(forms.ModelForm):
 class CustomUserChangeForm(UserChangeForm):
     delete_profile_image = forms.BooleanField(required=False, label="프로필 이미지 삭제")
     password = None
+    phone_number = PhoneNumberField(
+        label='전화번호',
+        help_text='전화번호를 입력하세요.',
+        required=True,
+        region='KR',  # 한국 전화번호 형식을 사용
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': '010-1234-5678'})
+    )
 
     class Meta:
         model = CustomUser
@@ -81,7 +85,7 @@ class CustomUserChangeForm(UserChangeForm):
             'profile_image': forms.FileInput(attrs={'class': 'form-input--img'}),
             'cohort': forms.NumberInput(attrs={'class': 'form-input'}),
             'intro': forms.Textarea(attrs={'class': 'form-textarea', 'placeholder': '소개'}),
-            'phone_number': forms.TextInput(attrs={'class': 'form-input'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-input', 'placeholder': '010-1234-5678'}),
         }
 
     def save(self, commit=True):

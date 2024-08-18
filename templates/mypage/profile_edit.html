@@ -6,12 +6,12 @@
 <style>
     @media screen and (max-width: 768px) {
         .form-container {
-            width: 600px; 
+            width: 600px;
         }
 
         .form-input, .form-textarea {
             padding: 12px;
-            font-size: 1rem; 
+            font-size: 1rem;
         }
 
         .form-button {
@@ -32,13 +32,13 @@
 
     @media screen and (max-width: 480px) {
         .form-container {
-            width: 400px; 
-            padding: 15px; 
+            width: 400px;
+            padding: 15px;
         }
 
         .upload-label {
             width: 100px;
-            height: 100px; 
+            height: 100px;
         }
     }
 </style>
@@ -51,11 +51,46 @@
     <form method="post" action="{% url 'mypage:profile_edit' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
+        <div class="form-group image-upload">
+            <div class="image-label-wrapper">
+                <span>프로필 이미지 (선택)</span>
+                <button type="button" class="remove-image" onclick="removeImage()" style="display: none;">이미지 삭제</button>
+            </div>
+            <label for="id_profile_image" class="upload-label">
+                {% if user.profile_image %}
+                    <img id="image-preview" src="{{ user.profile_image.url }}" alt="프로필 이미지 미리보기" class="profile-image">
+                {% else %}
+                    <i class="fas fa-camera"></i>
+                    <img id="image-preview" alt="프로필 이미지 미리보기" style="display: none;">
+                {% endif %}
+            </label>
+            <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)">
+        </div>
+        {% if form.profile_image.errors %}
+            <div class="error">{{ form.profile_image.errors }}</div>
+        {% endif %}
+
         <div class="form-group">
-            <label for="id_username">사용자 이름</label>
+            <label for="id_username">아이디</label>
             {{ form.username }}
             {% if form.username.errors %}
                 <div class="error">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_nickname">사용자 닉네임(실명을 입력해주세요!)</label>
+            {{ form.nickname }}
+            {% if form.nickname.errors %}
+                <div class="error">{{ form.nickname.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone_number">전화번호</label>
+            {{ form.phone_number }}
+            {% if form.phone_number.errors %}
+                <div class="error">{{ form.phone_number.errors }}</div>
             {% endif %}
         </div>
 
@@ -66,34 +101,6 @@
                 <div class="error">{{ form.email.errors }}</div>
             {% endif %}
         </div>
-
-        <div class="form-group">
-            <label for="id_nickname">닉네임</label>
-            {{ form.nickname }}
-            {% if form.nickname.errors %}
-                <div class="error">{{ form.nickname.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group image-upload">
-            <div class="image-label-wrapper">
-                <span>프로필 이미지 (선택)</span>
-                <button type="button" class="remove-image" onclick="removeImage()">이미지 삭제</button>
-            </div>
-            <div class="upload-label" onclick="document.getElementById('id_profile_image').click();">
-                {% if user.profile_image %}
-                    <img id="image-preview" src="{{ user.profile_image.url }}" alt="프로필 이미지 미리보기" class="profile-image">
-                {% else %}
-                    <i class="fas fa-camera"></i>
-                    <img id="image-preview" alt="프로필 이미지 미리보기" style="display:none;">
-                {% endif %}
-            </div>
-            <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)" style="display:none;">
-            <input type="hidden" name="delete_profile_image" id="id_delete_profile_image" value="false">
-        </div>
-        {% if form.profile_image.errors %}
-            <div class="error">{{ form.profile_image.errors }}</div>
-        {% endif %}
 
         <div class="form-group">
             <label for="id_cohort">기수</label>
@@ -117,6 +124,7 @@
 
 <script>
     function previewImage(event) {
+        console.log('previewImage called'); // 디버깅: 함수가 호출되는지 확인
         const reader = new FileReader();
         reader.onload = function() {
             const output = document.getElementById('image-preview');
@@ -134,16 +142,17 @@
 
             // 삭제 버튼 보이기
             removeBtn.style.display = 'inline-block';
+            console.log('Image loaded:', reader.result); // 디버깅: 이미지가 제대로 로드되었는지 확인
         }
         reader.readAsDataURL(event.target.files[0]);
     }
 
     function removeImage() {
+        console.log('removeImage called'); // 디버깅: 함수가 호출되는지 확인
         const output = document.getElementById('image-preview');
         const cameraIcon = document.querySelector('.upload-label i');
         const removeBtn = document.querySelector('.remove-image');
         const fileInput = document.getElementById('id_profile_image');
-        const deleteImageInput = document.getElementById('id_delete_profile_image');
 
         // 이미지 src를 제거하고 이미지 숨기기
         output.removeAttribute('src');
@@ -159,17 +168,16 @@
 
         // 파일 입력 초기화
         fileInput.value = ""; 
-
-        // 이미지 삭제 의도 전송
-        deleteImageInput.value = "true";
+        console.log('Image removed'); // 디버깅: 이미지 삭제 후 상태 확인
     }
 
     // 페이지 로드 시 프로필 이미지가 있으면 삭제 버튼을 표시
     window.onload = function() {
+        console.log('Window loaded'); // 디버깅: 페이지 로드 확인
         const output = document.getElementById('image-preview');
         const removeBtn = document.querySelector('.remove-image');
         const cameraIcon = document.querySelector('.upload-label i');
-        
+
         // 프로필 이미지가 있으면 삭제 버튼 보이기
         if (output.src && !output.src.includes('data:') && output.src !== '') {
             removeBtn.style.display = 'inline-block';
@@ -177,13 +185,36 @@
             if (cameraIcon) {
                 cameraIcon.style.display = 'none'; // 아이콘 숨기기
             }
+            console.log('Profile image found, showing remove button'); // 디버깅: 이미지가 있는 경우 상태 확인
         } else {
             if (cameraIcon) {
                 cameraIcon.style.display = 'block'; // 아이콘 보이기
             }
             removeBtn.style.display = 'none'; // 삭제 버튼 숨기기
             output.style.display = 'none'; // 이미지 숨기기
+            console.log('No profile image found'); // 디버깅: 이미지가 없는 경우 상태 확인
         }
     };
+
+    // 필터 상태를 자동으로 적용하기 위해 URL에서 쿼리 파라미터나 해시 읽기
+    document.addEventListener("DOMContentLoaded", function() {
+        // URL에서 해시 또는 쿼리 파라미터를 가져와 필터링에 사용
+        const urlParams = new URLSearchParams(window.location.search);
+        const filter = urlParams.get('filter') || window.location.hash.substring(1); // 필터 파라미터 또는 해시태그 읽기
+
+        if (filter) {
+            const filterLink = document.querySelector(`.activity-link[data-filter="${filter}"]`);
+            if (filterLink) {
+                filterLink.click();  // 해당 필터를 클릭하여 필터링 상태를 적용
+            }
+        }
+
+        // 성공 메시지가 있는 경우 alert 창으로 표시
+        {% if messages %}
+            {% for message in messages %}
+                alert("{{ message }}");
+            {% endfor %}
+        {% endif %}
+    });
 </script>
 {% endblock %}

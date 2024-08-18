@@ -32,17 +32,22 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     form_class = CustomUserChangeForm
     template_name = 'mypage/profile_edit.html'
-    success_url = reverse_lazy('mypage:profile')
+    
+    def get_success_url(self):
+        return f"{reverse_lazy('mypage:profile')}#profile_info"
 
     def get_object(self, queryset=None):
         return self.request.user
 
     def form_valid(self, form):
+        print("Form is valid, redirecting to success_url")
         response = super().form_valid(form)
-        # messages.success(self.request, '프로필이 성공적으로 업데이트되었습니다.')
+        messages.success(self.request, '프로필이 성공적으로 업데이트되었습니다.')
         return response
 
     def form_invalid(self, form):
+        print("Form is invalid, reloading the form")
+        print(form.errors)
         messages.error(self.request, '오류가 발생했습니다. 입력 내용을 다시 확인해 주세요.')
         return super().form_invalid(form)
 
