@@ -465,8 +465,15 @@
         // 커피챗 수락,거절 버튼에 이벤트 리스너 추가
         document.addEventListener('click', function(event) {
             if (event.target.matches('.btn-accept')) {
-                const url = event.target.getAttribute('data-url');
-                handleCoffeeChatResponse(url, 'accepted');
+                console.log("++++++++++++accept")
+                console.log(event.target.getAttribute('data-agree'))
+                if (event.target.getAttribute('data-agree') == "true") {
+                    const url = event.target.getAttribute('data-url');
+                    handleCoffeeChatResponse(url, 'accepted');
+                }
+                else {
+                    alert('정보제공 동의를 해야합니다.');
+                }
             } else if (event.target.matches('.btn-reject')) {
                 const url = event.target.getAttribute('data-url');
                 handleCoffeeChatResponse(url, 'rejected');

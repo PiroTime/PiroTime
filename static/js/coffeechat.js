@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
 <!--                <p>수락하기 버튼을 누르면 신청자에게 연락처가 전달됩니다. 동의하십니까?</p>-->
                 <label for="is_agree">수락하기 버튼을 누르면 신청자에게 연락처가 전달됩니다. 동의하십니까?</label>
-                <input type="checkbox" id="is_agree" name="is_agree" value=True>        
+                <input type="checkbox" id="is_agree" name="is_agree" value="True" >        
                 <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
                 <button type="button" class="btn-reject modal-reject" data-url="${urlRej}">Reject</button>
             `;
@@ -49,14 +49,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (event.target.classList.contains('btn-view-letter')) {
             const letterContent = event.target.getAttribute('data-letter');
-            console.log('letter')
-            console.log(letterContent)
 
             modalContent.innerHTML = `
                 <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
             `;
             modal.style.display = "flex";
         }
+
+        const checkbox = document.getElementById('is_agree');
+        const button = document.querySelector('.btn-accept');
+
+        // 체크박스의 상태가 변경될 때마다 실행되는 함수
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                console.log("Checkbox is checked");
+                button.setAttribute('data-agree', 1);
+                console.log("this", event.target.getAttribute('data-agree'))
+            } else {
+                console.log("Checkbox is unchecked");
+                button.removeAttribute('data-agree');
+            }
+        });
     });
 
     // 모달 닫기 (X 버튼 클릭 시)
