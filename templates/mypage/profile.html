@@ -88,6 +88,11 @@
                 <h2>커피챗 신청자가 보낸 메세지입니다.</h2>
                 <span id="coffeechatModalClose" class="close-button">&times;</span>
                 <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+
+                <h2>수락시 신청자가 사용할 연락수단을 입력하세요</h2>
+                <textarea class="comment-input" name="way" placeholder="답글을 입력하세요..." required></textarea>
+                <input type="hidden" name="parent" value="{{ comment.id }}">
+
                 <div class="button-container">
                 </div>
             </div>
@@ -398,7 +403,7 @@
                         cardElement.innerHTML += `
                     <span class="waiting-status">후배가 기다리는 중!</span>
                     <div class="buttons">
-                        <button type="button" class="btn-accept-letter btn-accept"
+                        <button type="button" class="btn-accept-letter btn-accept2"
                             data-letter="${coffeechat.letter_to_senior}"
                             data-url-acc="${coffeechat.accept_url}"
                             data-url-rej="${coffeechat.reject_url}">Accept</button>
@@ -464,16 +469,11 @@
 
         // 커피챗 수락,거절 버튼에 이벤트 리스너 추가
         document.addEventListener('click', function(event) {
+
             if (event.target.matches('.btn-accept')) {
-                console.log("++++++++++++accept")
-                console.log(event.target.getAttribute('data-agree'))
-                if (event.target.getAttribute('data-agree') == "true") {
-                    const url = event.target.getAttribute('data-url');
-                    handleCoffeeChatResponse(url, 'accepted');
-                }
-                else {
-                    alert('정보제공 동의를 해야합니다.');
-                }
+                const url = event.target.getAttribute('data-url');
+                confirm("수락버튼을 누르면 신청자에게 연락처가 전달됩니다. 진행하시겠습니까?")
+                handleCoffeeChatResponse(url, 'accepted');
             } else if (event.target.matches('.btn-reject')) {
                 const url = event.target.getAttribute('data-url');
                 handleCoffeeChatResponse(url, 'rejected');
@@ -482,6 +482,7 @@
         
         // 커피챗 수락,거절 버튼
         function handleCoffeeChatResponse(url, status) {
+            console.log("__+_+__+_")
             fetch(url, {
                 method: 'POST',
                 headers: {
