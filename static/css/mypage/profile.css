@@ -190,7 +190,7 @@ body {
     flex-direction: column;
     height: 200px;
     width: 100%;
-    max-width: 700px; /* 가로 길이 조절 */
+    max-width: 750px; /* 가로 길이 조절 */
     box-sizing: border-box;
 }
 
@@ -208,7 +208,7 @@ body {
 
 .activity-card h3 {
     font-size: 19.2px; /* 1.2rem = 19.2px */
-    margin: 0 0 5px 0;
+    margin: 0 0 7px 0;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -218,20 +218,33 @@ body {
 .activity-card span {
     font-size: 14.4px; /* 0.9rem = 14.4px */
     color: #666;
-    margin: 0 0 10px 0;
+    margin: 0 0 5px 0;
     flex: 1;
 }
 
 .activity-card p {
     font-size: 24px; /* 1.5rem = 24px */
     color: #666;
-    margin: 0 0 10px 0;
+    margin: 0 0 5px 0;
     flex: 1;
 }
 
 .activity-card .info {
     font-size: 14.4px; /* 0.9rem = 14.4px */
     color: #999;
+}
+
+.activity-card .bookmark-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 22.4px; /* 1.4rem = 22.4px */
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #FFC107;
 }
 
 /* 커피챗 카드 스타일 */
