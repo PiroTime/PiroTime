@@ -367,11 +367,15 @@
                             ${coffeechat.profile_image ? `<img src="${coffeechat.profile_image}" alt="Profile Image">` : '<i class="fas fa-user"></i>'}
                         </div>
                         <div class="profile-details">
-                            <a href="${profileLink}" class="name">${displayName}</a>
+                            ${category !== 'history' ? 
+                                `<a href="${profileLink}" class="name">${displayName}</a>` : 
+                                `<span class="name">${displayName}</span>`}
                             ${category !== 'history' ? `<span class="job">${job}</span>` : ''}
                         </div>
                         <div class="card-content">
-                            ${category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
+                            <span class="request-time">
+                                ${category !== 'history' ? `${date} ${time} 부터` : `${date} ${time}에`}
+                            </span>
                     `;
 
                     if (category === 'sent') {
@@ -390,17 +394,11 @@
                     } else if (category === 'bookmarked') {
                         cardElement.innerHTML += `
                     <span class="waiting-status">커피챗 고민 중!</span>
-                    <div class="hashtags">
-                        ${hashtags.slice(0, 2).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
-                    </div>
                 `;
-
+                    
                     } else if (category === 'history') {
                         cardElement.innerHTML += `
                     <span class="waiting-status">커피챗 완료!</span>
-                    <div class="hashtags">
-                        ${hashtags.slice(0, 4).map(tag => `<span class="hashtag">#${tag}</span>`).join(' ')}
-                    </div>
                 `;
                     }
 
@@ -470,7 +468,7 @@
             .then(data => {
                 if (data.status === status) {
                     alert(`Coffee chat request has been ${status}`);
-                    location.reload();
+                    loadActivities(currentFilter, currentCategory);
                 } else {
                     alert('요청을 처리하는 중 오류가 발생했습니다.');
                 }
