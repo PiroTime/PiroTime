@@ -30,7 +30,14 @@ function initializeProfileModal(userId) {
 
     function loadActivities(filter, category, userId) {
         const url = `/mypage/ajax/activities/?filter=${filter}&category=${category}&user_id=${userId}`;
-        
+
+        //이미지 로딩 부분 제외
+        // const profileModal = document.getElementById('profile_modal');
+        // const randomImageUrl = profileModal.getAttribute('data-random-image-url');
+        // console.log(randomImageUrl)
+
+        //<div class="card-image" style="background-image: url('${randomImageUrl}');"></div> 
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -38,15 +45,12 @@ function initializeProfileModal(userId) {
                 activityContent.innerHTML = '';
 
                 if (data.posts && data.posts.length > 0) {
-                    const randomImage = "/static/images/";
-
                     data.posts.forEach(post => {
                         const postElement = document.createElement('div');
                         postElement.classList.add('activity-card');
 
                         postElement.innerHTML = `
                             <a href="${post.url}" class="card-link">
-                                <div class="card-image" style="background-image: url('${randomImage}');"></div>
                                 <div class="card-content">
                                     <h3>${post.title}</h3>
                                     <br/>

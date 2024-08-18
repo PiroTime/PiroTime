@@ -3,24 +3,57 @@
     <link rel="stylesheet" href="{% static 'css/mypage/profile_modal.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="{% static 'js/modal.js' %}"></script>
 </head>
+<style>
+    @media screen and (max-width: 768px) {
+        .modal-profile-header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
 
+        .modal-profile-image {
+            margin: 0;
+        }
+
+        .activity-content-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-profile-info {
+            text-align: center;
+        }
+
+        .activity-filter {
+            gap: 5px;
+        }
+
+        .activity-filter .filter-link {
+            padding: 5px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+    }
+</style>
 <!-- 모달 HTML 구조 -->
-<div id="profile_modal" class="modal" data-user-id="{{ profile_user.id }}">
+<div id="profile_modal" class="modal" data-user-id="{{ profile_user.id }}" data-random-image-url="{% static 'images/' %}{{ random_image }}">
     <div class="modal-content">
         <span class="close-button" id="close-button">&times;</span>
-        <div class="profile-container">
-            <div class="profile-header">
-                <div class="profile-image" style="background-color: black;">
+        <div class="modal-profile-container">
+            <div class="modal-profile-header">
+                <div class="modal-profile-image">
                     {% if profile_user.profile_image %}
                         <img src="{{ profile_user.profile_image.url }}" alt="{{ profile_user.username }}의 프로필 이미지">
                     {% else %}
                         <i class="fas fa-user"></i>
                     {% endif %}
                 </div>
-                <div class="profile-info">
-                    <h1>🍀{{ profile_user.cohort }}기 피로그래머 {{ profile_user.username }}🍀</h1>
+                <div class="modal-profile-info">
+                    <h1>{{ profile_user.cohort }}기 피로그래머 {{ profile_user.username }}</h1>
                     <p>{{ profile_user.intro|default_if_none:"소개가 없습니다." }}</p>
                 </div>
             </div>
@@ -46,3 +79,4 @@
         </div>
     </div>
 </div>
+<script src="{% static 'js/modal.js' %}"></script>

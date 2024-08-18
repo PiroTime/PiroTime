@@ -130,7 +130,7 @@
                     <div class="profile-content">
                         <div class="hashtag-container">
                             {% for hashtag in profile.hashtags.all %}
-                                <a href="{% url 'coffeechat:coffeechat_list' %}?search={{ hashtag.name }}" class="hashtag">#{{ hashtag.name }}</a>
+                                <a href="{% url 'coffeechat:coffeechat_list' %}?search={{ hashtag.name }}" class="hashtag" >#{{ hashtag.name }}</a>
                             {% endfor %}
                         </div>
                         <a href="{% url 'coffeechat:coffeechat_detail' profile.pk %}">View Details</a>
