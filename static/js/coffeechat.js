@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
             modalContent.innerHTML = `
                 <p>${letterContent.replace(/\r?\n/g, '<br>')}</p>
+                <p>수락하기 버튼을 누르면 신청자에게 연락처가 전달됩니다. 동의하십니까?</p>
+                <label for="is_agree">Option 1</label>
+                <input type="checkbox" id="is_agree" name="is_agree" value=True>        
                 <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
                 <button type="button" class="btn-reject modal-reject" data-url="${urlRej}">Reject</button>
             `;
