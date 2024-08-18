@@ -206,6 +206,16 @@ body{
     font-size: 1.4rem;
 }
 
+.page-link {
+    background: none;
+    border: none;
+    color: gray;
+}
+
+.page-link:hover {
+    color: black;
+}
+
 /*----- 좋아요 북마크 버튼 --------*/
 
 .like-button {
@@ -276,7 +286,7 @@ body{
 }
 
 .mypage:hover {
-    background-color: #0BEC12;
+    background-color: #079e0c;
 }
 
 .profile-img i {
