@@ -10,4 +10,6 @@ urlpatterns = [
     path('ajax/profile-modal/', views.profile_modal_view, name='profile_modal'),
     path('profile/<int:user_id>/', views.profile_read, name='profile_read'),
     path('bookmark/<int:pk>/', views.coffeechat_bookmark_profile, name='coffeechat_bookmark_profile'),
+
+    path('toggle_bookmark/<str:post_type>/<int:post_id>/', views.toggle_bookmark, name='toggle_bookmark'),
 ]

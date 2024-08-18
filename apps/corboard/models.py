@@ -18,6 +18,9 @@ class Corboard(models.Model):
 
     def get_absolute_url(self):
         return reverse('corboard:cor_detail', args=[self.id])
+    
+    def get_post_type(self):
+        return 'corboard'
 
 class Comment(models.Model):
     corboard = models.ForeignKey(Corboard, related_name='cor_comments', on_delete=models.CASCADE)
