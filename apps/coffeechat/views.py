@@ -233,8 +233,8 @@ def accept_request(request, request_id):
     coffeechat.save()
 
     subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
-    message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
-    content = ""
+    content = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
+    message = ""
 
     try:
         sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message)

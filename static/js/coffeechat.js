@@ -1,117 +1,79 @@
 window.onload = function() {
-    var modal = document.getElementById("myModal");
+    // myModal 관련 변수 정의
+    var myModal = document.getElementById("myModal");
     var btn = document.getElementById("openModalBtn");
-    var span = document.getElementById("coffeechat-modal-close");
+    var myModalClose = document.getElementById("coffeechat-modal-close");
 
     btn.onclick = function() {
-        modal.style.display = "flex";
+        myModal.style.display = "flex";
     }
 
-    // 모달 닫기 (X 버튼 클릭 시)
-    span.onclick = function() {
-        modal.style.display = "none";
+    myModalClose.onclick = function() {
+        myModal.style.display = "none";
     }
 
-    // 모달 닫기 (모달 외부 클릭 시)
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == myModal) {
+            myModal.style.display = "none";
         }
     }
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    // 모달 관련 변수 정의
-    const modal = document.getElementById("coffeechatModal");
-    const modalContent = document.getElementById("coffeechatModalContent");
-    const closeModalBtn = document.getElementById("coffeechatModalClose");
+    // coffeechatModal 관련 변수 정의
+    const coffeechatModal = document.getElementById("coffeechatModal");
+    const coffeechatModalContent = document.getElementById("coffeechatModalContent");
+    const coffeechatCloseBtn = document.getElementById("coffeechatModalClose");
 
-    // "커피챗 문구보기" 버튼 클릭 시 모달 열기
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('btn-view-letter')) {
             const letterContent = event.target.getAttribute('data-letter');
             const urlRej = event.target.getAttribute('data-url-rej');
             const urlAcc = event.target.getAttribute('data-url-acc');
 
-
-            modalContent.innerHTML = `
+            coffeechatModalContent.innerHTML = `
                 <p>${letterContent.replace(/\r?\n/g, '<br>')}</p>
                 <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
                 <button type="button" class="btn-reject modal-reject" data-url="${urlRej}">Reject</button>
             `;
-            modal.style.display = "flex";
+            coffeechatModal.style.display = "flex";
         }
 
-        if (event.target.classList.contains('coffeechat-card')) {
 
-        }
     });
 
-    // 모달 닫기 (X 버튼 클릭 시)
-    closeModalBtn.onclick = function() {
-        modal.style.display = "none";
+    coffeechatCloseBtn.onclick = function() {
+        coffeechatModal.style.display = "none";
     }
 
-    // 모달 닫기 (모달 외부 클릭 시)
     window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-});
-
-$(document).ready(function() {
-    function toggleModalCSS(load) {
-        const modalCSSId = 'modal-css';
-        if (load) {
-            if ($('#' + modalCSSId).length === 0) {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = '{% static "css/mypage/profile_modal.css" %}';
-                link.id = modalCSSId;
-                document.head.appendChild(link);
-            }
-        } else {
-            var link = document.getElementById(modalCSSId);
-            if (link) {
-                document.head.removeChild(link);
-            }
+        if (event.target == coffeechatModal) {
+            coffeechatModal.style.display = "none";
         }
     }
 
-    $(document).on('click', '.coffeechat-card', function (event) {
-        event.preventDefault();
-        var userId = event.target.getAttribute('data-coffeechat-sender-id')
-        var url = `/mypage/ajax/profile-modal`;
-        console.log("++++++++++++++++++++++++++", userId)
-
-        // Make an AJAX request to load the modal content
-        $.ajax({
-            url: url,
-            data: {'user_id': userId},
-            success: function (response) {
-                $('#modal-profile-content').html(response);
-                $('#profile_modal').show();
-
-                // 모달 로드 후 스크립트 초기화
-                initializeProfileModal(userId);
-
-            },
-            error: function (xhr) {
-                alert('프로필을 불러오는 중 오류가 발생했습니다.');
-            }
-        });
-    });
-
-    $('.close-button').click(function () {
-        $('#profile_modal').hide();
-        toggleModalCSS(false);  // CSS 파일 제거
-    });
-
-    $(window).click(function (event) {
-        if (event.target.id === 'profile_modal') {
-            $('#profile_modal').hide();
+    document.getElementById('profile_modal').addEventListener('click', function(event) {
+        if (event.target.classList.contains('close-button') || event.target.id === 'profile_modal') {
+            document.getElementById('profile_modal').style.display = "none";
             toggleModalCSS(false);  // CSS 파일 제거
         }
     });
 });
+
+function toggleModalCSS(load) {
+    const modalCSSId = 'modal-css';
+    if (load) {
+        if (!document.getElementById(modalCSSId)) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '{% static "css/mypage/profile_modal.css" %}';
+            link.id = modalCSSId;
+            document.head.appendChild(link);
+        }
+    } else {
+        var link = document.getElementById(modalCSSId);
+        if (link) {
+            document.head.removeChild(link);
+        }
+    }
+}
