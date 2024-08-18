@@ -8,7 +8,7 @@
 <meta name="csrf-token" content="{{ csrf_token }}">
 <style>
     .container {
-        min-height: calc(100vh - 11rem);
+        min-height: calc(20vh - 11rem);
     }
 
     .fa-bookmark {
@@ -52,7 +52,9 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        margin-top: 5px;
+        margin-top: 0px;
+        border: none;
+        border-radius: 5px;
     }
 
     .review-button {
@@ -239,9 +241,34 @@
         border: none;
     }
 
+    .status-box {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 1rem;
+        justify-content: flex-end;
+        gap: 2rem;
+    }
+
+    .my-profile {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        margin-top: 1rem;
+        justify-content: flex-end;
+        gap: 2rem;
+    }
+
+    .btn-delete {
+        margin-bottom: 0.5rem;
+        border: none;
+        font-size: 15px;
+    }
+
     @media (max-width: 450px) {
         .container {
             width: 100%;
+            min-height: calc(20vh - 11rem);
         }
 
         .header-container {
@@ -271,7 +298,7 @@
 
         .action-buttons a,
         .action-buttons button {
-            width: 40%;
+            width: 10%;
             margin-bottom: 0.5rem;
         }
 
@@ -320,6 +347,16 @@
             font-size: 14px;
         }
 
+        .review-rule {
+            padding: 20px;
+            margin-left: -32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 120px;
+            text-align: start;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
         .review-check-box {
             width: 100%;
             text-align: center;
@@ -353,8 +390,8 @@
             padding: 0 0px;
         }
 
-        .tab-content-container {
-            text-align: center;
+        .tab-content3 {
+            width: 80%;
         }
 
         .profile-header {
@@ -391,13 +428,107 @@
         .btn-bookmark.bookmarked {
             background-color: black;
             color: #FFC107;
-            width: 40%;
+            width: 10%;
         }
 
         .btn-action:hover {
             background-color: black;
             color: white;
             width: 40%;
+        }
+
+        .profile-header p {
+            margin: 5px 0;
+            width: 70%;
+        }
+
+        .btn-bookmark {
+            height: 37.5px;
+            line-height: 1.5;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0px;
+            width: 10%;
+        }
+
+        #openModalBtn {
+            height: 37.5px;
+            line-height: 1.5;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0px;
+            width: 80%;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .my-profile {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 1rem;
+            justify-content: center;
+            gap: 4rem;
+        }
+
+        .btn-edit,
+        .btn-private {
+            width: 50%;
+            margin-bottom: 0.5rem;
+            border: none;
+        }
+
+        .btn-delete {
+            width: 220%;
+            margin-bottom: 0.5rem;
+            border: none;
+        }
+
+        .my-profile>*:nth-child(1) {
+            margin-right: 0rem;
+            /* 첫 번째 요소와 두 번째 요소 사이의 간격 */
+        }
+
+        .my-profile>*:nth-child(2) {
+            margin-right: 1.5rem;
+            /* 두 번째 요소와 세 번째 요소 사이의 간격 */
+        }
+
+        .profile-info-box {
+            text-align: -webkit-center;
+        }
+
+        .max-width-1200 {
+            width: min(1200px, 98%);
+            padding: 0 40px;
+        }
+
+        .status-message {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 1rem;
+            justify-content: center;
+            gap: 0rem;
+        }
+
+        .status-box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 1rem;
+            justify-content: center;
+            gap: 0rem;
+        }
+
+        .review-alarm {
+            font-size: 23px;
+            text-align: center;
+            margin-left: -39px;
         }
     }
 </style>
@@ -412,18 +543,18 @@
                     <i class="fas fa-user"></i>
                     {% endif %}
                 </div>
-                <div>
+                <div class="profile-info-box">
                     <h1>{{ profile.receiver.username }}</h1>
                     <p>{{ profile.job }}</p>
                     <p>피로그래밍 {{ profile.receiver.cohort }}기</p>
                     <p>커피챗 {{ profile.count }}회</p>
                 </div>
             </div>
-            <div class="action-buttons">
+            <div class="my-profile status-box">
                 {% if user.is_authenticated %}
                 {% if user == profile.receiver %}
                 <!-- 프로필 소유자가 자신의 프로필을 보는 경우 -->
-                <div>
+                <div class="my-profile">
                     <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
                         <i class="fas fa-edit"></i> 수정
                     </a>
@@ -445,23 +576,28 @@
                 {% else %}
                 {% csrf_token %}
                 {% if is_limited %}
-                <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
-                {% elif is_waiting %}
-                <p class="status-message">커피챗 수락대기중</p>
-                {% elif has_pending_request %}
-                <p class="status-message">당신에게 커피챗 신청 중</p>
-                {% else %}
-                <button id="openModalBtn" type="button">커피챗 신청하기</button>
-                {% endif %}
 
-                <!-- 북마크 버튼 -->
-                <button type="button"
-                    class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
-                    data-profile-id="{{ profile.pk }}">
-                    <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
-                </button>
-                {% endif %}
-                {% endif %}
+                <div class=status-box>
+                    <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
+                    {% elif is_waiting %}
+                    <p class="status-message">커피챗 수락대기중</p>
+                    {% elif has_pending_request %}
+                    <p class="status-message">당신에게 커피챗 신청 중</p>
+                    {% else %}
+                    <button id="openModalBtn" type="button">커피챗 신청하기</button>
+                    {% endif %}
+
+
+
+                    <!-- 북마크 버튼 -->
+                    <button type="button"
+                        class="btn-action btn-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"
+                        data-profile-id="{{ profile.pk }}">
+                        <i class="fas fa-bookmark {% if user in profile.bookmarks.all %}bookmarked{% endif %}"></i>
+                    </button>
+                    {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
         <!-- modal html 폼 -->
@@ -536,7 +672,7 @@
             </div>
         </div>
 
-        <div id="content-3" class="tab-content">
+        <div id="content-3" class="tab-content tab-content3">
             <!-- 요청 목록을 표시 -->
             <div class="requests-list max-width-1200">
                 <div class="review-rule">
@@ -546,7 +682,7 @@
                     <h5>🫰한 번 남기면 수정이 어려우니 주의하여 작성해주세요</h5>
                 </div>
 
-                <h3 class="review-alarm">리뷰를 남겨주세요! 커피챗 대상자가 커피챗을 수락하면 리뷰 남기기 버튼이 보여요</h3>
+                <h3 class="review-alarm">리뷰를 남겨주세요! 커피챗 완료 후에 리뷰를 남길 수 있어요</h3>
                 {% for request in requests %}
                 <!-- 리뷰 버튼 추가 -->
                 {% if user.is_authenticated and request.status == 'ACCEPTED' and request.user == user %}
