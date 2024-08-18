@@ -30,7 +30,18 @@ document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener('click', function(event) {
         if (event.target.classList.contains('btn-view-letter')) {
             const letterContent = event.target.getAttribute('data-letter');
-            modalContent.innerHTML = `<p>${letterContent.replace(/\r?\n/g, '<br>')}</p>`;
+            const urlRej = event.target.getAttribute('data-url-rej');
+            const urlAcc = event.target.getAttribute('data-url-acc');
+            console.log("+++++++++++++++++++++++++");
+            console.log(urlRej);
+            console.log(urlAcc);
+            console.log(letterContent);
+
+            modalContent.innerHTML = `
+                <p>${letterContent.replace(/\r?\n/g, '<br>')}</p>
+                <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
+                <button type="button" class="btn-reject modal-reject" data-url="${urlRej}">Reject</button>
+            `;
             modal.style.display = "flex";
         }
     });

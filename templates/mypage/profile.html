@@ -85,8 +85,8 @@
             <div class="modal-content">
                 <span id="coffeechatModalClose" class="close-button">&times;</span>
                 <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
-                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>
-                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>
+{#                <button type="button" class="btn-accept modal-accept" data-url="${coffeechat.accept_url}">Accept</button>#}
+{#                <button type="button" class="btn-reject modal-reject" data-url="${coffeechat.reject_url}">Reject</button>#}
 
             </div>
         </div>
@@ -388,7 +388,10 @@
                         <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
-                    <button type="button" class="btn-view-letter" data-letter="${coffeechat.letter_to_senior}">커피챗 문구보기</button>
+                    <button type="button" class="btn-view-letter"
+                        data-letter="${coffeechat.letter_to_senior}"
+                        data-url-acc="${coffeechat.accept_url}"
+                        data-url-rej="${coffeechat.reject_url}">커피챗 문구보기</button>
                 `;
 
                     } else if (category === 'bookmarked') {
