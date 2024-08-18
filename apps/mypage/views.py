@@ -272,6 +272,9 @@ def profile_read(request, user_id):
 def toggle_bookmark(request, post_type, post_id):
     if request.method == 'POST':
         try:
+            print(f"Received post_type: {post_type}, post_id: {post_id}")  # 로그 추가
+            print(f"User: {request.user.username}")  # 요청한 사용자 정보 로그
+
             if post_type == 'review':
                 post = Review.objects.get(id=post_id)
             elif post_type == 'trend':
@@ -289,6 +292,8 @@ def toggle_bookmark(request, post_type, post_id):
                 return JsonResponse({'bookmarked': True})
 
         except Exception as e:
+            # 예외 발생 시 예외 메시지 출력
+            print(f"Error occurred: {str(e)}")
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)

@@ -68,7 +68,12 @@
     const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
     const csrftoken = csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
     
-    // 북마크 토글 함수
+    // 게시글 북마크 토글 함수
+    function togglePostBookmark(url, cardElement) {
+        toggleBookmark(url, cardElement);
+    }
+
+    // 커피챗 북마크 토글 함수
     function toggleBookmark(url, cardElement) {
         if (!confirm('정말로 취소하시겠습니까?')) {
             return;
@@ -236,13 +241,13 @@
                             const postElement = document.createElement('div');
                             postElement.classList.add('activity-card');
 
-                            const bookmarkUrl = `/toggle_bookmark/${post.type}/${post.id}/`;
+                            const bookmarkUrl = `/mypage/toggle_post_bookmark/${post.type}/${post.id}/`;
 
                             postElement.innerHTML = `
                                 <div class="card-image" style="background-image: url('${randomImage}');"></div>
                                 <div class="card-content">
-                                    <p>Post Type: ${post.type}</p>
-                                    <p>Post ID: ${post.id}</p>  
+                                    {% comment %} <p>Post Type: ${post.type}</p>
+                                    <p>Post ID: ${post.id}</p>   {% endcomment %}
                                     <h3><a href="${post.url}"><strong>${post.title}</strong></a></h3>
                                     <span><strong>작성자:</strong> ${post.writer}</span>
                                     <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
@@ -257,10 +262,11 @@
                             const bookmarkButton = postElement.querySelector('.bookmark-btn');
                             if (bookmarkButton) {
                                 bookmarkButton.addEventListener('click', function() {
-                                    const bookmarkUrl = `/mypage/toggle_post_bookmark/${post.type}/${post.id}/`;
+                                    const bookmarkUrl = `/mypage/toggle_bookmark/${post.type}/${post.id}/`;
                                     togglePostBookmark(bookmarkUrl, postElement);
                                 });
                             }
+
                             activityContent.appendChild(postElement);
                         });
                     } else {

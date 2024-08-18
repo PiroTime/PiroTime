@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+import apps.mypage.views
 
 app_name = 'mypage'
 
@@ -11,5 +12,5 @@ urlpatterns = [
     path('profile/<int:user_id>/', views.profile_read, name='profile_read'),
     path('bookmark/<int:pk>/', views.coffeechat_bookmark_profile, name='coffeechat_bookmark_profile'),
 
-    path('toggle_bookmark/<str:post_type>/<int:post_id>/', views.toggle_bookmark, name='toggle_bookmark'),
+    path('toggle_bookmark/<str:post_type>/<int:post_id>/', apps.mypage.views.toggle_bookmark, name='toggle_bookmark'),
 ]
