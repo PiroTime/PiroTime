@@ -215,7 +215,6 @@ $(document).ready(function() {
             url: url,
             data: { 'user_id': userId },
             success: function(response) {
-                console.log(response); // 응답 내용을 확인
                 $('#modal-profile-content').html(response);
                 $('#profile_modal').show();
 

@@ -4,6 +4,8 @@
 <meta name="csrf-token" content="{{ csrf_token }}">
 <link rel="stylesheet" href="{% static 'css/mypage/profile.css' %}">
 <link rel="stylesheet" href="{% static 'css/mypage/mobile.css' %}">
+<link rel="stylesheet" href="{% static 'css/mypage/message.css' %}">
+<link rel="stylesheet" href="{% static 'css/modal.css'%}">
 <div class="profile-container">
     <div class="profile-header">
         <div class="profile-image">
@@ -55,21 +57,62 @@
                     <li><a href="#" class="activity-link" data-filter="profile_info">내 정보</a></li>
                 </ul>
             </div>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 class="coffeechat-modal-h2">협업 신청 메세지를 작성해 주세요</h2>
+                    {% csrf_token %}
+                    <div class="input-container">
+                        <textarea id="userInput" name="requestContent" rows="10" cols="50" placeholder="프로젝트에 대해 궁굼한 점이나 자기소개에 적어주세요..."></textarea>
+                        <button type="submit" id="submitBtn" data-cor-id="{{ cor.id }}">제출</button>
+                    </div>
+                </div>
+            </div>
+            </form>
 
             <div id="activity-content" class="activity-content">
                 <!-- AJAX로 불러올 내용이 여기에 표시됩니다 -->
             </div>
         </div>
     </div>
+
+
 </div>
 
+<!-- 모달 HTML 구조 -->
+<div id="coffeechatModal" class="modal">
+    <div class="modal-content">
+        <span id="coffeechatModalClose" class="close-button">&times;</span>
+        <div id="coffeechatModalContent"></div> <!-- 여기에 커피챗 문구가 표시됩니다 -->
+    </div>
+</div>
+
+<!-- 하단에 추가된 고정 네비게이션 바
+<div class="bottom-navbar mobile">
+    <a href="#" class="bottom-link" data-filter="my_posts"><i class="fas fa-heart"></i>내가 쓴 글</a>
+    <a href="#" class="bottom-link" data-filter="bookmarked"><i class="fas fa-heart"></i>북마크한 글</a>
+    <a href="#" class="bottom-link" data-filter="liked"><i class="fas fa-heart"></i>좋아요한 글</a>
+    <a href="#" class="bottom-link" data-filter="commented"><i class="fas fa-heart"></i>댓글 단 글</a>
+    <a href="#" class="bottom-link" data-filter="coffeechat"><i class="fas fa-heart"></i>커피챗</a>
+    <a href="#" class="bottom-link" data-filter="profile_info"><i class="fas fa-heart"></i>내 정보</a>
+</div> -->
+<script src="{% static 'js/coffeechat.js' %}"></script>
 <script>
     // CSRF 토큰을 메타 태그에서 가져옴
     const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
     const csrftoken = csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
     
-    // 북마크 토글 함수
+    // 게시글 북마크 토글 함수
+    function togglePostBookmark(url, cardElement) {
+        toggleBookmark(url, cardElement);
+    }
+
+    // 커피챗 북마크 토글 함수
     function toggleBookmark(url, cardElement) {
+        if (!confirm('정말로 취소하시겠습니까?')) {
+            return;
+        }
+
         console.log('Calling toggleBookmark with URL:', url); // URL 로그 확인
         console.log('Requesting URL:', url);
     
@@ -232,13 +275,13 @@
                             const postElement = document.createElement('div');
                             postElement.classList.add('activity-card');
 
-                            const bookmarkUrl = `/toggle_bookmark/${post.type}/${post.id}/`;
+                            const bookmarkUrl = `/mypage/toggle_post_bookmark/${post.type}/${post.id}/`;
 
                             postElement.innerHTML = `
                                 <div class="card-image" style="background-image: url('${randomImage}');"></div>
                                 <div class="card-content">
-                                    <p>Post Type: ${post.type}</p>
-                                    <p>Post ID: ${post.id}</p>  
+                                    {% comment %} <p>Post Type: ${post.type}</p>
+                                    <p>Post ID: ${post.id}</p> {% endcomment %}
                                     <h3><a href="${post.url}"><strong>${post.title}</strong></a></h3>
                                     <span><strong>작성자:</strong> ${post.writer}</span>
                                     <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
@@ -253,10 +296,11 @@
                             const bookmarkButton = postElement.querySelector('.bookmark-btn');
                             if (bookmarkButton) {
                                 bookmarkButton.addEventListener('click', function() {
-                                    const bookmarkUrl = `/mypage/toggle_post_bookmark/${post.type}/${post.id}/`;
+                                    const bookmarkUrl = `/mypage/toggle_bookmark/${post.type}/${post.id}/`;
                                     togglePostBookmark(bookmarkUrl, postElement);
                                 });
                             }
+
                             activityContent.appendChild(postElement);
                         });
                     } else {
@@ -282,6 +326,7 @@
 
             const cardElement = document.createElement('div');
             cardElement.className = 'coffeechat-card';
+            cardElement.setAttribute('data-coffeechat-id', '{{ coffeechat.id }}')
         
             let displayName, job, hashtags;
 
@@ -291,7 +336,8 @@
                 hashtags = coffeechat.hashtags;
             } else if (category === 'received') {
                 displayName = coffeechat.sender;
-                job = coffeechat.sender_job;
+                job = '피로그래밍' + coffeechat.cohort + '기';
+                //job = coffeechat.sender_job;
                 hashtags = coffeechat.hashtags;
             } else if (category === 'bookmarked') {
                 displayName = coffeechat.receiver;
@@ -319,7 +365,7 @@
                 </div>
                 <div class="profile-details">
                     <a href="${profileLink}" class="name">${displayName}</a>
-                    ${category !== 'history' ? `<span class="job">${coffeechat.job}</span>` : ''}
+                    ${category !== 'history' ? `<span class="job">${job}</span>` : ''}
                 </div>
                 <div class="card-content">
                     ${category !== 'history' ? `<span class="request-time">${date} ${time} 부터</span><br>` : ''}
@@ -335,6 +381,7 @@
                         <button type="button" class="btn-accept" data-url="${coffeechat.accept_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
+                    <button type="button" class="btn-view-letter" data-letter="${coffeechat.letter_to_senior}">커피챗 문구보기</button>
                 `;
             
             } else if (category === 'bookmarked') {

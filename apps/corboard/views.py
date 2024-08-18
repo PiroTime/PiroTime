@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 from django.db.models import Count
 
 # 프로젝트 내 모듈
-from apps.corboard.forms import CorboardForm, CorCommentForm
+from apps.corboard.forms import CorboardForm, CorCommentForm, CorLetter
 from apps.corboard.forms import CorboardForm, CorCommentForm, CorSearchForm
 from apps.corboard.models import Corboard, Comment
 
@@ -76,12 +76,42 @@ def cor_create(request):
 @login_required
 def cor_detail(request, pk):
     print("cor_detail")
+    print(request.method)
+    if request.method == 'POST':
+        print("POst")
+        inp = CorLetter(request.POST)
+        if inp.is_valid():
+            print("data", inp.cleaned_data['letter'])
+            receiver = get_object_or_404(Corboard, pk=pk).writer
+            sender = request.user
+            subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
+
+            html_message = render_to_string(
+                "corboard/message.html",
+                {"sender": sender.username, "receiver": receiver.username,
+                 "content": f" coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!",
+                 "message": request.POST.get('letter')},
+            )
+            plain_message = strip_tags(html_message)
+            send_mail(
+                subject,
+                plain_message,
+                from_email,
+                recipient_list,
+                html_message=html_message,
+            )
+            print("++++++++++++")
+
+
     cor = get_object_or_404(Corboard, pk=pk)
     form = CorCommentForm()
+    content = CorLetter()
+
     return render(request, 'corboard/corboard_detail.html', {
         'cor': cor,
         'comments': cor.cor_comments.filter(parent=None),
         'form': form,
+        'content': content,
     })
 
 @require_POST
@@ -187,6 +217,8 @@ def generate_email_content(sender, receiver):
 
 @login_required
 def cor_mail(request, pk):
+    letter = CorLetter(request.POST)
+    print(letter.letter)
     receiver = get_object_or_404(Corboard, pk=pk).writer
     sender = request.user
     subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
@@ -194,7 +226,8 @@ def cor_mail(request, pk):
     html_message = render_to_string(
         "corboard/message.html",
         {"sender": sender.username, "receiver": receiver.username,
-         "content": f"{receiver.username}님! coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!"},
+         "content": f"{receiver.username}님! coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!",
+         "message": request.POST.get('letter')},
     )
     plain_message = strip_tags(html_message)
     send_mail(

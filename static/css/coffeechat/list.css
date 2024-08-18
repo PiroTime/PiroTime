@@ -124,20 +124,29 @@
 .hashtag-container {
     max-height: 100px; 
     overflow: hidden; 
+    padding: 0 5px;
 }
 
 .hashtag {
     display: inline-block;
-    background-color: #f1f1f1;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-right: 5px;
+    margin-right: 10px;
     margin-bottom: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+.hashtag-container a {
+    text-decoration: none;
     color: black;
 }
 
-.hashtag:hover  {
-    text-decoration: none;
+.hashtag-container a:hover {
+    text-decoration: none; /* hover 시 밑줄이 없어짐 */
+}
+
+.hashtag:hover {
+    transform: scale(1.1);
 }
 
 .profile-content {

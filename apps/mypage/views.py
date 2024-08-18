@@ -142,6 +142,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                     receiver_username = request.coffeechat.receiver.username if request.coffeechat.receiver else 'Unknown'
                     job = request.coffeechat.job
                     detail_url = reverse_lazy('coffeechat:coffeechat_detail', args=[request.coffeechat.id])
+                    cohort = request.user.cohort  # 신청한 사람의 기수
 
                     # 디버깅 정보 리스트
                     debug_data.append({
@@ -150,22 +151,28 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'sender_username': sender_username,
                         'receiver_username': receiver_username,
                         'job': job,
+                        'cohort': cohort,  # 추가된 부분
                         'detail_url': detail_url,
                         'status': request.status,
                         'receiver_id': request.coffeechat.receiver.id if request.coffeechat.receiver else 'None',
-                        'sender_id': request.user.id
+                        'sender_id': request.user.id,
+                        'letter_to_senior': request.letterToSenior,  # 추가된 부분
+                        
                     })
 
                     data.append({
+                        'message': request.letterToSenior,
                         'sender': sender_username,
                         'receiver': receiver_username,
                         'job': job,
+                        'cohort': cohort,  # 추가된 부분
                         'created_at': request.created_at.isoformat(),
                         'status': request.get_status_display(),
                         'detail_url': detail_url,
                         'profile_read_url': reverse_lazy('mypage:profile_read', args=[request.coffeechat.receiver.id if request.coffeechat.receiver else '']),
                         'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
                         'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
+                        'letter_to_senior': request.letterToSenior,  # 추가된 부분
                     })
 
                 # 디버깅 정보를 출력
@@ -309,7 +316,16 @@ def coffeechat_bookmark_profile(request, pk):
 def profile_modal_view(request):
     user_id = request.GET.get('user_id')
     profile_user = get_object_or_404(CustomUser, id=user_id)
+
+    image_files = ['back.png', 'back1.png', 'back2.png']
+    random_image = random.choice(image_files)
+
     context = {
         'profile_user': profile_user,
+        'random_image': random_image,
     }
+
+    # 서버 로그에 출력
+    print(f"Random Image URL: /static/images/{random_image}")
+
     return render(request, 'mypage/profile_modal.html', context)
