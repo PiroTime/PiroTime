@@ -17,6 +17,7 @@ from apps.review.models import Review, Comment as ReviewComment
 from apps.corboard.models import Corboard, Comment as CorboardComment
 from apps.trend.models import Trend, Comment as TrendComment
 from apps.coffeechat.models import CoffeeChat, CoffeeChatRequest
+from apps.coffeechat.forms import WayToContect
 
 # 프로필 보기 뷰
 class ProfileView(LoginRequiredMixin, TemplateView):
@@ -161,6 +162,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'letter_to_senior': request.letterToSenior,  # 추가된 부분
                         
                     })
+                    way = WayToContect()
 
                     data.append({
                         'sender': sender_username,
@@ -175,6 +177,7 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
                         'accept_url': reverse_lazy('coffeechat:accept_request', args=[request.id]),
                         'reject_url': reverse_lazy('coffeechat:reject_request', args=[request.id]),
                         'letter_to_senior': request.letterToSenior,  # 추가된 부분
+                        'way': way,
                     })
 
                 # 디버깅 정보를 출력

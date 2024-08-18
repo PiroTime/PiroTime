@@ -18,3 +18,6 @@ class ReviewForm(forms.ModelForm):
 
 class CoffeechatRequestForm(forms.Form):
     requestContent = forms.CharField(max_length=100, required=False, label='RequestContent')
+
+class WayToContect(forms.Form):
+    way = forms.CharField(max_length=200, required=False)
