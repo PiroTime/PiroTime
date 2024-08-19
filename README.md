@@ -117,21 +117,21 @@
 
 ## 🌟아키텍처
 
-![아키텍처](https://private-user-images.githubusercontent.com/123529128/359079465-760e6a2c-a5da-4b5b-abb4-4ac6767cdbbc.png)
+![PiroTIme_시스템 아키텍처](https://github.com/user-attachments/assets/831e383c-8ae0-4ae8-8a24-b84534cc5f61)
 
 # 📂기획 및 설계 산출물
 
 ## 💭요구사항 정의 및 기능 명세([Notion](https://www.notion.so/ebb329f0e6f749e0947046f1dfa628d8?v=fd2c8b8ab04d4e06a10654310a2e4638)) - 일부 캡쳐
 
-![Figma](https://private-user-images.githubusercontent.com/123529128/359103124-871b0d6b-a9bf-46ea-b6a9-57c14671a3f9.png)
+<img width="634" alt="PiroTIme_기능명세" src="https://github.com/user-attachments/assets/d31e7684-0085-4a9c-8298-1d672edbcc58">
 
 ## 🎨화면 설계([Figma](https://www.figma.com/design/GNy9zyW1y3IQk1oaukzBrK/PiroTime?node-id=70-4&t=HZbUcis6l2gl7siK-0))
 
-![Figma](https://private-user-images.githubusercontent.com/123529128/359089862-9c428b8b-f0fd-44fc-9a12-c5341ddf0cfa.png)
+<img width="505" alt="PiroTime_피그마" src="https://github.com/user-attachments/assets/6b56cea8-31b7-4582-9947-618d54afe87e">
 
 ## 📜[ERD](https://www.erdcloud.com/d/SEz3HouJH7wNG4B8W)
 
-![ERD](https://private-user-images.githubusercontent.com/123529128/359088543-803ff5b1-3e0a-437f-8b54-7229e3194d76.png)
+<img width="1001" alt="PiroTime_erd" src="https://github.com/user-attachments/assets/6c786b8a-1fbf-401d-81a7-410b3a7b69cf">
 
 # 💞팀원 소개
 
@@ -152,13 +152,13 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/YourLink2">
+      <a href="https://github.com/nawkwoo">
         <img src="https://github.com/user-attachments/assets/ef2e635a-001d-4250-8bcc-6abe958be91d" width="250px;" alt="관우빠"><br>
         <b>FE/BE 팀원: 손관우</b>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/YourLink3">
+      <a href="https://github.com/C2hazelnut">
         <img src="https://github.com/user-attachments/assets/188861f6-37dc-4d84-8857-a2de6882e38d" width="250px;" alt="연진"><br>
         <b>FE/BE 팀원: 이연진</b>
       </a>
