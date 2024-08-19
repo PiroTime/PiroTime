@@ -248,7 +248,7 @@ def accept_request(request, request_id):
     coffeechat.save()
 
     subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
-    content = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
+    content = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래에 있는 연락처로 연락해보세요!"
     message = ""
 
     try:
@@ -379,7 +379,7 @@ def sending_mail_info(receiver, sender, subject, content, message):
 
 
     html_message = render_to_string(
-        "corboard/message.html",
+        "corboard/message_accept_coffeechat.html",
         {"sender": sender.username,
          "receiver": receiver.username,
          "content": content,
