@@ -38,6 +38,21 @@ class CustomUserCreationForm(forms.ModelForm):
             'cohort': '',
             'phone_number': '',
         }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].error_messages['required'] = '아이디를 입력해 주세요.'
+        self.fields['nickname'].error_messages['required'] = '아이디를 입력해 주세요.'
+        self.fields['phone_number'].error_messages['required'] = '전화번호를 입력해 주세요.'
+        self.fields['password2'].error_messages['required'] = '비밀번호를 입력해 주세요.'
+        self.fields['password1'].error_messages['required'] = '비밀번호를 입력해 주세요.'
+        self.fields['cohort'].error_messages['required'] = '기수를 입력해 주세요.'
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        if not phone_number:
+            raise forms.ValidationError("전화번호를 반드시 입력해야 합니다.")
+        return phone_number
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
