@@ -7,13 +7,13 @@
     unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F;
 }
 
-@font-face {
+/* @font-face {
     font-family: 'Hubballi';
     src: url('path-to-your-english-font.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     unicode-range: U+0020-007F;
-}
+} */
 
 body:lang(ko) {
     font-family: 'S-CoreDream-3Light';
