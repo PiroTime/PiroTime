@@ -382,7 +382,7 @@ def sending_mail_info(receiver, sender, subject, content, message):
     content = content
 
     from_email = 'pirotimeofficial@gmail.com'
-    recipient_list = [receiver.email]
+    recipient_list = [sender.email]
     mail = receiver.email
     phoneNumber = format_phone_number(receiver.phone_number)
 

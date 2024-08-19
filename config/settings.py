@@ -26,9 +26,9 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = "django-insecure-%%&ov9zcz=)%v9-a3^7qd0x5tf9u5buxn)s)eru+7p6!4!7bh7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []  # In production, add your domain here
+ALLOWED_HOSTS = ["*","3.39.9.209"]  # In production, add your domain here
 
 # Application definition
 
@@ -164,7 +164,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     os.system("pip install Pillow")
 
 # CSRF 설정
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 CSRF_USE_SESSIONS = True
 
 MEDIA_URL = '/media/'
