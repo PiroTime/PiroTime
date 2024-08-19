@@ -4,13 +4,14 @@
 {% load static %}
 <style>
     .container {
-        scroll-snap-type: y mandatory;
-        overflow-y: scroll;
-        height: 100vh;
-        scroll-behavior: smooth;
+        {% comment %} scroll-snap-type: y mandatory;
+        overflow-y: scroll; {% endcomment %}
+        {% comment %} height: 100vh; {% endcomment %}
+        {% comment %} scroll-behavior: smooth; {% endcomment %}
     }
 
     section {
+        scroll-snap-align: start;
         opacity: 0;
         transform: translateY(20px);
         transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -250,7 +251,7 @@
                 }
             });
         }, {
-            threshold: 0.4 // 섹션의 40%가 보이면 나타나기
+            threshold: 0.3 // 섹션의 40%가 보이면 나타나기
         });
 
         sections.forEach(section => {
@@ -265,11 +266,14 @@
         "scroll",
         throttle(() => {
             const scrollPosition = window.scrollY;
+            const OFFSET = 300;  // 애니메이션이 시작될 스크롤 위치
             const SPEED = 517; // 숫자 작을수록 빨라짐
             let scrollPercentage;
 
-            if (scrollPosition < SPEED) {
-                scrollPercentage = scrollPosition / SPEED;
+            if (scrollPosition < OFFSET) {
+                scrollPercentage = 0; // 스크롤 위치가 OFFSET보다 작으면 애니메이션 시작하지 않음
+            } else if (scrollPosition < OFFSET + SPEED) {
+                scrollPercentage = (scrollPosition - OFFSET) / SPEED; // OFFSET을 뺀 위치로 계산
             } else {
                 scrollPercentage = 1;
             }
@@ -291,6 +295,5 @@
             }, delay);
         };
     }
-
 </script>
 {% endblock %}
