@@ -11,6 +11,7 @@
     }
 
     section {
+        scroll-snap-align: start;
         opacity: 0;
         transform: translateY(20px);
         transition: opacity 0.6s ease-out, transform 0.6s ease-out;
@@ -250,7 +251,7 @@
                 }
             });
         }, {
-            threshold: 0.4 // 섹션의 40%가 보이면 나타나기
+            threshold: 0.3 // 섹션의 40%가 보이면 나타나기
         });
 
         sections.forEach(section => {
@@ -294,7 +295,6 @@
             }, delay);
         };
     }
-
 
 </script>
 {% endblock %}
