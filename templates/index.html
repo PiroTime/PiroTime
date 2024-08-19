@@ -4,8 +4,8 @@
 {% load static %}
 <style>
     .container {
-        scroll-snap-type: y mandatory;
-        overflow-y: scroll;
+        /* scroll-snap-type: y mandatory;
+        overflow-y: scroll; */
         height: 100vh;
         scroll-behavior: smooth;
     }
@@ -41,7 +41,7 @@
         left: 29.7%;
         transform: translate(-50%);
         bottom: 20px;
-        height: 238px !important; 
+        height: 238px !important;
     }
 
     #rocket {
@@ -265,11 +265,14 @@
         "scroll",
         throttle(() => {
             const scrollPosition = window.scrollY;
+            const OFFSET = 300;  // 애니메이션이 시작될 스크롤 위치
             const SPEED = 517; // 숫자 작을수록 빨라짐
             let scrollPercentage;
 
-            if (scrollPosition < SPEED) {
-                scrollPercentage = scrollPosition / SPEED;
+            if (scrollPosition < OFFSET) {
+                scrollPercentage = 0; // 스크롤 위치가 OFFSET보다 작으면 애니메이션 시작하지 않음
+            } else if (scrollPosition < OFFSET + SPEED) {
+                scrollPercentage = (scrollPosition - OFFSET) / SPEED; // OFFSET을 뺀 위치로 계산
             } else {
                 scrollPercentage = 1;
             }
@@ -291,6 +294,7 @@
             }, delay);
         };
     }
+
 
 </script>
 {% endblock %}
