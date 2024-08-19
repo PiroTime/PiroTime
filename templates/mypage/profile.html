@@ -470,6 +470,8 @@
             if (event.target.matches('.btn-accept')) {
                 const url = event.target.getAttribute('data-url');
                 confirm("수락버튼을 누르면 신청자에게 연락처가 전달됩니다. 진행하시겠습니까?")
+                const modal = document.getElementById("coffeechatModal");
+                modal.style.display = "none";
                 handleCoffeeChatResponse(url, 'accepted');
             } else if (event.target.matches('.btn-reject')) {
                 const url = event.target.getAttribute('data-url');
