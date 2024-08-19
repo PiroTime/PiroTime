@@ -370,6 +370,13 @@ def sending_mail(receiver, sender, subject, content, message):
     )
     return True
 
+def format_phone_number(phone_number):
+    # 만약 전화번호가 '+82'로 시작하면
+    if phone_number.startswith('+82'):
+        # '+82'를 제거하고 앞에 '0'을 붙임
+        return '0' + phone_number[3:]
+    return phone_number  # 다른 경우는 그대로 반환
+
 def sending_mail_info(receiver, sender, subject, content, message):
 
     subject = subject
@@ -378,8 +385,7 @@ def sending_mail_info(receiver, sender, subject, content, message):
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
     mail = receiver.email
-    phoneNumber = receiver.phone_number
-
+    phoneNumber = format_phone_number(receiver.phone_number)
 
     html_message = render_to_string(
         "corboard/message_accept_coffeechat.html",
