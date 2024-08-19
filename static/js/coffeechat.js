@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // 모달 관련 변수 정의
     const modal = document.getElementById("coffeechatModal");
     const modalContent = document.getElementById("coffeechatModalContent");
+    const modalbutton = document.getElementById("coffeechatModalContentBtn")
     const closeModalBtn = document.getElementById("coffeechatModalClose");
 
     // "커피챗 문구보기" 버튼 클릭 시 모달 열기
@@ -38,6 +39,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             modalContent.innerHTML = `
                 <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
+            `;
+            modalbutton.innerHTML = `
                 <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
             `;
             modal.style.display = "flex";
