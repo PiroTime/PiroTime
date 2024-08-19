@@ -252,7 +252,7 @@ def accept_request(request, request_id):
     message = ""
 
     try:
-        sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message)
+        sending_mail_info(coffeechat.receiver, coffeechat_request.user, subject, content, message)
     except Exception as e:
         return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=503)
 
@@ -367,6 +367,37 @@ def sending_mail(receiver, sender, subject, content, message):
     )
     return True
 
+def sending_mail_info(receiver, sender, subject, content, message):
+
+    subject = subject
+    content = content
+
+    from_email = 'pirotimeofficial@gmail.com'
+    recipient_list = [receiver.email]
+    mail = receiver.email
+    phoneNumber = receiver.phone_number
+
+
+    html_message = render_to_string(
+        "corboard/message.html",
+        {"sender": sender.username,
+         "receiver": receiver.username,
+         "content": content,
+         "message": message,
+         "mail": mail,
+         "phoneNumber": phoneNumber,
+         },
+
+    )
+    plain_message = strip_tags(html_message)
+    send_mail(
+        subject,
+        plain_message,
+        from_email,
+        recipient_list,
+        html_message=html_message,
+    )
+    return True
 
 def howto(request):  
 
