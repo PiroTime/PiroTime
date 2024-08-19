@@ -1,7 +1,31 @@
-body {
-    font-family: 'Hubballi', sans-serif; 
-    color: #333;
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F; /* 한글 음절, 자모, 호환 자모 */
+}
+
+/* @font-face {
+    font-family: 'Hubballi';
+    src: url('path-to-your-english-font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+0020-007F;
+} */
+
+body:lang(ko) {
+    font-family: 'S-CoreDream-3Light'; /* 한글에만 적용될 폰트 */
+}
+
+body:lang(en) {
+    font-family: 'Hubballi'; /* 영어에만 적용될 폰트 */
+}
+
+body{
+    font-family: 'Hubballi', 'S-CoreDream-3Light'; 
     background-color: white;
+    color: #333;
 }
 
 .max-width-1200 {
@@ -77,6 +101,10 @@ body {
     margin-right: 15px;
 }
 
+.meta-info i {
+    font-size: 15px;
+}
+
 .header-sidebar {
     flex-basis: 25%;
 }
@@ -140,7 +168,7 @@ body {
 }
 
 .main-content {
-    flex-basis: 70%;
+    flex-basis: 100%;
     font-size: 1.1rem;
     line-height: 1.8;
     color: #444;

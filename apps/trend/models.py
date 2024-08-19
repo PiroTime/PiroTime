@@ -35,7 +35,9 @@ class Trend(models.Model):
     
     def get_absolute_url(self):
         return reverse('trend:trend_detail', args=[self.id])
-
+    
+    def get_post_type(self):
+        return 'trend'
 
 # 트렌드에 대한 댓글 모델
 class Comment(models.Model):

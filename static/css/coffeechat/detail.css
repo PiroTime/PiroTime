@@ -1,6 +1,9 @@
+main {
+    min-height: 100vh;
+}
+
 .container {
     margin-top: 60px;
-    margin-bottom: 60px;
 }
 
 .max-width-1200 {
@@ -9,7 +12,8 @@
 }
 
 .profile-header {
-    background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+    /* background: linear-gradient(90deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%); */
+    background: linear-gradient(135deg, #3498db, #2ecc71);
     padding: 20px;
     color: white;
     display: flex;
@@ -151,9 +155,10 @@
     display: flex;
     justify-content: flex-end;
     margin-right: 60px;
+    justify-content: flex-start;
 }
 
-.btn-back {
+/* .btn-back {
     background: rgba(211, 211, 211, 0.822);
     color: black;
     border: none;
@@ -167,21 +172,24 @@
 .btn-back:hover {
     background-color: rgb(163, 163, 163);
     color: white;
-}
+} */
 
 .action-buttons div {
     display: flex;
     gap: 10px;
 }
 
+.btn-delete,
+.btn-edit, .btn-private {
+    background-color: rgba(211, 211, 211, 0.5);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
 .btn-edit:hover {
     background-color: #2338f5;
     color: white;
     border:none;
-}
-
-.btn-delete {
-    background-color: transparent;
 }
 
 .btn-delete:hover {

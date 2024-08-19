@@ -34,11 +34,12 @@ ALLOWED_HOSTS = []  # In production, add your domain here
 
 INSTALLED_APPS = [
     "apps.accounts",
-    "apps.coffeechat",
-    "apps.review",  
-    "apps.trend", 
+    "apps.review",
     "apps.corboard",
+    "apps.coffeechat",
+    "apps.trend",
     "apps.mypage",
+    'phonenumber_field',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -56,7 +57,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -164,9 +164,8 @@ AUTH_USER_MODEL = 'accounts.CustomUser'  # Custom user model
 #     os.system("pip install Pillow")
 
 # CSRF 설정
-CSRF_COOKIE_SECURE = True
-CSRF_USE_SESSIONS = False
-DEBUG = True
+CSRF_COOKIE_SECURE = False
+CSRF_USE_SESSIONS = True
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

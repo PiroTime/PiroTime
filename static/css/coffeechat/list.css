@@ -2,7 +2,7 @@
     max-width: 1000px;
     margin: 3rem auto;
     padding: 20px;
-    padding-bottom: 5rem;
+    min-height: 100vh;
 }
 
 .search-bar-container {
@@ -89,7 +89,8 @@
 .profile-header {
     display: flex;
     align-items: center;
-    background: linear-gradient(45deg, #ff6b6b, #f5f7fa);
+    /* background: linear-gradient(45deg, #ff6b6b, #f5f7fa); */
+    background: linear-gradient(45deg, #00acdb, #00c4aa, #0074fc);
     padding: 20px;
     border-radius: 8px 8px 0 0;
     position: relative;
@@ -122,22 +123,31 @@
 }
 
 .hashtag-container {
-    max-height: 100px; 
+    max-height: 95px; 
     overflow: hidden; 
+    padding: 0 5px;
 }
 
 .hashtag {
     display: inline-block;
-    background-color: #f1f1f1;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-right: 5px;
+    margin-right: 10px;
     margin-bottom: 5px;
+    border: 1px solid #CCCCCC;
+}
+
+.hashtag-container a {
+    text-decoration: none;
     color: black;
 }
 
-.hashtag:hover  {
-    text-decoration: none;
+.hashtag-container a:hover {
+    text-decoration: none; /* hover 시 밑줄이 없어짐 */
+}
+
+.hashtag:hover {
+    transform: scale(1.05);
 }
 
 .profile-content {

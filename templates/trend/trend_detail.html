@@ -36,6 +36,15 @@
             margin-top: 0; /* 기본 마진 제거 */
         }
       }
+
+      .trend-writer {
+          color: #333; 
+          text-decoration: none; 
+      }
+
+      .trend-writer:hover {
+          color: #0BEC12; 
+      }
 </style>
 <meta name="csrf-token" content="{{ csrf_token }}">
 <div class="container max-width-1200">
@@ -47,11 +56,11 @@
                   <h2>{{ trend.subtitle }}</h2>
                   <div class="meta-info">
                       <span><i class="fas fa-user"></i> 
-                          {% if trend.writer == user %}
-                              <a href="{% url 'mypage:profile' %}">{{ trend.writer }}</a>
-                          {% else %}
-                              <a href="{% url 'mypage:profile_read' trend.writer.id %}">{{ trend.writer }}</a>
-                          {% endif %}
+                        {% if trend.writer == user %}
+                          <a href="{% url 'mypage:profile' %}" class="trend-writer">{{ trend.writer }}</a>
+                        {% else %}
+                          <a href="/" class="open-profile-modal trend-writer" data-user-id="{{ trend.writer.id }}">{{ trend.writer }}</a>
+                        {% endif %}
                       </span>            
                       <span><i class="fas fa-calendar-alt"></i> {{ trend.date }}</span>
                   </div>
@@ -95,9 +104,9 @@
                       <div class="comment-meta">
                           <span><i class="fas fa-user"></i> 
                               {% if comment.writer == user %}
-                                  <a href="{% url 'mypage:profile' %}">{{ comment.writer }}</a>
+                                  <a href="{% url 'mypage:profile' %}" class="trend-writer">{{ comment.writer }}</a>
                               {% else %}
-                                  <a href="{% url 'mypage:profile_read' comment.writer.id %}">{{ comment.writer }}</a>
+                                <a href="/" class="open-profile-modal trend-writer" data-user-id="{{ comment.writer.id }}">{{ comment.writer }}</a>
                               {% endif %}
                           </span>
                           <div class="comment-meta-data">
@@ -123,9 +132,9 @@
                                       <div class="comment-meta">
                                           <span><i class="fas fa-user"></i> 
                                               {% if reply.writer == user %}
-                                                  <a href="{% url 'mypage:profile' %}">{{ reply.writer }}</a>
+                                                  <a href="{% url 'mypage:profile' %}" class="trend-writer">{{ reply.writer }}</a>
                                               {% else %}
-                                                  <a href="{% url 'mypage:profile_read' reply.writer.id %}">{{ reply.writer }}</a>
+                                                <a href="/" class="open-profile-modal trend-writer" data-user-id="{{ reply.writer.id }}">{{ reply.writer }}</a>
                                               {% endif %}
                                           </span> 
                                           <div class="comment-meta-data">
@@ -159,7 +168,7 @@
               </div>
               {% endif %}
           {% empty %}
-              <p>댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+            <p id="no-comments-message">댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
           {% endfor %}
       </div>
   </div>
@@ -168,7 +177,7 @@
   <form class="comment-form" method="post" action="javascript:void(0);" onsubmit="submitCommentForm(this);">
       {% csrf_token %}
       <textarea class="comment-input" name="content" placeholder="댓글을 입력하세요..." required></textarea>
-      <button type="submit" class="btn-add-comment">등록</button>
+      <button type="submit" class="btn-add-comment" style="font-family: S-CoreDream-3Light;">등록</button>
   </form>
 
   <div class="action-buttons-bottom">
@@ -189,6 +198,14 @@
   </div>
 </div>
 
+<!-- 모달 HTML 구조 -->
+<div id="profile_modal" class="modal">
+  <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <div id="modal-profile-content"></div> <!-- 모달 AJAX -->
+  </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
@@ -204,6 +221,61 @@
           xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
         }
       }
+    });
+
+    //모달 기능
+    function toggleModalCSS(load) {
+        const modalCSSId = 'modal-css';
+        if (load) {
+            if ($('#' + modalCSSId).length === 0) {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = '{% static "css/mypage/profile_modal.css" %}';
+                link.id = modalCSSId;
+                document.head.appendChild(link);
+            }
+        } else {
+            var link = document.getElementById(modalCSSId);
+            if (link) {
+                document.head.removeChild(link);
+            }
+        }
+    }
+
+    $(document).on('click', '.open-profile-modal', function(event) {
+        event.preventDefault();
+        var userId = $(this).data('user-id');
+        var url = `/mypage/ajax/profile-modal`;
+
+        // Make an AJAX request to load the modal content
+        $.ajax({
+            url: url,
+            data: { 'user_id': userId },
+            success: function(response) {
+                console.log(response); // 응답 내용을 확인
+                $('#modal-profile-content').html(response);
+                $('#profile_modal').show();
+
+                // 모달 로드 후 스크립트 초기화
+                initializeProfileModal(userId);
+                
+            },
+            error: function(xhr) {
+                alert('프로필을 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    $('.close-button').click(function() {
+        $('#profile_modal').hide();
+        toggleModalCSS(false);  // CSS 파일 제거
+    });
+
+    $(window).click(function(event) {
+        if (event.target.id === 'profile_modal') {
+            $('#profile_modal').hide();
+            toggleModalCSS(false);  // CSS 파일 제거
+        }
     });
 
     // 좋아요 기능
@@ -294,6 +366,9 @@
         } else {
           $('.comments').append(data.comment_html);
         }
+        // 댓글이 성공적으로 추가되면 메시지 제거
+        $('#no-comments-message').remove();
+
         $(form).find('textarea').val('');
       } else {
         alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');

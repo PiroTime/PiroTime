@@ -1,3 +1,31 @@
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F; /* 한글 음절, 자모, 호환 자모 */
+}
+
+/* @font-face {
+    font-family: 'Hubballi';
+    src: url('path-to-your-english-font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+0020-007F;
+} */
+ 
+body:lang(ko) {
+    font-family: 'S-CoreDream-3Light'; /* 한글에만 적용될 폰트 */
+}
+
+body:lang(en) {
+    font-family: 'Hubballi'; /* 영어에만 적용될 폰트 */
+}
+
+body{
+    font-family: 'Hubballi', 'S-CoreDream-3Light'; 
+}
+
 .max-width-1200 {
     width: min(1200px, 100%);
     padding: 0 40px;
@@ -95,18 +123,6 @@ form button[type="submit"]:hover {
     background-color: #ddd;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .review-create-card {
-        padding: 20px;
-    }
-
-    .main-title {
-        font-size: 1.5rem;
-    }
-
-}
-
 .form-group {
     margin-bottom: 15px;
     width: 100%;
@@ -132,17 +148,29 @@ form button[type="submit"]:hover {
     justify-content: space-between;
 }
 
-@media (max-width: 768px){
+#editor-container {
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+
+    .max-width-1100 {
+        width: min(1200px, 100%);
+        padding: 0 40px;
+    }
+
     .btns {
         display: flex;
         justify-content: flex-end;
         flex-direction: column;
         align-items: flex-end;
     }
-}
+    .container {
+        width: 90%;
+        padding: 0px;
+        margin-top: 0px;
+    }
 
-#editor-container {
-    height: 300px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }

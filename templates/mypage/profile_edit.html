@@ -3,44 +3,7 @@
 <link rel="stylesheet" href="{% static 'css/mypage/profile_edit.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
-<style>
-    @media screen and (max-width: 768px) {
-        .form-container {
-            width: 600px; /* 화면 크기 대비 90% 너비 */
-        }
 
-        .form-input, .form-textarea {
-            padding: 12px;
-            font-size: 1rem; /* 폰트 크기를 조금 더 키워 가독성 향상 */
-        }
-
-        .form-button {
-            padding: 15px;
-            font-size: 1rem; /* 버튼의 크기를 조금 더 키움 */
-        }
-
-        .upload-label {
-            width: 120px;
-            height: 120px; /* 이미지 업로드 버튼의 크기를 확대 */
-        }
-
-        .remove-image {
-            font-size: 1rem; /* 삭제 버튼의 크기를 키워 클릭하기 쉽게 */
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        .form-container {
-            width: 400px; /* 작은 화면에서는 너비를 100%로 설정 */
-            padding: 15px; /* 패딩을 줄여서 화면에 더 잘 맞추기 */
-        }
-
-        .upload-label {
-            width: 100px;
-            height: 100px; /* 작은 화면에서는 이미지 업로드 버튼 크기 줄임 */
-        }
-    }
-</style>
 <div class="form-container">
     <div class="logo">
         <img src="{% static 'images/logo.svg' %}" alt="PiroTime Logo" width="170" height="170">
@@ -50,29 +13,7 @@
     <form method="post" action="{% url 'mypage:profile_edit' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <div class="form-group">
-            <label for="id_username">사용자 이름</label>
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="error">{{ form.username.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="id_email">이메일 주소</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="error">{{ form.email.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="form-group">
-            <label for="id_nickname">닉네임</label>
-            {{ form.nickname }}
-            {% if form.nickname.errors %}
-                <div class="error">{{ form.nickname.errors }}</div>
-            {% endif %}
-        </div>
+        <input type="hidden" name="delete_profile_image" id="id_delete_profile_image" value="false">
 
         <div class="form-group image-upload">
             <div class="image-label-wrapper">
@@ -90,14 +31,46 @@
             <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)">
         </div>
         {% if form.profile_image.errors %}
-            <div class="error">{{ form.profile_image.errors }}</div>
+            <div class="error">{{ form.profile_image.errors|striptags|join:"" }}</div>
         {% endif %}
+
+        <div class="form-group">
+            <label for="id_username">아이디</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error">{{ form.username.errors|striptags|join:"" }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_nickname">사용자 닉네임(실명을 입력해주세요!)</label>
+            {{ form.nickname }}
+            {% if form.nickname.errors %}
+                <div class="error">{{ form.nickname.errors|striptags|join:"" }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_phone_number">전화번호</label>
+            {{ form.phone_number }}
+            {% if form.phone_number.errors %}
+                <div class="error">{{ form.phone_number.errors|striptags|join:"" }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">이메일 주소</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error">{{ form.email.errors|striptags|join:"" }}</div>
+            {% endif %}
+        </div>
 
         <div class="form-group">
             <label for="id_cohort">기수</label>
             {{ form.cohort }}
             {% if form.cohort.errors %}
-                <div class="error">{{ form.cohort.errors }}</div>
+                <div class="error">{{ form.cohort.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -105,7 +78,7 @@
             <label for="id_intro">소개</label>
             {{ form.intro }}
             {% if form.intro.errors %}
-                <div class="error">{{ form.intro.errors }}</div>
+                <div class="error">{{ form.intro.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -113,43 +86,85 @@
     </form>
 </div>
 
+
 <script>
     function previewImage(event) {
-        console.log('previewImage called'); // 함수가 호출되는지 확인
+        console.log('previewImage called');
         const reader = new FileReader();
+        const deleteImageInput = document.getElementById('id_delete_profile_image');
+        const output = document.getElementById('image-preview');
+        const cameraIcon = document.querySelector('.upload-label i');
+        const removeBtn = document.querySelector('.remove-image');
+
         reader.onload = function() {
-            const output = document.getElementById('image-preview');
-            const cameraIcon = document.querySelector('.upload-label i');
-            const removeBtn = document.querySelector('.remove-image');
             output.src = reader.result;
             output.style.display = 'block';
-            cameraIcon.style.display = 'none';
+            if (cameraIcon) {
+                cameraIcon.style.display = 'none';
+            }
             removeBtn.style.display = 'inline-block';
-            console.log('Image loaded:', reader.result); // 이미지가 제대로 로드되었는지 확인
+            console.log('Image loaded:', reader.result);
         }
+
         reader.readAsDataURL(event.target.files[0]);
+        deleteImageInput.value = "false";
+        console.log('New image selected, delete_profile_image set to false');
     }
 
     function removeImage() {
+        console.log('removeImage called');
         const output = document.getElementById('image-preview');
         const cameraIcon = document.querySelector('.upload-label i');
         const removeBtn = document.querySelector('.remove-image');
         const fileInput = document.getElementById('id_profile_image');
+        const deleteImageInput = document.getElementById('id_delete_profile_image');
 
-        output.src = '';
+        output.removeAttribute('src');
         output.style.display = 'none';
-        cameraIcon.style.display = 'block';
+        if (cameraIcon) {
+            cameraIcon.style.display = 'block';
+        }
         removeBtn.style.display = 'none';
-        fileInput.value = '';  // 파일 선택 초기화
+        fileInput.value = ""; 
+        deleteImageInput.value = "true";
+        console.log('Image removed and marked for deletion');
     }
 
-    // 프로필 이미지가 있으면 삭제 버튼을 표시
-    window.onload = function() {
+    function initializeProfileImage() {
+        console.log('Initializing profile image');
         const output = document.getElementById('image-preview');
         const removeBtn = document.querySelector('.remove-image');
-        if (output.src) {
+        const cameraIcon = document.querySelector('.upload-label i');
+
+        if (output.src && !output.src.includes('data:') && output.src !== '') {
             removeBtn.style.display = 'inline-block';
+            output.style.display = 'block';
+            if (cameraIcon) {
+                cameraIcon.style.display = 'none';
+            }
+            console.log('Profile image found, showing remove button');
+        } else {
+            if (cameraIcon) {
+                cameraIcon.style.display = 'block';
+            }
+            removeBtn.style.display = 'none';
+            output.style.display = 'none';
+            console.log('No profile image found');
         }
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("JavaScript is running");
+        initializeProfileImage();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log("URL Parameters:", urlParams.toString());
+    
+        if (urlParams.has('success')) {
+            alert("프로필이 성공적으로 업데이트되었습니다.");
+        } else {
+            console.log("Success parameter not found.");
+        }
+    });
 </script>
 {% endblock %}

@@ -11,7 +11,8 @@ class Hashtag(models.Model):
         return self.name  # 해시태그의 이름을 반환
 
 class CoffeeChat(models.Model):
-    receiver = models.ForeignKey(CustomUser, related_name='received_coffeechats', on_delete=models.CASCADE) #커피챗 요청받은 사람(커피챗 프로필 당사자)
+    sender = models.ForeignKey(CustomUser, related_name='sent_coffeechats', on_delete=models.SET_NULL, null=True, blank=True)  # 커피챗 요청을 보낸 사람
+    receiver = models.ForeignKey(CustomUser, related_name='received_coffeechats', on_delete=models.SET_NULL, null=True, blank=True) # 커피챗 요청을 받은 사람
     job = models.CharField(max_length=10, null=False) #직업
     created_at = models.DateTimeField(auto_now_add=True) #요청시간
     hashtags = models.ManyToManyField(Hashtag, related_name='coffeechats') #해시태그
@@ -42,6 +43,9 @@ class CoffeeChatRequest(models.Model):
     created_at = models.DateTimeField(default=timezone.now) # 요청 생성 시간
     letterToSenior = models.TextField(null=True, blank=True) #선배에게 보내는 편지
 
+    def __str__(self):
+        return f'Request by {self.user.username} for chat {self.coffeechat.id}'
+
 class Review(models.Model):
     coffeechat_request = models.OneToOneField(CoffeeChatRequest, related_name='review', on_delete=models.CASCADE)
     reviewer = models.ForeignKey(CustomUser, related_name='coffeechat_reviews', on_delete=models.CASCADE)  # 리뷰를 작성한 사용자
@@ -51,3 +55,10 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review by {self.reviewer.username} for request {self.coffeechat_request.id}'
+
+
+class informationAgree(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE) # 동의한 사람
+    date = models.DateTimeField(default=timezone.now) #동의 시간
+    coffeechat_request = models.OneToOneField(CoffeeChatRequest, related_name='infoAgree', on_delete=models.CASCADE)
+    is_agree = models.BooleanField(default=False)

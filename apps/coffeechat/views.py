@@ -13,9 +13,11 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import get_user_model
+from apps.coffeechat.forms import WayToContect
+
 
 # 프로젝트 내 모듈
-from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser
+from .models import CoffeeChat, Hashtag, CoffeeChatRequest, Review, CustomUser, informationAgree
 from .forms import CoffeeChatForm, ReviewForm, CoffeechatRequestForm
 
 User = get_user_model()
@@ -131,7 +133,14 @@ def detail(request, pk):
     profile = CoffeeChat.objects.get(pk=pk)
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
     reviews = Review.objects.filter(coffeechat_request__coffeechat=profile)
-    
+
+    # 현재 사용자가 프로필 소유자로부터 커피챗 요청을 받았는지 확인
+    has_pending_request = CoffeeChatRequest.objects.filter(
+        user=profile.receiver,  # 프로필 소유자가 요청을 보낸 사람
+        coffeechat__receiver=request.user,  # 현재 로그인한 사용자가 이 요청을 받은 사람
+        status='WAITING'
+    ).exists()
+
     if request.method == "POST" and request.user != profile.receiver:
         existing_request = False
         if not existing_request:
@@ -173,6 +182,7 @@ def detail(request, pk):
                 profile.status = 'LIMITED'
                 profile.save()
 
+    
     is_waiting = CoffeeChatRequest.objects.filter(user=request.user, coffeechat=profile, status='WAITING').exists()
     waiting_requests = CoffeeChatRequest.objects.filter(coffeechat__receiver=profile.receiver, status='WAITING').count()
     is_limited = waiting_requests >= 5 and not is_waiting
@@ -187,6 +197,7 @@ def detail(request, pk):
         'profile': profile,
         'is_waiting': is_waiting,
         'is_limited': is_limited,
+        'has_pending_request': has_pending_request,  # 새로 추가된 컨텍스트 변수
         'hashtags': hashtags,
         'requests': requests,
         'requestContent': CoffeechatRequestForm,
@@ -195,7 +206,6 @@ def detail(request, pk):
     return render(request, 'coffeechat/detail.html', ctx)
 
 @login_required
-
 def coffeechat_request(request, post_id):
     coffeechat = CoffeeChat.objects.get(post_id)
     receiver = coffeechat.receiver
@@ -204,46 +214,78 @@ def coffeechat_request(request, post_id):
     chat_request.coffeechat = coffeechat
     chat_request.user = request.user
 
+from django.views.decorators.http import require_POST
+
 @login_required
+@require_POST
 def accept_request(request, request_id):
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
-    if request.user == coffeechat_request.coffeechat.receiver:
-        coffeechat_request.status = 'ACCEPTED'
-        coffeechat_request.save()
-        
-        # CoffeeChat 모델의 count 필드 증가
-        coffeechat = coffeechat_request.coffeechat
-        coffeechat.count += 1
-        coffeechat.save()
+    # AJAX 요청인지 확인
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return JsonResponse({"error": "AJAX request required"}, status=400)
 
-        # 메일 보내기
-        subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
-        message = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래 링크로 접속하여 확인해 보세요!"
-        content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
-        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+    if request.user != coffeechat_request.coffeechat.receiver:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
 
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+    print('accept 1+++++++++++++++')
+    agree = informationAgree()
+    agree.coffeechat_request = coffeechat_request
+    agree.date = timezone.now()
+    agree.user = coffeechat_request.coffeechat.receiver
+    agree.is_agree = True
 
+    inp = WayToContect(request.POST)
+    if inp.is_valid():
+        way = inp.cleaned_data['way']
+        print(way)
+
+    print('accept 2+++++++++++++++')
+
+    coffeechat_request.status = 'ACCEPTED'
+    coffeechat_request.save()
+
+    coffeechat = coffeechat_request.coffeechat
+    coffeechat.count += 1
+    coffeechat.save()
+
+    subject = f"PiroTime: {request.user}님이 커피챗 요청을 수락했습니다!"
+    content = f"{coffeechat_request.user}님! 요청하신 커피챗 요청이 수락되었습니다! 아래에 있는 연락처로 연락해보세요!"
+    message = ""
+
+    try:
+        sending_mail_info(coffeechat.receiver, coffeechat_request.user, subject, content, message)
+    except Exception as e:
+        return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=503)
+
+    print('accept 3+++++++++++++++')
+
+    return JsonResponse({"status": "accepted"})
 
 @login_required
+@require_POST
 def reject_request(request, request_id):
-    coffeechat_request = CoffeeChatRequest.objects.get(id=request_id)
-    if request.user == coffeechat_request.coffeechat.receiver:
-        coffeechat_request.status = "REJECTED"
-        coffeechat_request.save()
+    # AJAX 요청인지 확인
+    if request.headers.get('x-requested-with') != 'XMLHttpRequest':
+        return JsonResponse({"error": "AJAX request required"}, status=400)
 
-        coffeechat = coffeechat_request.coffeechat
+    coffeechat_request = get_object_or_404(CoffeeChatRequest, id=request_id)
+    if request.user != coffeechat_request.coffeechat.receiver:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
 
-        subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
-        message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
-        content = ""  # content 인자를 빈 문자열로 전달하거나 다른 내용으로 설정
-        if not sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message):
-            return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)  # 에러 메시지 보내고 싶음
+    coffeechat_request.status = "REJECTED"
+    coffeechat_request.save()
 
-    return redirect('coffeechat:coffeechat_detail', pk=coffeechat_request.coffeechat.pk)
+    coffeechat = coffeechat_request.coffeechat
+    subject = f"PiroTime: {request.user}님이 커피챗 요청을 거절하셨습니다!"
+    message = f"{coffeechat_request.user}님! 선배님의 개인 사정으로 인해 커피챗 요청이 거절되었습니다. 다른 선배님과의 커피챗은 어떠하신가요?"
+    content = ""
 
+    try:
+        sending_mail(coffeechat.receiver, coffeechat_request.user, subject, content, message)
+    except Exception as e:
+        return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=503)
 
+    return JsonResponse({"status": "rejected"})
 
 @login_required
 def update(req, pk):
@@ -327,6 +369,43 @@ def sending_mail(receiver, sender, subject, content, message):
     )
     return True
 
+def format_phone_number(phone_number):
+    # 만약 전화번호가 '+82'로 시작하면
+    if phone_number.startswith('+82'):
+        # '+82'를 제거하고 앞에 '0'을 붙임
+        return '0' + phone_number[3:]
+    return phone_number  # 다른 경우는 그대로 반환
+
+def sending_mail_info(receiver, sender, subject, content, message):
+
+    subject = subject
+    content = content
+
+    from_email = 'pirotimeofficial@gmail.com'
+    recipient_list = [receiver.email]
+    mail = receiver.email
+    phoneNumber = format_phone_number(receiver.phone_number)
+
+    html_message = render_to_string(
+        "corboard/message_accept_coffeechat.html",
+        {"sender": sender.username,
+         "receiver": receiver.username,
+         "content": content,
+         "message": message,
+         "mail": mail,
+         "phoneNumber": phoneNumber,
+         },
+
+    )
+    plain_message = strip_tags(html_message)
+    send_mail(
+        subject,
+        plain_message,
+        from_email,
+        recipient_list,
+        html_message=html_message,
+    )
+    return True
 
 def howto(request):  
 

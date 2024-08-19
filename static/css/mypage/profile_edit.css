@@ -1,5 +1,30 @@
+/* Font Definitions */
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F;
+}
+
+/* @font-face {
+    font-family: 'Hubballi';
+    src: url('path-to-your-english-font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+0020-007F;
+} */
+
+body:lang(ko) {
+    font-family: 'S-CoreDream-3Light';
+}
+
+body:lang(en) {
+    font-family: 'Hubballi';
+}
+
 body {
-    font-family: "Hubballi", sans-serif;
+    font-family: 'Hubballi', 'S-CoreDream-3Light'; 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,23 +37,23 @@ body {
     background-color: #fff;
     padding: 40px;
     border-radius: 10px;
-    margin-bottom: 20px;
     text-align: left;
-    max-width: 600px; /* 최대 너비를 600px로 제한 */
+    width: 100%;
+    max-width: 600px;
     box-sizing: border-box;
-    margin: 0 auto; /* 중앙 정렬 */
-}
-
-.logo h1 {
-    margin: 0;
-    font-size: 3rem;
-    color: #000;
+    margin: 0 auto;
 }
 
 .logo {
     display: flex; 
     align-items: center; 
     justify-content: center;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 3rem;
+    color: #000;
 }
 
 .logo img {
@@ -72,55 +97,41 @@ body {
     background-color: #0aa90a;
 }
 
+.form-group.image-upload {
+    width: 100%;
+    margin: 20px 0;
+    text-align: left;
+}
+
 .image-label-wrapper {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: space-between; /* span과 button 사이의 공간을 균등하게 분배 */
-    margin-bottom: 10px; /* label과 프로필 이미지 사이의 간격 */
-}
-
-.image-upload {
-    position: relative;
-    display: inline-block;
-    margin: 20px;
-    text-align: left; /* 이미지 업로드 섹션의 정렬을 텍스트와 일치 */
-}
-
-.image-upload span {
-    display: block; /* 텍스트를 이미지 업로드 섹션 위에 표시 */
-    color: gray;
-    margin-bottom: 5px; /* 텍스트와 업로드 버튼 사이의 간격 추가 */
+    margin-bottom: 10px;
 }
 
 .upload-label {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    color: gray;
     border: 1px solid #ccc;
-    font-size: 24px; 
-    text-align: center;
+    overflow: hidden;
     cursor: pointer;
-    position: relative;
-    margin-top: 10px;
 }
 
 .upload-label img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: none; /* 이미지가 없을 때는 숨김 */
-    border-radius: 50%; /* 업로드된 이미지도 원형으로 표시 */
+    border-radius: 50%;
 }
 
 .upload-label i {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-size: 24px;
     color: gray;
 }
 
@@ -151,4 +162,56 @@ body {
     color: red;
     font-size: 14px;
     margin-top: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .form-container {
+        padding: 30px;
+    }
+
+    .form-input, .form-textarea {
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    .form-button {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .upload-label {
+        width: 90px;
+        height: 90px;
+    }
+
+    .remove-image {
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+    }
+
+    .logo h1 {
+        font-size: 2rem;
+    }
+
+    .form-input, .form-textarea {
+        font-size: 16px;
+    }
+
+    .form-button {
+        font-size: 16px;
+    }
+
+    .upload-label {
+        width: 80px;
+        height: 80px;
+    }
+
+    .remove-image {
+        font-size: 0.8rem;
+    }
 }

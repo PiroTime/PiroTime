@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en, ko">
 
 <head>
     <meta charset="UTF-8">
@@ -107,7 +107,7 @@
 
 <body>
     <section class="container max-width-1325">
-        <h2>🌟{{ cohort }}기 한 눈에 보기🌟</h2>
+        <h2>{{ cohort }}기 한 눈에 보기</h2>
         <div class="profile">
             {% for profile in profiles %}
             {% with coffeechat=profile.received_coffeechats.first %}
