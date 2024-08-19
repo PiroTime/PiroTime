@@ -143,7 +143,11 @@
         </p>
         <p id="mail-contact">
             Mail: {{ mail }}<br>
-            Phone number: {{ phoneNumber }}
+            {% if phoneNumber.startswith('+82') %}
+                Phone number: 0{{ phoneNumber|slice:"3:" }}
+            {% else %}
+                Phone number: {{ phoneNumber }}
+            {% endif %}
         </p>
         <a href="https://pirotime.com/mypage/"> 확인하기</a>
     </div>
