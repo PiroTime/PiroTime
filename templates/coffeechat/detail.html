@@ -603,6 +603,7 @@
                 </div>
             </div>
         </div>
+
         <!-- modal html 폼 -->
         <form method="post">
             <div id="myModal" class="modal">
@@ -618,6 +619,8 @@
                 </div>
             </div>
         </form>
+
+
     </div>
 
     <div id="myModal" class="modal">
@@ -770,13 +773,7 @@
                 modal.style.display = "none";
             });
 
-            // 제출 버튼 클릭 시 모달 닫기
-            $('#submitBtn').click(function () {
-                alert("메일이 전송 중입니다");
-            
-                var modal = document.getElementById("myModal");
-                modal.style.display = "none";
-            });
+
 
             // 모달 닫기 (모달 외부 클릭 시)
             window.onclick = function (event) {
@@ -789,9 +786,10 @@
             // 제출 버튼 클릭 시 모달 닫기
             $('#submitBtn').click(function () {
                 alert("메일이 전송 중입니다");
-            
                 var modal = document.getElementById("myModal");
                 modal.style.display = "none";
+
+
             });
 
             // 탭 전환 기능
