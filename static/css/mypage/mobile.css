@@ -226,6 +226,36 @@ body{
     }
 
     .myinfo {
+        width: 100%; 
+        padding: 10px; 
+        box-sizing: border-box; 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .myinfo-item {
         width: 100%;
+        margin: 10px 0; 
+        word-wrap: break-word; 
+    }
+
+    .myinfo-item strong {
+        display: inline-block; 
+        width: 30%;
+    }
+
+    .myinfo-item span, .myinfo-item div {
+        display: inline-block;
+        width: 65%;
+        word-wrap: break-word; 
+    }
+
+    .btn-primary {
+        display: block; 
+        width: 100%; 
+        text-align: center; 
+        padding: 10px 0; 
+        box-sizing: border-box;
+        margin-top: 20px; 
     }
 }

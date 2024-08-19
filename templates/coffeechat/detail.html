@@ -260,9 +260,7 @@
     }
 
     .btn-delete {
-        margin-bottom: 0.5rem;
         border: none;
-        font-size: 15px;
     }
 
     @media (max-width: 450px) {
@@ -315,6 +313,7 @@
             width: 92%;
             text-align: center;
             margin-bottom: 0.5rem;
+            padding: 10px;
         }
 
         .profile-details-box {
@@ -322,9 +321,8 @@
             align-items: center;
             text-align: center;
             margin: 0;
-            padding: 0px 15px;
-            width: 93%;
-
+            padding: 0px 10px;
+            width: 90%;
         }
 
         .hashtag-box {
@@ -472,7 +470,7 @@
             align-items: center;
             margin-top: 1rem;
             justify-content: center;
-            gap: 4rem;
+            gap: 2rem;
         }
 
         .btn-edit,
@@ -486,6 +484,11 @@
             width: 220%;
             margin-bottom: 0.5rem;
             border: none;
+        }
+
+        .btn-delete,
+        .btn-edit, .btn-private {
+            padding: 5px 5px;
         }
 
         .my-profile>*:nth-child(1) {
@@ -504,7 +507,7 @@
 
         .max-width-1200 {
             width: min(1200px, 98%);
-            padding: 0 40px;
+            padding: 0 30px;
         }
 
         .status-message {
@@ -554,15 +557,15 @@
                 {% if user.is_authenticated %}
                 {% if user == profile.receiver %}
                 <!-- 프로필 소유자가 자신의 프로필을 보는 경우 -->
-                <div class="my-profile">
+                <div class="my-profile btn-container">
                     <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
                         <i class="fas fa-edit"></i> 수정
                     </a>
                     <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
                         style="display:inline;">
                         {% csrf_token %}
-                        <button type="button" onclick="confirmDelete()" class="btn-delete">
-                            <i class="fas fa-trash-alt"></i> 삭제
+                        <button type="button" onclick="confirmDelete()" class="btn-delete" style="font-family: S-CoreDream-3Light; font-size: 1rem;">
+                            <i class="fas fa-trash-alt" style="font-size: 1rem;"></i> 삭제
                         </button>
                     </form>
                     <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
@@ -584,7 +587,7 @@
                     {% elif has_pending_request %}
                     <p class="status-message">당신에게 커피챗 신청 중</p>
                     {% else %}
-                    <button id="openModalBtn" type="button">커피챗 신청하기</button>
+                    <button id="openModalBtn" type="button" style="font-family: S-CoreDream-3Light;" class="btn-coffeechat">커피챗 신청하기</button>
                     {% endif %}
 
 
@@ -625,7 +628,7 @@
             <div class="input-container">
                 <textarea id="userInput" name="requestContent" rows="10" cols="50"
                     placeholder="여기에 글을 작성하세요..."></textarea>
-                <button type="submit" id="submitBtn">제출</button>
+                <button type="submit" id="submitBtn" style="font-family: S-CoreDream-3Light;">제출</button>
             </div>
         </div>
     </div>
