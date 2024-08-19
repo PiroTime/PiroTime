@@ -1,5 +1,174 @@
-# review/corboard/ITtrend
-1. 프로젝트 리뷰(create, detail, update,list)
-2. 프로젝트 협업(create, detail, update, list) 
-3. IT동향(create, detail, update, list)
-4. 마이페이지
+# 🌐PiroTime
+
+#### 🏆피로그래밍 21기 최종 프로젝트 작품
+
+## 🌟Overview
+
+세상 곳곳의 피로그래머들을 연결하는 피로그래밍 커뮤니티 플랫폼 입니다.
+
+## 🌟PiroTime 플랫폼 링크
+
+[플랫폼 링크](https://pirotime.com/)
+
+## 🌟협업 페이지 링크
+
+[노션 링크](https://www.notion.so/PiroTime-5d7fb0a939be45ee9e663767952b0b3c)
+
+## 🖥️서비스 화면
+
+### 모든 페이지 모바일(아이폰 14 Pro Max 기준 max-width: 430px) 반응형 지원
+
+#### 홈(랜딩페이지)
+
+- 피로그래밍 로고 적용
+- 로그인 및 회원가입 버튼 생성
+- 'About PiroTime' 으로 플랫폼 소개
+- 주요 기능을 나열
+
+![PiroTime - Chrome 2024-08-19 20-13-35](https://private-user-images.githubusercontent.com/123529128/359081903-d9e7f347-8a09-463c-9094-376a4ef7d033.gif)
+
+#### 회원가입 & 로그인 & 로그아웃
+
+- 유저 회원가입/로그인
+- 회원가입/로그인을 하면 start 페이지로 넘어간다.
+
+#### 시작 페이지
+
+- 각 게시판 인기글 확인 가능
+- 커피챗 다수 진행한 선배님 확인 가능
+
+#### 커피챗
+
+- 커피챗 프로필 등록
+- 커피챗 신청
+- 커피챗 프로필 기수별 확인
+- 커피챗 리뷰 작성/관리
+
+#### 프로젝트 리뷰
+
+- 프로젝트 리뷰/피드백을 받는 공간이다.
+- 게시판 CRUD
+- 깃허브 URL 등록
+- 북마크/좋아요 -> 마이페이지에서 확인 가능
+
+#### 프로젝트 협업
+
+- 프로젝트 협업을 제안하는 공간이다.
+- 협업을 원한다면 메일을 통해 협업에 함께 할 수 있다.
+- 게시판 CRUD
+- 북마크/좋아요 -> 마이페이지에서 확인 가능
+
+#### IT 동향
+
+- IT 동향을 공유하는 공간이다
+- 게시판 CRUD
+- 북마크/좋아요 -> 마이페이지에서 확인 가능
+
+#### 마이페이지
+
+- 내가 쓴 글/ 좋아요/ 북마크 기록 확인
+- 커피챗 수락/거절 기능
+
+## 🎯주요 기능
+
+- 게시판 기능(create, detail, update,list)
+- 각 게시판 인기글 모아보기 기능
+- 1:1 매칭 기능(Accepted, Rejected)
+- 메일 회원 정보 송신 기능
+- 리뷰 관리 기능
+- 내 정보 관리 기능
+- 사용자 친화적 UI
+
+## 🔨개발 환경
+
+#### Management Tool
+
+- 코드 관리: Git
+- 커뮤니케이션: Zep, Notion
+- 디자인: Figma
+
+#### 🐳Backend
+
+- Python `3.8.0`
+- Django `4.2.x`
+- Django Rest Framework `3.12.x`
+- Gunicorn `20.1.0` (배포용 WSGI 서버)
+- PostgreSQL `16.4.x`
+
+#### 🦊Frontend
+
+- lang: HTML5, CSS3, JAVASCRIPT
+
+#### 🗂️DB
+
+- PostgreSQL `16.4.x`
+
+#### 🗝️Server
+
+- AWS EC2 (Ubuntu `20.04`)
+- Nginx `1.23` (Reverse Proxy)
+- Gunicorn `20.1.0` (WSGI Application Server)
+- HTTPS (TLS `1.2`)
+
+#### 🕹️IDE
+
+- VSCode `1.69.2`
+- InteliJ
+
+## 🌟아키텍처
+
+![아키텍처](https://private-user-images.githubusercontent.com/123529128/359079465-760e6a2c-a5da-4b5b-abb4-4ac6767cdbbc.png)
+
+# 📂기획 및 설계 산출물
+
+## 💭요구사항 정의 및 기능 명세([Notion](https://www.notion.so/ebb329f0e6f749e0947046f1dfa628d8?v=fd2c8b8ab04d4e06a10654310a2e4638)) - 일부 캡쳐
+
+![Figma](https://private-user-images.githubusercontent.com/123529128/359103124-871b0d6b-a9bf-46ea-b6a9-57c14671a3f9.png)
+
+## 🎨화면 설계([Figma](https://www.figma.com/design/GNy9zyW1y3IQk1oaukzBrK/PiroTime?node-id=70-4&t=HZbUcis6l2gl7siK-0))
+
+![Figma](https://private-user-images.githubusercontent.com/123529128/359089862-9c428b8b-f0fd-44fc-9a12-c5341ddf0cfa.png)
+
+## 📜[ERD](https://www.erdcloud.com/d/SEz3HouJH7wNG4B8W)
+
+![ERD](https://private-user-images.githubusercontent.com/123529128/359088543-803ff5b1-3e0a-437f-8b54-7229e3194d76.png)
+
+# 💞팀원 소개
+
+#### PiroTime을 개발한 피로그래밍 21기 팀원들을 소개합니다!
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/JuheeeKim">
+        <img src="https://github.com/user-attachments/assets/8904c618-4873-40ec-ab9d-789d2c8f55db" width="250px;" alt="나"><br>
+        <b>FE/BE 팀장: 김주희</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/YourLink1">
+        <img src="https://github.com/user-attachments/assets/64d688b5-173e-4a3e-bcc8-5be6fe3f2a70" width="250px;" alt="수용빠"><br>
+        <b>FE/BE 팀원: 이수용</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/YourLink2">
+        <img src="https://github.com/user-attachments/assets/ef2e635a-001d-4250-8bcc-6abe958be91d" width="250px;" alt="관우빠"><br>
+        <b>FE/BE 팀원: 손관우</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/YourLink3">
+        <img src="https://github.com/user-attachments/assets/188861f6-37dc-4d84-8857-a2de6882e38d" width="250px;" alt="연진"><br>
+        <b>FE/BE 팀원: 이연진</b>
+      </a>
+    </td>
+  </tr>
+</table>
+
+## 🥰팀원 역할
+
+- 김주희
+- 손관우
+- 이수용
+- 이연진
