@@ -486,10 +486,10 @@
                 border: none;
             }
 
-            .btn-delete,
-            .btn-edit, .btn-private {
-                padding: 5px 5px;
-            }
+        .btn-delete,
+        .btn-edit, .btn-private {
+            padding: 5px 5px;
+        }
 
             .my-profile > *:nth-child(1) {
                 margin-right: 0rem;
@@ -528,71 +528,67 @@
                 gap: 0rem;
             }
 
-            .review-alarm {
-                font-size: 23px;
-                text-align: center;
-                margin-left: -39px;
-            }
+        .review-alarm {
+            font-size: 23px;
+            text-align: center;
+            margin-left: -39px;
         }
-    </style>
-    <div class="container">
-        <div class="profile-header">
-            <div class="max-width-1100 max-width-1200">
-                <div class="profile-info">
-                    <div class="profile-img">
-                        {% if profile.receiver.profile_image %}
-                            <img src="{{ profile.receiver.profile_image.url }}" alt="Profile Image">
-                        {% else %}
-                            <i class="fas fa-user"></i>
-                        {% endif %}
-                    </div>
-                    <div class="profile-info-box">
-                        <h1>{{ profile.receiver.username }}</h1>
-                        <p>{{ profile.job }}</p>
-                        <p>피로그래밍 {{ profile.receiver.cohort }}기</p>
-                        <p>커피챗 {{ profile.count }}회</p>
-                    </div>
+    }
+</style>
+<div class="container">
+    <div class="profile-header">
+        <div class="max-width-1100 max-width-1200">
+            <div class="profile-info">
+                <div class="profile-img">
+                    {% if profile.receiver.profile_image %}
+                    <img src="{{ profile.receiver.profile_image.url }}" alt="Profile Image">
+                    {% else %}
+                    <i class="fas fa-user"></i>
+                    {% endif %}
                 </div>
-                <div class="my-profile status-box">
-                    {% if user.is_authenticated %}
-                        {% if user == profile.receiver %}
-                            <!-- 프로필 소유자가 자신의 프로필을 보는 경우 -->
-                            <div class="my-profile btn-container">
-                                <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
-                                    <i class="fas fa-edit"></i> 수정
-                                </a>
-                                <form id="delete-form" method="post"
-                                      action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
-                                      style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="button" onclick="confirmDelete()" class="btn-delete"
-                                            style="font-family: S-CoreDream-3Light; font-size: 1rem;">
-                                        <i class="fas fa-trash-alt" style="font-size: 1rem;"></i> 삭제
-                                    </button>
-                                </form>
-                                <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
-                                    {% if profile.is_public %}
-                                        비공개로 전환하기
-                                    {% else %}
-                                        공개로 전환하기
-                                    {% endif %}
-                                </a>
-                            </div>
+                <div class="profile-info-box">
+                    <h1>{{ profile.receiver.username }}</h1>
+                    <p>{{ profile.job }}</p>
+                    <p>피로그래밍 {{ profile.receiver.cohort }}기</p>
+                    <p>커피챗 {{ profile.count }}회</p>
+                </div>
+            </div>
+            <div class="my-profile status-box">
+                {% if user.is_authenticated %}
+                {% if user == profile.receiver %}
+                <!-- 프로필 소유자가 자신의 프로필을 보는 경우 -->
+                <div class="my-profile btn-container">
+                    <a href="{% url 'coffeechat:coffeechat_update' profile.pk %}" class="btn-edit">
+                        <i class="fas fa-edit"></i> 수정
+                    </a>
+                    <form id="delete-form" method="post" action="{% url 'coffeechat:coffeechat_delete' profile.pk %}"
+                        style="display:inline;">
+                        {% csrf_token %}
+                        <button type="button" onclick="confirmDelete()" class="btn-delete" style="font-family: S-CoreDream-3Light; font-size: 1rem;">
+                            <i class="fas fa-trash-alt" style="font-size: 1rem;"></i> 삭제
+                        </button>
+                    </form>
+                    <a href="{% url 'coffeechat:toggle_visibility' profile.pk %}" class="btn-private">
+                        {% if profile.is_public %}
+                        비공개로 전환하기
                         {% else %}
-                            {% csrf_token %}
-                            {% if is_limited %}
+                        공개로 전환하기
+                        {% endif %}
+                    </a>
+                </div>
+                {% else %}
+                {% csrf_token %}
+                {% if is_limited %}
 
-                                <div class=status-box>
-                                <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
-                            {% elif is_waiting %}
-                                <p class="status-message">커피챗 수락대기중</p>
-                            {% elif has_pending_request %}
-                                <p class="status-message">당신에게 커피챗 신청 중</p>
-                            {% else %}
-                                <button id="openModalBtn" type="button" style="font-family: S-CoreDream-3Light;"
-                                        class="btn-coffeechat">커피챗 신청하기
-                                </button>
-                            {% endif %}
+                <div class=status-box>
+                    <p class="status-message">오늘치 최대 커피챗을 신청받음</p>
+                    {% elif is_waiting %}
+                    <p class="status-message">커피챗 수락대기중</p>
+                    {% elif has_pending_request %}
+                    <p class="status-message">당신에게 커피챗 신청 중</p>
+                    {% else %}
+                    <button id="openModalBtn" type="button" style="font-family: S-CoreDream-3Light;" class="btn-coffeechat">커피챗 신청하기</button>
+                    {% endif %}
 
 
 
@@ -711,19 +707,19 @@
                         {% endif %}
                     {% endfor %}
                     </div>
-                    </div>
                 </div>
             </div>
-            <!-- 리뷰 작성 링크 -->
-            {% if request.user == profile.receiver and show_review_button %}
-                <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}"></a>
-            {% else %}
-            {% endif %}
-            <div class="btn-container">
-                <!-- <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn-back"> <i class="fas fa-arrow-left"></i>목록보기</a> -->
-            </div>
+        </div>
+        <!-- 리뷰 작성 링크 -->
+        {% if request.user == profile.receiver and show_review_button %}
+        <a href="{% url 'coffeechat:review_create' coffeechat_request.id %}"></a>
+        {% else %}
+        {% endif %}
+        <div class="btn-container">
+            <!-- <a href="{% url 'coffeechat:coffeechat_list' %}" class="btn-back"> <i class="fas fa-arrow-left"></i>목록보기</a> -->
         </div>
     </div>
+</div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function confirmDelete() {
