@@ -476,6 +476,8 @@
             if (event.target.matches('.btn-accept')) {
                 const url = event.target.getAttribute('data-url');
                 confirm("수락버튼을 누르면 신청자에게 연락처가 전달됩니다. 진행하시겠습니까?")
+
+                //modal 닫기
                 const modal = document.getElementById("coffeechatModal");
                 modal.style.display = "none";
                 handleCoffeeChatResponse(url, 'accepted');
@@ -508,7 +510,7 @@
                     }
                     loadActivities(currentFilter, currentCategory);
                 } else {
-                    alert('요청을 처리하는 중 오류가 발생했습니다.');
+                    alert('요청을 처리하는 중 오류가 발생했습니다.111');
                 }
             })
             .catch(error => {
