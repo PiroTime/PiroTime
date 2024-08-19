@@ -52,6 +52,9 @@ document.addEventListener("DOMContentLoaded", function() {
             modalContent.innerHTML = `
                 <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
             `;
+            modalbutton.innerHTML = `
+                
+            `;
             modal.style.display = "flex";
         }
         if (event.target.classList.contains('btn-accept modal-accept')) {
