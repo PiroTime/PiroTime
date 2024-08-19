@@ -59,6 +59,14 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="signup-form">
+                <div class="image-upload">
+                    <span>프로필 이미지 (선택)</span><button type="button" class="remove-image" onclick="removeImage()">이미지 삭제</button>
+                    <label for="id_profile_image" class="upload-label">
+                        <i class="fas fa-camera"></i>
+                        <img id="image-preview" alt="프로필 이미지 미리보기">
+                    </label>
+                    <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)">
+                </div>
                 {{ form.non_field_errors }}
                 <input type="text" name="username" placeholder="아이디" class="form-input" value="{{ form.username.value|default_if_none:'' }}">
                 {% if form.username.errors %}
@@ -88,14 +96,7 @@
                 {% if form.cohort.errors %}
                     <div class="error">{{ form.cohort.errors }}</div>
                 {% endif %}
-                <div class="image-upload">
-                    <span>프로필 이미지 (선택)</span><button type="button" class="remove-image" onclick="removeImage()">이미지 삭제</button>
-                    <label for="id_profile_image" class="upload-label">
-                        <i class="fas fa-camera"></i>
-                        <img id="image-preview" alt="프로필 이미지 미리보기">
-                    </label>
-                    <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)">
-                </div>
+                
                 <button type="submit" class="form-button">회원가입</button>
             </div>
         </form>
