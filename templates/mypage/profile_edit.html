@@ -31,14 +31,14 @@
             <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)">
         </div>
         {% if form.profile_image.errors %}
-            <div class="error">{{ form.profile_image.errors }}</div>
+            <div class="error">{{ form.profile_image.errors|striptags|join:"" }}</div>
         {% endif %}
 
         <div class="form-group">
             <label for="id_username">아이디</label>
             {{ form.username }}
             {% if form.username.errors %}
-                <div class="error">{{ form.username.errors }}</div>
+                <div class="error">{{ form.username.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -46,7 +46,7 @@
             <label for="id_nickname">사용자 닉네임(실명을 입력해주세요!)</label>
             {{ form.nickname }}
             {% if form.nickname.errors %}
-                <div class="error">{{ form.nickname.errors }}</div>
+                <div class="error">{{ form.nickname.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -54,7 +54,7 @@
             <label for="id_phone_number">전화번호</label>
             {{ form.phone_number }}
             {% if form.phone_number.errors %}
-                <div class="error">{{ form.phone_number.errors }}</div>
+                <div class="error">{{ form.phone_number.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -62,7 +62,7 @@
             <label for="id_email">이메일 주소</label>
             {{ form.email }}
             {% if form.email.errors %}
-                <div class="error">{{ form.email.errors }}</div>
+                <div class="error">{{ form.email.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -70,7 +70,7 @@
             <label for="id_cohort">기수</label>
             {{ form.cohort }}
             {% if form.cohort.errors %}
-                <div class="error">{{ form.cohort.errors }}</div>
+                <div class="error">{{ form.cohort.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
@@ -78,7 +78,7 @@
             <label for="id_intro">소개</label>
             {{ form.intro }}
             {% if form.intro.errors %}
-                <div class="error">{{ form.intro.errors }}</div>
+                <div class="error">{{ form.intro.errors|striptags|join:"" }}</div>
             {% endif %}
         </div>
 
