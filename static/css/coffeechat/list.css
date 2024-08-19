@@ -89,7 +89,8 @@
 .profile-header {
     display: flex;
     align-items: center;
-    background: linear-gradient(45deg, #ff6b6b, #f5f7fa);
+    /* background: linear-gradient(45deg, #ff6b6b, #f5f7fa); */
+    background: linear-gradient(45deg, #00acdb, #00c4aa, #0074fc);
     padding: 20px;
     border-radius: 8px 8px 0 0;
     position: relative;
