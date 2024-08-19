@@ -227,7 +227,7 @@ def accept_request(request, request_id):
     if request.user != coffeechat_request.coffeechat.receiver:
         return JsonResponse({"error": "Unauthorized"}, status=403)
 
-
+    print('accept 1+++++++++++++++')
     agree = informationAgree()
     agree.coffeechat_request = coffeechat_request
     agree.date = timezone.now()
@@ -239,6 +239,7 @@ def accept_request(request, request_id):
         way = inp.cleaned_data['way']
         print(way)
 
+    print('accept 2+++++++++++++++')
 
     coffeechat_request.status = 'ACCEPTED'
     coffeechat_request.save()
@@ -255,6 +256,8 @@ def accept_request(request, request_id):
         sending_mail_info(coffeechat.receiver, coffeechat_request.user, subject, content, message)
     except Exception as e:
         return JsonResponse({"error": "메일을 보내는 중 문제가 발생했습니다."}, status=503)
+
+    print('accept 3+++++++++++++++')
 
     return JsonResponse({"status": "accepted"})
 
