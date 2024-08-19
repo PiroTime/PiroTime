@@ -6,13 +6,13 @@
     unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F; /* 한글 음절, 자모, 호환 자모 */
 }
 
-@font-face {
+/* @font-face {
     font-family: 'Hubballi';
     src: url('path-to-your-english-font.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
-    unicode-range: U+0020-007F; /* 영어 범위 */
-}
+    unicode-range: U+0020-007F; 
+} */
 
 body:lang(ko) {
     font-family: 'S-CoreDream-3Light'; /* 한글에만 적용될 폰트 */
@@ -226,6 +226,36 @@ body{
     }
 
     .myinfo {
+        width: 100%; 
+        padding: 10px; 
+        box-sizing: border-box; 
+        display: flex;
+        flex-direction: column;
+    }
+
+    .myinfo-item {
         width: 100%;
+        margin: 10px 0; 
+        word-wrap: break-word; 
+    }
+
+    .myinfo-item strong {
+        display: inline-block; 
+        width: 30%;
+    }
+
+    .myinfo-item span, .myinfo-item div {
+        display: inline-block;
+        width: 65%;
+        word-wrap: break-word; 
+    }
+
+    .btn-primary {
+        display: block; 
+        width: 100%; 
+        text-align: center; 
+        padding: 10px 0; 
+        box-sizing: border-box;
+        margin-top: 20px; 
     }
 }

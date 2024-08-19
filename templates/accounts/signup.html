@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +42,7 @@
 
         /* 삭제 버튼 스타일 */
         .remove-image {
-            margin-left: 10px; 
+            margin-left: 10px;
             display: none;
         }
 
@@ -50,6 +51,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="form-container">
         <div class="logo">
@@ -68,35 +70,40 @@
                     <input type="file" name="profile_image" id="id_profile_image" accept="image/*" class="form-input--img" onchange="previewImage(event)">
                 </div>
                 {{ form.non_field_errors }}
-                <input type="text" name="username" placeholder="아이디" class="form-input" value="{{ form.username.value|default_if_none:'' }}">
+                <input type="text" name="username" placeholder="아이디" class="form-input"
+                    value="{{ form.username.value|default_if_none:'' }}">
                 {% if form.username.errors %}
-                    <div class="error">{{ form.username.errors }}</div>
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">{{ form.username.errors|striptags|join:"" }}</div>
                 {% endif %}
                 <input type="password" name="password1" placeholder="비밀번호" class="form-input">
                 {% if form.password1.errors %}
-                    <div class="error">{{ form.password1.errors }}</div>
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">{{ form.password1.errors|striptags|join:"" }}</div>
                 {% endif %}
                 <input type="password" name="password2" placeholder="비밀번호 확인" class="form-input">
                 {% if form.password2.errors %}
-                    <div class="error">{{ form.password2.errors }}</div>
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">{{ form.password2.errors|striptags|join:"" }}</div>
                 {% endif %}
-                <input type="text" name="nickname" placeholder="사용자 닉네임(실명을 입력해주세요!)" class="form-input" value="{{ form.nickname.value|default_if_none:'' }}">
+                <input type="text" name="nickname" placeholder="사용자 닉네임(실명을 입력해주세요!)" class="form-input"
+                    value="{{ form.nickname.value|default_if_none:'' }}">
                 {% if form.nickname.errors %}
-                    <div class="error">{{ form.nickname.errors }}</div>
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">{{ form.nickname.errors|striptags|join:"" }}</div>
                 {% endif %}
-                <input type="text" name="phone_number" placeholder="전화번호" class="form-input" value="{{ form.phone_number.value|default_if_none:'' }}">
+                <input type="text" name="phone_number" placeholder="전화번호" class="form-input"
+                    value="{{ form.phone_number.value|default_if_none:'' }}">
                 {% if form.phone_number.errors %}
-                    <div class="error">{{ form.phone_number.errors }}</div>
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">
+                    {{ form.phone_number.errors|striptags|join:"" }}
+                </div>
                 {% endif %}
-                <input type="email" name="email" placeholder="email" class="form-input" value="{{ form.email.value|default_if_none:'' }}">
+                <input type="email" name="email" placeholder="email" class="form-input"
+                    value="{{ form.email.value|default_if_none:'' }}">
                 {% if form.email.errors %}
-                    <div class="error">{{ form.email.errors }}</div>
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">{{ form.email.errors|striptags|join:"" }}</div>
                 {% endif %}
                 <input type="cohort" name="cohort" placeholder="기수" class="form-input">
                 {% if form.cohort.errors %}
-                    <div class="error">{{ form.cohort.errors }}</div>
-                {% endif %}
-                
+                <div class="error" style="color: lightcoral; font-weight: normal; font-size: 12px;">{{ form.cohort.errors|striptags|join:"" }}</div>
+                {% endif %}          
                 <button type="submit" class="form-button">회원가입</button>
             </div>
         </form>
@@ -105,16 +112,16 @@
         </div>
     </div>
     {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
     {% endif %}
     <script>
         function previewImage(event) {
             const reader = new FileReader();
-            reader.onload = function() {
+            reader.onload = function () {
                 const output = document.getElementById('image-preview');
                 const cameraIcon = document.querySelector('.upload-label i');
                 const removeBtn = document.querySelector('.remove-image');
@@ -136,8 +143,9 @@
             output.style.display = 'none';
             cameraIcon.style.display = 'block';
             removeBtn.style.display = 'none';
-            fileInput.value = ''; 
+            fileInput.value = '';
         }
     </script>
 </body>
+
 </html>

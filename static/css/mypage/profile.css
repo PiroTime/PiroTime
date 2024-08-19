@@ -6,13 +6,13 @@
     unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F; /* 한글 음절, 자모, 호환 자모 */
 }
 
-@font-face {
+/* @font-face {
     font-family: 'Hubballi';
     src: url('path-to-your-english-font.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
-    unicode-range: U+0020-007F; /* 영어 범위 */
-}
+    unicode-range: U+0020-007F; 영어범위
+} */
 
 body:lang(ko) {
     font-family: 'S-CoreDream-3Light'; /* 한글에만 적용될 폰트 */
@@ -381,7 +381,8 @@ body {
 }
 
 /* 커피챗 버튼 스타일 */
-.coffeechat-card button.btn-accept, 
+.coffeechat-card button.btn-accept,
+.coffeechat-card button.btn-accept2,
 .coffeechat-card button.btn-reject,
 .coffeechat-card button.btn-view-letter,
 .coffeechat-card button.coffeechat-request,
@@ -406,6 +407,7 @@ body {
 }
 
 .coffeechat-card button.btn-accept:hover,
+.coffeechat-card button.btn-accept2:hover,
 .coffeechat-card button.btn-reject:hover,
 .coffeechat-card button.btn-view-letter:hover,
 .coffeechat-card button.coffeechat-request:hover,
