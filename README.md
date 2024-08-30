@@ -25,7 +25,7 @@
 - 'About PiroTime' 으로 플랫폼 소개
 - 주요 기능을 나열
 
-![PiroTime - Chrome 2024-08-19 20-13-35](https://private-user-images.githubusercontent.com/123529128/359081903-d9e7f347-8a09-463c-9094-376a4ef7d033.gif)
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/d48131a4-27b9-4750-bf4e-23772d2123e2)
 
 #### 회원가입 & 로그인 & 로그아웃
 
@@ -37,12 +37,16 @@
 - 각 게시판 인기글 확인 가능
 - 커피챗 다수 진행한 선배님 확인 가능
 
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/fea7856a-9d8c-4922-accf-8d8489359861)
+
 #### 커피챗
 
 - 커피챗 프로필 등록
 - 커피챗 신청
 - 커피챗 프로필 기수별 확인
 - 커피챗 리뷰 작성/관리
+
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/8e6a1eeb-da33-46ce-9404-647d685f37df)
 
 #### 프로젝트 리뷰
 
@@ -51,6 +55,8 @@
 - 깃허브 URL 등록
 - 북마크/좋아요 -> 마이페이지에서 확인 가능
 
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/a658414d-f1f5-4445-b79a-bd37cfb849fc)
+
 #### 프로젝트 협업
 
 - 프로젝트 협업을 제안하는 공간이다.
@@ -58,16 +64,22 @@
 - 게시판 CRUD
 - 북마크/좋아요 -> 마이페이지에서 확인 가능
 
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/2761259c-ddbf-475a-ae89-38004b849c4c)
+
 #### IT 동향
 
 - IT 동향을 공유하는 공간이다
 - 게시판 CRUD
 - 북마크/좋아요 -> 마이페이지에서 확인 가능
 
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/6ab2729d-eae8-4c35-a9c9-d11e374a93a6)
+
 #### 마이페이지
 
 - 내가 쓴 글/ 좋아요/ 북마크 기록 확인
 - 커피챗 수락/거절 기능
+
+![PiroTime - Chrome 2024-08-19 20-13-35](https://github.com/user-attachments/assets/d6161b74-0997-43a7-bdff-bccf9e4b7e78)
 
 ## 🎯주요 기능
 
@@ -116,22 +128,18 @@
 - InteliJ
 
 ## 🌟아키텍처
-
-![PiroTIme_시스템 아키텍처](https://github.com/user-attachments/assets/831e383c-8ae0-4ae8-8a24-b84534cc5f61)
+<img width="1000" alt="아키텍처" src="https://github.com/user-attachments/assets/831e383c-8ae0-4ae8-8a24-b84534cc5f61">
 
 # 📂기획 및 설계 산출물
 
 ## 💭요구사항 정의 및 기능 명세([Notion](https://www.notion.so/ebb329f0e6f749e0947046f1dfa628d8?v=fd2c8b8ab04d4e06a10654310a2e4638)) - 일부 캡쳐
-
-<img width="634" alt="PiroTIme_기능명세" src="https://github.com/user-attachments/assets/d31e7684-0085-4a9c-8298-1d672edbcc58">
+<img src="https://github.com/user-attachments/assets/d1b4a673-c1ba-464f-995b-f03fb4f9d8bb" alt="기능 명세서" width="1000"  height="400">
 
 ## 🎨화면 설계([Figma](https://www.figma.com/design/GNy9zyW1y3IQk1oaukzBrK/PiroTime?node-id=70-4&t=HZbUcis6l2gl7siK-0))
-
-<img width="505" alt="PiroTime_피그마" src="https://github.com/user-attachments/assets/6b56cea8-31b7-4582-9947-618d54afe87e">
+<img src="https://github.com/user-attachments/assets/fa32a01d-544e-4454-96c5-82c6e9f06f42" alt="Figma" width="1000"  height="500">
 
 ## 📜[ERD](https://www.erdcloud.com/d/SEz3HouJH7wNG4B8W)
-
-<img width="1001" alt="PiroTime_erd" src="https://github.com/user-attachments/assets/6c786b8a-1fbf-401d-81a7-410b3a7b69cf">
+<img src="https://github.com/user-attachments/assets/7cddc4cd-f479-4f96-8635-e7dbe6b733da" alt="ERD" width="1000"  height="500">
 
 # 💞팀원 소개
 
@@ -167,8 +175,11 @@
 </table>
 
 ## 🥰팀원 역할
-
 - 김주희
+  - 회원가입/로그인, 커피챗, 회원관리
 - 손관우
+  - 리뷰 게시판, IT 동향 게시판, 마이페이지
 - 이수용
+  - 협업 게시판, 마이페이지, 메일 시스템 관리
 - 이연진
+  - 랜딩 페이지, 메인 페이지, 커피챗
