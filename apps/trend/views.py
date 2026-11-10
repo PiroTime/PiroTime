@@ -74,6 +74,8 @@ def trend_delete(request, pk):
 @login_required
 def trend_update(request, pk):
     trend = get_object_or_404(Trend, pk=pk)
+    if trend.writer != request.user and not request.user.is_staff:
+        return HttpResponseForbidden()
     
     if request.method == "POST":
         form = TrendForm(request.POST, instance=trend)
@@ -108,6 +110,7 @@ def trend_detail(request, pk):
         'user': request.user,
     })
 
+@login_required
 def add_comment(request, trend_pk):
     trend = get_object_or_404(Trend, pk=trend_pk)
     if request.method == "POST":
@@ -134,6 +137,7 @@ def add_comment(request, trend_pk):
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 @csrf_protect
+@login_required
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if comment.writer != request.user and not request.user.is_staff:

@@ -1,3 +1,8 @@
+// 사용자 입력을 innerHTML에 넣기 전에 HTML 특수문자를 이스케이프 (XSS 방지)
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+}
+
 window.onload = function() {
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("openModalBtn");
@@ -38,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
             modalContent.innerHTML = `
-                <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
+                <p class="letter-area">${escapeHtml(letterContent).replace(/\r?\n/g, '<br>')}</p>
             `;
             modalbutton.innerHTML = `
                 <button type="button" class="btn-accept modal-accept" data-url="${urlAcc}">Accept</button>
@@ -50,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const letterContent = event.target.getAttribute('data-letter');
 
             modalContent.innerHTML = `
-                <p class="letter-area">${letterContent.replace(/\r?\n/g, '<br>')}</p>
+                <p class="letter-area">${escapeHtml(letterContent).replace(/\r?\n/g, '<br>')}</p>
             `;
             modalbutton.innerHTML = `
                 

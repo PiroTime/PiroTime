@@ -58,20 +58,16 @@ def cor_list(request):
 @login_required
 def cor_create(request):
     if request.method == "POST":
-        print("createL post")
-        form = CorboardForm(request.POST)
+        form = CorboardForm(request.POST, request.FILES)
         if form.is_valid():
             cor = form.save(commit = False)
             cor.writer = request.user
-            cor.created_at = timezone.now()
             cor.save()
 
             return redirect('corboard:cor_detail', pk = cor.id)
     else:
-        print("create get")
-
         form = CorboardForm()
-        return render(request, 'corboard/corboard_create.html', {'form': form})
+    return render(request, 'corboard/corboard_create.html', {'form': form})
 
 @login_required
 def cor_detail(request, pk):
@@ -118,16 +114,20 @@ def cor_detail(request, pk):
 @login_required
 def cor_delete(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
+    if cor.writer != request.user and not request.user.is_staff:
+        return HttpResponseForbidden()
     cor.delete()
     return redirect("corboard:cor_list")
 
 @login_required
 def cor_update(request, pk):
     cor = get_object_or_404(Corboard, pk=pk)
+    if cor.writer != request.user and not request.user.is_staff:
+        return HttpResponseForbidden()
     if request.method == "GET":
         form = CorboardForm(instance = cor)
     else:
-        form = CorboardForm(request.POST, instance=cor)
+        form = CorboardForm(request.POST, request.FILES, instance=cor)
         if form.is_valid():
             form.save()
             return redirect("corboard:cor_detail", pk=cor.pk)
@@ -214,27 +214,3 @@ def generate_email_content(sender, receiver):
     from_email = 'pirotimeofficial@gmail.com'
     recipient_list = [receiver.email]
     return subject, message, from_email, recipient_list
-
-@login_required
-def cor_mail(request, pk):
-    letter = CorLetter(request.POST)
-    print(letter.letter)
-    receiver = get_object_or_404(Corboard, pk=pk).writer
-    sender = request.user
-    subject, message, from_email, recipient_list = generate_email_content(sender, receiver)
-
-    html_message = render_to_string(
-        "corboard/message.html",
-        {"sender": sender.username, "receiver": receiver.username,
-         "content": f"{receiver.username}님! coorperation에 작성해 주신 프로젝트에 함께 하고 싶은 사람이 있습니다! 아래 링크로 들어와 확인해 보세요!",
-         "message": request.POST.get('letter')},
-    )
-    plain_message = strip_tags(html_message)
-    send_mail(
-        subject,
-        plain_message,
-        from_email,
-        recipient_list,
-        html_message=html_message,
-    )
-    return JsonResponse({'success': True})

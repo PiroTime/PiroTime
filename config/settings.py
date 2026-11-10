@@ -23,12 +23,13 @@ environ.Env.read_env(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-%%&ov9zcz=)%v9-a3^7qd0x5tf9u5buxn)s)eru+7p6!4!7bh7"
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ["*","3.39.9.209"]  # In production, add your domain here
+# 쉼표로 구분해서 .env에 지정 (예: ALLOWED_HOSTS=3.39.9.209,pirotime.com)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['3.39.9.209', 'localhost', '127.0.0.1'])
 
 # Application definition
 
@@ -143,8 +144,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'pirotimeofficial@gmail.com'
-EMAIL_HOST_PASSWORD = 'foci ryhd hxqa mcwb'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='pirotimeofficial@gmail.com')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/mypage/'

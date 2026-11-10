@@ -1,4 +1,5 @@
 from django import forms
+from apps.accounts.sanitize import clean_html
 from .models import Trend, Comment
 
 class TrendForm(forms.ModelForm):
@@ -6,10 +7,13 @@ class TrendForm(forms.ModelForm):
         model = Trend
         fields = ['title', 'content', 'refer_url']
 
+    def clean_content(self):
+        return clean_html(self.cleaned_data.get('content'))
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['content', 'writer', 'parent']
+        fields = ['content', 'parent']
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)

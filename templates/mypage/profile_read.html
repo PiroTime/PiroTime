@@ -52,6 +52,10 @@
     </div>
     
     <script>
+    // 사용자 입력을 innerHTML에 넣기 전에 HTML 특수문자를 이스케이프 (XSS 방지)
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+    }
         document.getElementById('back-button').addEventListener('click', function() {
             history.back(); // 이전 페이지로 이동
         });
@@ -107,9 +111,9 @@
                                     <a href="${post.url}" class="card-link">
                                         <div class="card-image" style="background-image: url('${randomImage}');"></div>
                                         <div class="card-content">
-                                            <h3>${post.title}</h3>
+                                            <h3>${escapeHtml(post.title)}</h3>
                                             <br/>
-                                            <span>작성자: ${post.writer}</span><br/>
+                                            <span>작성자: ${escapeHtml(post.writer)}</span><br/>
                                             <span>날짜: ${new Date(post.date).toLocaleDateString()}</span>
                                         </div>
                                     </a>

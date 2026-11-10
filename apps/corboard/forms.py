@@ -1,4 +1,5 @@
 from django import forms
+from apps.accounts.sanitize import clean_html
 from apps.corboard.models import Corboard, Comment
 
 class CorboardForm(forms.ModelForm):
@@ -6,6 +7,9 @@ class CorboardForm(forms.ModelForm):
         model = Corboard
         fields = ['title', 'content', 'corboardImg']
     letter = forms.CharField(max_length=100, required=False, label='Search')
+
+    def clean_content(self):
+        return clean_html(self.cleaned_data.get('content'))
 
 class CorCommentForm(forms.ModelForm):
     class Meta:

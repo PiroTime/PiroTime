@@ -82,6 +82,8 @@ def review_delete(request, pk):
 @login_required
 def review_update(request, pk):
     review = get_object_or_404(Review, pk=pk)
+    if review.writer != request.user and not request.user.is_staff:
+        return HttpResponseForbidden()
     
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)

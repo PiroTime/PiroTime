@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load sanitize %}
 {% load static %}
 
 {% block content %}
@@ -665,7 +666,7 @@
         <div class="tab-content-container">
             <div id="content-1" class="tab-content active-content">
                 <div class="profile-content max-width-1000">
-                    <div>{{ profile.content|safe }}</div>
+                    <div>{{ profile.content|sanitize }}</div>
                 </div>
 
             </div>

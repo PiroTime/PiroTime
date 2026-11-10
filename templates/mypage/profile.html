@@ -111,6 +111,11 @@
 </div> -->
 <script src="{% static 'js/coffeechat.js' %}"></script>
 <script>
+    // 사용자 입력을 innerHTML에 넣기 전에 HTML 특수문자를 이스케이프 (XSS 방지)
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
+    }
+
     // CSRF 토큰을 메타 태그에서 가져옴
     const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
     const csrftoken = csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
@@ -300,8 +305,8 @@
                                         ` : ''}
                                 </div>
                                 <div class="card-content">
-                                    <h3><a href="${post.url}"><strong>${post.title}</strong></a></h3>
-                                    <span><strong>작성자:</strong> ${post.writer}</span>
+                                    <h3><a href="${post.url}"><strong>${escapeHtml(post.title)}</strong></a></h3>
+                                    <span><strong>작성자:</strong> ${escapeHtml(post.writer)}</span>
                                     <span><strong>날짜:</strong>${new Date(post.date).toLocaleDateString()}</span>
                                 </div>
                             `;
@@ -372,7 +377,7 @@
                         <div class="card-header">
                             ${category === 'received' ? `
                                 <button type="button" class="btn-view-letter"
-                                    data-letter="${coffeechat.letter_to_senior}">
+                                    data-letter="${escapeHtml(coffeechat.letter_to_senior)}">
                                     <i class="fas fa-message" style="pointer-events: none; margin: auto;"></i>
                                 </button>
                             ` : '<div class="scrap-placeholder"></div>'}
@@ -389,9 +394,9 @@
                         </div>
                         <div class="profile-details">
                             ${category !== 'received' && category !== 'history' ? 
-                                `<a href="${profileLink}" class="name">${displayName}</a>` :
-                                `<span class="name">${displayName}</span>`}
-                            ${category !== 'history' ? `<span class="job">${job}</span>` : ''}
+                                `<a href="${profileLink}" class="name">${escapeHtml(displayName)}</a>` :
+                                `<span class="name">${escapeHtml(displayName)}</span>`}
+                            ${category !== 'history' ? `<span class="job">${escapeHtml(job)}</span>` : ''}
                         </div>
                         <div class="card-content">
                             <span class="request-time">
@@ -407,13 +412,13 @@
                     <span class="waiting-status">후배가 기다리는 중!</span>
                     <div class="buttons">
                         <button type="button" class="btn-accept-letter btn-accept2"
-                            data-letter="${coffeechat.letter_to_senior}"
+                            data-letter="${escapeHtml(coffeechat.letter_to_senior)}"
                             data-url-acc="${coffeechat.accept_url}"
                             data-url-rej="${coffeechat.reject_url}">Accept</button>
                         <button type="button" class="btn-reject" data-url="${coffeechat.reject_url}">Reject</button>
                     </div>
                     {% comment %} <button type="button" class="btn-view-letter"
-                        data-letter="${coffeechat.letter_to_senior}"
+                        data-letter="${escapeHtml(coffeechat.letter_to_senior)}"
                         data-url-acc="${coffeechat.accept_url}"
                         data-url-rej="${coffeechat.reject_url}">커피챗 문구보기</button> {% endcomment %}
                 `;

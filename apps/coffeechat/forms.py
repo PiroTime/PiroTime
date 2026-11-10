@@ -1,4 +1,5 @@
 from django import forms
+from apps.accounts.sanitize import clean_html
 from .models import CoffeeChat
 from .models import Review
 
@@ -9,6 +10,9 @@ class CoffeeChatForm(forms.ModelForm):
     class Meta:
         model = CoffeeChat
         fields = ['job', 'hashtags', 'content']
+
+    def clean_content(self):
+        return clean_html(self.cleaned_data.get('content'))
         
 
 class ReviewForm(forms.ModelForm):

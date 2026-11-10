@@ -8,7 +8,6 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 # 프로젝트 내 모듈
 from apps.accounts.models import CustomUser
@@ -63,6 +62,11 @@ class ActivitiesAjaxView(LoginRequiredMixin, TemplateView):
             target_user = get_object_or_404(CustomUser, id=user_id)
         else:
             target_user = request.user
+
+        # 다른 사람에 대해서는 작성한 글 목록만 공개
+        # (연락처, 커피챗 신청 내역, 북마크·좋아요 목록은 본인만 조회 가능)
+        if target_user != request.user and filter_type != 'my_posts':
+            return JsonResponse({'error': 'Forbidden'}, status=403)
 
         # 내가 쓴 글 필터링
         if filter_type == 'my_posts':
@@ -271,6 +275,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 import random
 
+@login_required
 def profile_read(request, user_id):
     User = get_user_model()
     user_profile = get_object_or_404(User, pk=user_id)
@@ -284,7 +289,7 @@ def profile_read(request, user_id):
         'random_image': random_image,
     })
 
-@csrf_exempt
+@login_required
 def toggle_bookmark(request, post_type, post_id):
     if request.method == 'POST':
         try:
@@ -304,8 +309,8 @@ def toggle_bookmark(request, post_type, post_id):
                 post.bookmarks.add(request.user)
                 return JsonResponse({'bookmarked': True})
 
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+        except (Review.DoesNotExist, Trend.DoesNotExist, Corboard.DoesNotExist):
+            return JsonResponse({'error': 'Not found'}, status=404)
 
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 

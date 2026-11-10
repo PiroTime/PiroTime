@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load sanitize %}
 
 {% block title %}Update CoffeeChat Profile{% endblock %}
 
@@ -129,7 +130,7 @@
         </div>
         <div class="form-group">
             <label for="id_content">프로필 소개</label>
-            <input type="hidden" name="content" id="hidden-content" value="{{ form.content.value|safe }}" />
+            <input type="hidden" name="content" id="hidden-content" value="{{ form.content.value|sanitize|force_escape }}" />
             <div id="editor-container"></div>
         </div>
         <button type="submit" class="btn-submit">저장하기</button>

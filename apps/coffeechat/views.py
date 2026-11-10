@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_POST
 from django.contrib.auth import get_user_model
 from apps.coffeechat.forms import WayToContect
 
@@ -129,8 +130,9 @@ def create_review(request, coffeechat_request_id):
     return render(request, 'coffeechat/review_form.html', {'form': form})
 
 
+@login_required
 def detail(request, pk):
-    profile = CoffeeChat.objects.get(pk=pk)
+    profile = get_object_or_404(CoffeeChat, pk=pk)
     coffeechat_requests = CoffeeChatRequest.objects.filter(coffeechat=profile)
     reviews = Review.objects.filter(coffeechat_request__coffeechat=profile)
 
@@ -157,11 +159,6 @@ def detail(request, pk):
                 if form.is_valid():
                     message = form.cleaned_data['requestContent']
 
-                    #메일 전송
-                    subject = "PiroTime: 커피챗 신청이 왔습니다!"
-                    content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
-                    sending_mail(profile.receiver, request.user, subject, content, message)
-
                     #리쿼스트 생성
 
 
@@ -173,6 +170,7 @@ def detail(request, pk):
                     )
 
 
+                    #메일 전송
                     subject = "PiroTime: 커피챗 신청이 왔습니다!"
                     content = f"{profile.receiver}님! 작성하신 커피챗 프로필에 요청한 사람이 있습니다! 아래 링크로 들어와 확인해 보세요."
                     sending_mail(profile.receiver, request.user, subject, content, message)
@@ -213,8 +211,6 @@ def coffeechat_request(request, post_id):
 
     chat_request.coffeechat = coffeechat
     chat_request.user = request.user
-
-from django.views.decorators.http import require_POST
 
 @login_required
 @require_POST
@@ -289,13 +285,12 @@ def reject_request(request, request_id):
 
 @login_required
 def update(req, pk):
-    profile = CoffeeChat.objects.get(pk=pk)
+    # 본인 프로필만 수정 가능 (다른 사람이 수정하면 소유권이 넘어가던 문제 수정)
+    profile = get_object_or_404(CoffeeChat, pk=pk, receiver=req.user)
     if req.method == "POST": # 수정 후
         form = CoffeeChatForm(req.POST, instance=profile)
         if form.is_valid():
             coffeechat = form.save(commit=False)
-            coffeechat.receiver = req.user
-            coffeechat.count = 0  # count 필드에 기본값 설정
             coffeechat.content = form.cleaned_data['content']
             coffeechat.save()
             
@@ -324,15 +319,11 @@ def update(req, pk):
     return render(req, 'coffeechat/update.html', ctx)
 
 @login_required
+@require_POST
 def delete(req, pk):
-    profile = CoffeeChat.objects.get(pk=pk)
-    if req.method == "POST":
-        profile.delete()
-        return redirect('coffeechat:coffeechat_list')
-    ctx = {
-        'profile': profile
-    }
-    return render(req, 'coffeechat/delete.html', ctx)
+    profile = get_object_or_404(CoffeeChat, pk=pk, receiver=req.user)
+    profile.delete()
+    return redirect('coffeechat:coffeechat_list')
 
 
 def generate_email_content(sender, receiver):
@@ -415,6 +406,7 @@ def how_received(request):
 
     return render(request, 'coffeechat/how_received.html')
 
+@login_required
 def cohort_profiles(request, cohort):
     profiles = CustomUser.objects.filter(cohort=cohort)
     return render(request, 'coffeechat/cohort_profiles.html', {'profiles': profiles, 'cohort': cohort})
