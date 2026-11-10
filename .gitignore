@@ -187,3 +187,6 @@ PiroTime.iml
 **/migrations/0001_initial.py
 **/migrations/0002_initial.py
 **/migrations/0003_initial.py
+
+### macOS ###
+.DS_Store
